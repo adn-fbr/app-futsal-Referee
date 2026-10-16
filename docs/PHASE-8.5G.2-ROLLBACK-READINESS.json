@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2",
+  "status":"READY_DOCUMENTED_NOT_EXECUTED",
+  "rollback_action":"restore prior Admins can manage assignments and Admins can view all assignments policies",
+  "helper_function_changed":false,
+  "rollback_executed":false,
+  "production_rollback":false
+}

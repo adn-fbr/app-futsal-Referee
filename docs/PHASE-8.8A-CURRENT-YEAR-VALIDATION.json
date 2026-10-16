@@ -1,0 +1,13 @@
+{
+  "phase": "8.8A",
+  "status": "PASS",
+  "timezone": "Asia/Makassar",
+  "current_year_source": "CurrentYearProvider + currentYear helper",
+  "today_source": "getToday()",
+  "annual_range": "[startOfCurrentYear, startOfNextYear)",
+  "evidence": [
+    "src/lib/currentYear.ts",
+    "src/contexts/CurrentYearContext.tsx",
+    "src/test/phase-8-7-current-year.test.ts"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "phase": "8.9.1",
+  "status": "NOT_VALIDATED",
+  "baseline": "BASELINE_NOT_AVAILABLE",
+  "screenshots_persisted": 0,
+  "comparison_performed": false,
+  "reason": "No workspace screenshot artifact was persisted and protected routes were unavailable"
+}

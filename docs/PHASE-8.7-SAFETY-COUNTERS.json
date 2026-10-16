@@ -1,0 +1,11 @@
+{
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_deployments": 0,
+  "schema_mutations": 0,
+  "rls_mutations": 0,
+  "auth_mutations": 0,
+  "storage_mutations": 0,
+  "secrets_exposed": 0,
+  "production_references_in_bundle": 0
+}

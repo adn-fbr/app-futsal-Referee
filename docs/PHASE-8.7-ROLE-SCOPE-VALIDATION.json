@@ -1,0 +1,11 @@
+{
+  "phase": "8.7",
+  "principle": "Current year is a period filter, not an authorization mechanism",
+  "admin_provinsi": "existing scope preserved",
+  "admin_kab_kota": "existing kabupaten_kota scope preserved",
+  "wasit": "existing personal assignment/honor scope preserved",
+  "other_roles": "existing route/RLS scope preserved",
+  "user_metadata_authority": false,
+  "rls_changes": 0,
+  "live_cross_role_validation": "NOT EXECUTED"
+}

@@ -1,0 +1,16 @@
+{
+  "phase": "8.5G.1",
+  "target": "shorsqyycpptxcutrqrb",
+  "production_target": "xfscfjwapwnkiinkgbjg",
+  "runtime_lock": "PASS",
+  "commands": [
+    {"command":"npm run typecheck","result":"PASS"},
+    {"command":"npm test","result":"PASS - 11 files, 33 tests"},
+    {"command":"npm run build","result":"PASS"},
+    {"command":"npm run lint","result":"FAIL - 68 errors, 11 warnings"}
+  ],
+  "live_commands": [],
+  "live_mutations": [],
+  "reason_live_not_run": "approved synthetic Auth credentials and fixture IDs unavailable",
+  "missing_artifact": "PHASE-8.3E.2-TARGET-VERIFICATION.json was not present at the expected path"
+}

@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "grants",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "all schema/table/sequence/function/view grants",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No live grant catalog extraction occurred."
+}

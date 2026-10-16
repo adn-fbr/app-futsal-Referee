@@ -1,0 +1,12 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "tables":[
+    {"name":"events","row_count":0,"current_state":"EMPTY","classification":"EMPTY","provenance":"NOT_APPLICABLE_TO_CURRENT_ROWS"},{"name":"profiles","row_count":0,"current_state":"EMPTY","classification":"EMPTY","provenance":"NOT_APPLICABLE_TO_CURRENT_ROWS"},{"name":"user_roles","row_count":0,"current_state":"EMPTY","classification":"EMPTY","provenance":"NOT_APPLICABLE_TO_CURRENT_ROWS"},{"name":"event_assignments","row_count":0,"current_state":"EMPTY","classification":"EMPTY","provenance":"NOT_APPLICABLE_TO_CURRENT_ROWS"},{"name":"referee_reviews","row_count":0,"current_state":"EMPTY","classification":"EMPTY","provenance":"NOT_APPLICABLE_TO_CURRENT_ROWS"},{"name":"honors","row_count":0,"current_state":"EMPTY","classification":"EMPTY","provenance":"NOT_APPLICABLE_TO_CURRENT_ROWS"},
+    {"name":"pengurus","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"event_approvals","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"evaluations","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"evaluation_scores","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"referee_cards","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"notifications","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"learning_progress","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"discussion_topics","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"},{"name":"discussion_replies","row_count":"UNKNOWN","current_state":"ABSENT","classification":"UNKNOWN","provenance":"UNKNOWN"}
+  ],
+  "auth_users":"UNKNOWN_NOT_ENUMERATED",
+  "storage_buckets":0,
+  "storage_objects":"UNKNOWN_NOT_LISTED",
+  "whole_database":"UNKNOWN",
+  "disposition":"GOVERNANCE_REQUIRED"
+}

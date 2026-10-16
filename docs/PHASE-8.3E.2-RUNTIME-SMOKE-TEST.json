@@ -1,0 +1,14 @@
+{
+  "phase":"8.3E.2",
+  "status":"PASS",
+  "tests":[
+    {"test_id":"SMOKE-001","action":"npm run dev -- --host 127.0.0.1","expected":"application starts","actual":"Vite ready at local port 8080","result":"PASS"},
+    {"test_id":"SMOKE-002","action":"GET http://127.0.0.1:8080/","expected":"local app responds","actual":"HTTP 200 and root mount present","result":"PASS"},
+    {"test_id":"SMOKE-003","action":"Supabase client target metadata","expected":"authorized Non-Production","actual":"shorsqyycpptxcutrqrb.supabase.co","result":"PASS"},
+    {"test_id":"SMOKE-004","action":"GET /auth/v1/settings with configured publishable key","expected":"read-only Non-Production response","actual":"HTTP 200 from shorsqyycpptxcutrqrb.supabase.co","result":"PASS"},
+    {"test_id":"SMOKE-005","action":"mutation/auth/storage check","expected":"none","actual":"no mutation, auth mutation, or storage operation executed","result":"PASS"}
+  ],
+  "browser_session_started":false,
+  "fixtures_created":0,
+  "production_contacted":false
+}

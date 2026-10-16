@@ -1,0 +1,28 @@
+{
+  "phase": "8.9",
+  "final_gate": "PARTIAL",
+  "desktop": {
+    "1280x800": "STATIC_REVIEW_ONLY",
+    "1366x768": "STATIC_REVIEW_ONLY",
+    "1440x900": "STATIC_REVIEW_ONLY",
+    "1536x864": "STATIC_REVIEW_ONLY",
+    "1920x1080": "STATIC_REVIEW_ONLY"
+  },
+  "tablet": {
+    "768x1024": "NOT_VALIDATED",
+    "1024x768": "NOT_VALIDATED"
+  },
+  "mobile": {
+    "320x568": "STATIC_REVIEW_ONLY",
+    "360x800": "STATIC_REVIEW_ONLY",
+    "375x812": "STATIC_REVIEW_ONLY",
+    "390x844": "STATIC_REVIEW_ONLY",
+    "393x873": "STATIC_REVIEW_ONLY",
+    "412x915": "STATIC_REVIEW_ONLY"
+  },
+  "landscape": {
+    "844x390": "NOT_VALIDATED",
+    "915x412": "NOT_VALIDATED"
+  },
+  "browser_validation": "NOT_AVAILABLE"
+}

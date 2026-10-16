@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.1",
+  "status":"FAIL",
+  "admin_a_to_event_b":"LEAKAGE_CONFIRMED_READ_AND_UPDATE",
+  "admin_b_to_event_a":"NOT_SEPARATELY_EXECUTED",
+  "frontend_filter_only":false,
+  "fixture_restored":"pending",
+  "production_requests":0
+}

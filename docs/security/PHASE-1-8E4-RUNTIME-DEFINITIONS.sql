@@ -1,0 +1,17 @@
+-- PHASE 1.8E.4B RUNTIME DEFINITIONS REFERENCE ARTIFACT
+-- STATUS: BLOCKED
+--
+-- This file intentionally contains no invented or executable production SQL.
+-- The available Phase 1.8B schema-only reference establishes counts and major
+-- object names, but a complete authorized live catalog extraction containing
+-- pg_get_functiondef, pg_get_viewdef, exact policies, triggers, indexes,
+-- constraints, ACLs, owners, and dependency metadata is not available in the
+-- current workspace.
+--
+-- DO NOT EXECUTE this file.
+--
+-- Required read-only extraction sources:
+-- pg_class, pg_namespace, pg_attribute, pg_type, pg_enum, pg_constraint,
+-- pg_index, pg_proc, pg_trigger, pg_policies, pg_roles, pg_extension,
+-- information_schema, pg_get_functiondef(), pg_get_viewdef(),
+-- pg_get_constraintdef(), pg_get_indexdef(), and ACL expansion.

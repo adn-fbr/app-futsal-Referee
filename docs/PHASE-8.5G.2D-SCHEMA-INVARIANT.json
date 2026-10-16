@@ -1,0 +1,11 @@
+{
+  "phase":"8.5G.2D",
+  "status":"NOT_VERIFIED_POST_APPLY",
+  "tables_unchanged":"NOT_TESTED",
+  "columns_unchanged":"NOT_TESTED",
+  "functions_unchanged":"NOT_TESTED",
+  "views_unchanged":"NOT_TESTED",
+  "triggers_unchanged":"NOT_TESTED",
+  "enums_unchanged":"NOT_TESTED",
+  "approved_sql_policy_only":true
+}

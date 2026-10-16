@@ -1,0 +1,22 @@
+{
+  "phase": "8.9",
+  "status": "PARTIAL",
+  "route_matrix": {
+    "/dashboard": "STATIC_REVIEW_ONLY",
+    "/events": "STATIC_REVIEW_ONLY",
+    "/events/calendar": "STATIC_REVIEW_ONLY",
+    "/events/:id": "STATIC_REVIEW_ONLY",
+    "/events/submit": "STATIC_REVIEW_ONLY",
+    "/events/:id/edit": "STATIC_REVIEW_ONLY",
+    "/referees": "STATIC_REVIEW_ONLY",
+    "/referees/:id": "STATIC_REVIEW_ONLY",
+    "/evaluations": "STATIC_REVIEW_ONLY",
+    "/approvals": "STATIC_REVIEW_ONLY",
+    "/organization": "STATIC_REVIEW_ONLY",
+    "/settings": "STATIC_REVIEW_ONLY",
+    "/login": "STATIC_REVIEW_ONLY",
+    "/signup": "STATIC_REVIEW_ONLY",
+    "/profile/complete": "STATIC_REVIEW_ONLY"
+  },
+  "browser_validation": "NOT_AVAILABLE"
+}

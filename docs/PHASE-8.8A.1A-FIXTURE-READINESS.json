@@ -1,0 +1,13 @@
+{
+  "phase": "8.8A.1A",
+  "status": "BLOCKED",
+  "target_resolution": "PASS",
+  "environment_guard": "PASS_WITH_PLACEHOLDERS_ONLY",
+  "service_role_presence": "FAIL",
+  "fixture_password_presence": "FAIL",
+  "official_auth_admin_readiness": "NOT_EXECUTED",
+  "provisioning": "NOT_EXECUTED",
+  "fixtures_created": {"auth_users":0,"events":0,"assignments":0},
+  "dry_run_network_requests": 0,
+  "dry_run_mutations": 0
+}

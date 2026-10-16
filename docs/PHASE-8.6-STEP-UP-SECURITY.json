@@ -1,0 +1,12 @@
+{
+  "phase": "8.6",
+  "mechanism": "supabase.auth.signInWithPassword for current authenticated user's email",
+  "historical_only": true,
+  "password_persisted": false,
+  "password_logged": false,
+  "password_in_audit": false,
+  "empty_password": "button disabled",
+  "wrong_password": "mutation rejected",
+  "duplicate_submit": "button disabled while mutation pending",
+  "live_validation": "BLOCKED - synthetic fixture unavailable"
+}

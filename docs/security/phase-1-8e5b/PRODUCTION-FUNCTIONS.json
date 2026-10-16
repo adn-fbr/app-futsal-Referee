@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "functions",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": 47,
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No `pg_proc` / `pg_get_functiondef()` extraction occurred."
+}

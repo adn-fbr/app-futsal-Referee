@@ -1,0 +1,19 @@
+{
+  "remote_schema_target":"DETERMINISTIC_FROM_CANONICAL_BASELINE",
+  "migration_conflicts":"CLASSIFIED_BUT_UNRESOLVED",
+  "dependency_order":"DETERMINISTIC_PROPOSED",
+  "data_disposition":"GOVERNANCE_REQUIRED",
+  "auth_strategy":"RESOLVED_DESIGN_NOT_EXECUTED",
+  "storage_strategy":"GOVERNANCE_REQUIRED",
+  "rls_strategy":"DETERMINISTIC_FROM_CANONICAL_SOURCE",
+  "events_target":"DETERMINISTIC_CANONICAL",
+  "reconstruction_method":"OPTION_A_RECOMMENDED",
+  "rollback_strategy":"REQUIRED_BEFORE_EXECUTION",
+  "production_safety":"PASS",
+  "execution_authorization":"NOT_GRANTED",
+  "d1":"BLOCKED",
+  "reasons":["remote data provenance not fully resolved","three migration conflicts unresolved","Storage fixtures/buckets require governance","rollback approval absent"],
+  "safety_counters":{"insert":0,"update":0,"delete":0,"upsert":0,"ddl":0,"migration_execution":0,"db_push":0,"db_reset":0,"rebuild":0,"seed":0,"auth_mutation":0,"storage_mutation":0,"rls_mutation":0,"production_mutation":0,"production_deployment":0,"baseline_modification":0,"application_implementation":0},
+  "docker_infrastructure_side_effect":1,
+  "gate":"BLOCKED"
+}

@@ -1,0 +1,10 @@
+{
+  "phase":"8.5G.1",
+  "status":"PARTIAL",
+  "wrong_password_auth_rejected":true,
+  "wrong_password_mutation_not_attempted":true,
+  "browser_correct_password_step_up":"NOT_VERIFIED",
+  "browser_wrong_password_step_up":"NOT_VERIFIED",
+  "password_logged":false,
+  "password_persisted":false
+}

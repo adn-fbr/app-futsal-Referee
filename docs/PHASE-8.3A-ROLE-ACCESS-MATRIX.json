@@ -1,0 +1,17 @@
+{
+  "phase": "8.3A",
+  "role_source": "AuthContext roles resolved from user_roles.user_id",
+  "admin_role": "admin_provinsi",
+  "route": "/administration/event-assignments",
+  "access": {
+    "admin_provinsi": {"menu": true, "route": true, "detail": true, "status_mutation": true},
+    "admin_kab_kota": {"menu": false, "route": false, "detail": false, "status_mutation": false},
+    "panitia": {"menu": false, "route": false, "detail": false, "status_mutation": false},
+    "wasit": {"menu": false, "route": false, "detail": false, "status_mutation": false},
+    "evaluator": {"menu": false, "route": false, "detail": false, "status_mutation": false},
+    "unauthenticated": {"menu": false, "route": false, "detail": false, "status_mutation": false}
+  },
+  "final_mutation_role_recheck": true,
+  "role_authority": ["user_roles.user_id", "authenticated user id"],
+  "forbidden_authorities": ["user_metadata", "localStorage", "sessionStorage", "email matching", "hard-coded user list"]
+}

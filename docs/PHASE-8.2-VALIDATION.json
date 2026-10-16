@@ -1,0 +1,11 @@
+{
+  "phase": "8.2",
+  "typescript": {"command":"npx tsc --noEmit","status":"PASS"},
+  "build": {"command":"npm run build","status":"PASS","notes":"Existing Browserslist and chunk-size warnings only"},
+  "tests": {"command":"npm test","status":"PASS","test_files":4,"tests":11},
+  "focused_tests": {"command":"npm test -- --run src/repositories/auth/...","status":"PASS","tests":10},
+  "lint": {"command":"npm run lint","status":"FAIL","errors":66,"warnings":11,"classification":"PRE-EXISTING REPOSITORY-WIDE LINT DEBT; no new error identified in changed logic; changed-file lint still reports one pre-existing any in BulkUserImportDialog and one existing AuthContext fast-refresh warning"},
+  "diff_check": {"status":"PASS","changed_files":4},
+  "gate_impact": "Strict Phase 8.2 PASS criteria require lint PASS; final gate is BLOCKED — VALIDATION FAILED because repository-wide lint remains failing.",
+  "database_inspection": false
+}

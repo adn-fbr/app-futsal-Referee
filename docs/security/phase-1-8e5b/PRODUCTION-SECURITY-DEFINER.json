@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "security_definer",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": 41,
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No `prosecdef`, `search_path`, `owner`, `proconfig`, or `ACL` verification occurred."
+}

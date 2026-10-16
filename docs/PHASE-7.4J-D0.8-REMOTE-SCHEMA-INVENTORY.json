@@ -1,0 +1,47 @@
+{
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "access": "REMOTE_DATABASE_ACCESSIBLE",
+  "schema_dump_sha256": "15bd39c8b6d0c7abb76177ea694bf7c4f8cfa2dc07a9c6dcce59732e731a3814",
+  "schema_dump_scope": ["public", "auth", "storage"],
+  "public_counts": {
+    "tables": 6,
+    "columns": 48,
+    "functions": 3,
+    "views": 1,
+    "triggers": 4,
+    "indexes_explicit_public": 0,
+    "foreign_keys_to_public": 7,
+    "rls_enabled_tables": 6,
+    "policies": 23,
+    "extensions_in_dump": 0,
+    "extensions_status": "UNKNOWN"
+  },
+  "tables": [
+    {"schema":"public","name":"event_assignments","exists":true,"columns":7,"estimated_rows":0,"data_state":"EMPTY","rls":true,"policy_count":2},
+    {"schema":"public","name":"events","exists":true,"columns":10,"estimated_rows":0,"data_state":"EMPTY","rls":true,"policy_count":4},
+    {"schema":"public","name":"honors","exists":true,"columns":10,"estimated_rows":0,"data_state":"EMPTY","rls":true,"policy_count":6},
+    {"schema":"public","name":"profiles","exists":true,"columns":12,"estimated_rows":0,"data_state":"EMPTY","rls":true,"policy_count":5},
+    {"schema":"public","name":"referee_reviews","exists":true,"columns":6,"estimated_rows":0,"data_state":"EMPTY","rls":true,"policy_count":2},
+    {"schema":"public","name":"user_roles","exists":true,"columns":3,"estimated_rows":0,"data_state":"EMPTY","rls":true,"policy_count":2}
+  ],
+  "requested_missing_tables": [
+    "pengurus",
+    "event_approvals",
+    "evaluations",
+    "evaluation_scores",
+    "referee_cards",
+    "notifications",
+    "learning_progress",
+    "discussion_topics",
+    "discussion_replies"
+  ],
+  "auth_users_relation": "PRESENT_IN_SCHEMA_DUMP",
+  "storage_buckets": 0,
+  "duplicate_functions": {
+    "canonical_check_duplicate_event": "ABSENT",
+    "rich_search": "ABSENT"
+  },
+  "migration_history_remote_count": 4,
+  "migration_history_local_count": 55,
+  "classification": "PARTIAL_SCHEMA_EMPTY_OBSERVABLE_APPLICATION_TABLES"
+}

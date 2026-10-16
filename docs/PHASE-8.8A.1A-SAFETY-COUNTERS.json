@@ -1,0 +1,17 @@
+{
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_auth_operations": 0,
+  "production_storage_operations": 0,
+  "production_deployments": 0,
+  "schema_mutations": 0,
+  "rls_mutations": 0,
+  "migration_executions": 0,
+  "service_role_frontend_references": 0,
+  "secret_values_exposed": 0,
+  "fixture_auth_users_created": 0,
+  "fixture_events_created": 0,
+  "fixture_assignments_created": 0,
+  "dry_run_network_requests": 0,
+  "dry_run_mutations": 0
+}

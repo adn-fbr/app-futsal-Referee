@@ -1,0 +1,13 @@
+{
+  "phase":"8.5A",
+  "contract_tests":{"result":"NOT_ADDED","reason":"canonical generated type source unavailable; no speculative adaptation"},
+  "historical_event_tests":{"result":"PASS_FROM_PHASE_8_5","tests":2},
+  "current_local_regression":{"typecheck":"PASS","tests":"PASS: 10 files/28 tests","build":"PASS","lint":"PRE_EXISTING: 66 errors/11 warnings"},
+  "transaction_tests":[
+    {"id":"HIST-TX-003","result":"BLOCKED","reason":"no atomic mechanism/fixture"},
+    {"id":"HIST-TX-004","result":"BLOCKED","reason":"approval failure cannot be safely induced without mutation fixture"},
+    {"id":"HIST-TX-005","result":"BLOCKED","reason":"retry fixture unavailable"},
+    {"id":"HIST-TX-006","result":"STATIC_ONLY","reason":"submission control exists; browser request count not tested"}
+  ],
+  "production_access":0
+}

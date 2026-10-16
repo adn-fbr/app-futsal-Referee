@@ -1,0 +1,13 @@
+{
+  "phase": "PHASE 7.4J-D1-D.6",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "canonical_policy_count": 86,
+  "post_reconstruction_policy_count": 86,
+  "policy_identity_missing": [],
+  "policy_identity_unexpected": [],
+  "normalized_policy_definition_mismatches": [],
+  "using_and_with_check_preserved": true,
+  "generic_auth_uid_substitution": false,
+  "rls_weakened": false,
+  "status": "PASS"
+}

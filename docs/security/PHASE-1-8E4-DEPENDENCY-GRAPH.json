@@ -1,0 +1,30 @@
+{
+  "phase": "1.8E.4B",
+  "status": "BLOCKED",
+  "source": "Phase 1.8B production schema-only runtime reference",
+  "complete": false,
+  "verifiedEdges": [
+    {"from": "profiles.id", "to": "auth.users.id", "type": "foreign_key"},
+    {"from": "user_roles.user_id", "to": "auth.users.id", "type": "foreign_key"},
+    {"from": "profiles.kabupaten_kota_id", "to": "kabupaten_kota.id", "type": "foreign_key"},
+    {"from": "kabupaten_kota.provinsi_id", "to": "provinsi.id", "type": "foreign_key"},
+    {"from": "events.kabupaten_kota_id", "to": "kabupaten_kota.id", "type": "foreign_key"},
+    {"from": "event_assignments.event_id", "to": "events.id", "type": "foreign_key"},
+    {"from": "event_assignments.referee_id", "to": "profiles.id", "type": "foreign_key"},
+    {"from": "honors.event_id", "to": "events.id", "type": "foreign_key"},
+    {"from": "honors.referee_id", "to": "profiles.id", "type": "foreign_key"},
+    {"from": "evaluations.event_id", "to": "events.id", "type": "foreign_key"},
+    {"from": "evaluations.referee_id", "to": "profiles.id", "type": "foreign_key"}
+  ],
+  "requiredUncapturedEdges": [
+    "table -> constraint",
+    "table -> index",
+    "table -> trigger",
+    "trigger -> function",
+    "function -> table",
+    "function -> function",
+    "view -> table",
+    "view -> function",
+    "policy -> function"
+  ]
+}

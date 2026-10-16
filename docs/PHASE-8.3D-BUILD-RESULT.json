@@ -1,0 +1,14 @@
+{
+  "phase":"8.3D",
+  "build_command":"npm run build",
+  "exit_code":0,
+  "result":"PASS",
+  "environment":"local non-production workspace",
+  "deployment_performed":false,
+  "production_access":false,
+  "supabase_access":false,
+  "output":"dist/index.html, dist/assets/index-NywoOlgL.css, dist/assets/index-C9pzSXyL.js and logo asset generated",
+  "warnings":["Browserslist/caniuse-lite data is 15 months old","One chunk is larger than 500 kB after minification"],
+  "f007_bundle_scan":{"seed-database":"ABSENT","Generate Seed Data":"ABSENT","SEED_DATA_SUMMARY":"ABSENT","useSeedDatabase":"ABSENT","database-export":"ABSENT"},
+  "interpretation":"Build verified locally; this is not deployment and does not prove Production UAT readiness."
+}

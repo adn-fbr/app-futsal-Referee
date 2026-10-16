@@ -1,0 +1,20 @@
+id,decision,recommendation,authority,approval_required,current_status
+D01,Function identity,"Candidate identity TBD; do not reuse or overload canonical name",Database/Architecture Owner,true,DATABASE_APPROVAL_REQUIRED
+D02,Signature,"Preserve five observed application semantics; exact PostgreSQL signature TBD",Database/Architecture Owner,true,DATABASE_APPROVAL_REQUIRED
+D03,Return contract,"Logical isDuplicate plus candidates; exact database return type TBD",Architecture and Database Owners,true,DATABASE_APPROVAL_REQUIRED
+D04,Matching semantics,"Only observed name/date/location/region/exclusion behavior",Business/Product and Architecture Owners,true,BUSINESS_APPROVAL_REQUIRED
+D05,Similarity model,"Historical CASE only evidenced; retain only if approved",Architecture and Business Owners,true,MULTI_OWNER_APPROVAL_REQUIRED
+D06,Threshold,"Recommend no numeric threshold and ranking-only score",Business/Product and Architecture Owners,true,BUSINESS_APPROVAL_REQUIRED
+D07,Ordering,"Score DESC then date DESC",Architecture Owner,true,ARCHITECTURE_RECOMMENDATION
+D08,Limit,"Historical maximum 5 unless Product changes it",Product and Architecture Owners,true,BUSINESS_APPROVAL_REQUIRED
+D09,NULL semantics,"Optional null values disable corresponding historical filters",Architecture Owner,true,ARCHITECTURE_RECOMMENDATION
+D10,Error semantics,"Exact error policy TBD; do not preserve fail-open without review",Architecture and Security Owners,true,SECURITY_APPROVAL_REQUIRED
+D11,Security model,"Prefer SECURITY INVOKER; definer requires exception",Security and Database Owners,true,SECURITY_APPROVAL_REQUIRED
+D12,RLS,"RLS respected; no bypass or service-role browser workaround",Security and Database Owners,true,SECURITY_APPROVAL_REQUIRED
+D13,Visibility scope,"No invented tenant model; visibility requires explicit approval",Business and Security Owners,true,MULTI_OWNER_APPROVAL_REQUIRED
+D14,Performance target,"Set dataset/latency/timeout/concurrency targets",Performance and Product Owners,true,PERFORMANCE_APPROVAL_REQUIRED
+D15,Indexes,"No index approved; query-plan review required later",Database Owner,true,DATABASE_APPROVAL_REQUIRED
+D16,Migration,"Non-Production implementation only after approvals",Database/Architecture and Deployment Owners,true,DEPLOYMENT_APPROVAL_REQUIRED
+D17,Rollback,"Preserve canonical function; reversible rich capability",Database/Architecture and Deployment Owners,true,DEPLOYMENT_APPROVAL_REQUIRED
+D18,Baseline revision,"New revision only after authorized change and extraction",Database Governance Owner,true,DATABASE_APPROVAL_REQUIRED
+D19,Deployment,"Production remains separate authorization gate",Deployment Owner,true,DEPLOYMENT_APPROVAL_REQUIRED

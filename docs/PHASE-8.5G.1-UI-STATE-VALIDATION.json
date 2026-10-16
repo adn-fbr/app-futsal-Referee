@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G.1",
+  "loading_state": "STATIC PASS; LIVE NOT VERIFIED",
+  "mutation_button_disabled": "STATIC PASS; LIVE NOT VERIFIED",
+  "error_preserves_previous_status": "STATIC PASS; LIVE NOT VERIFIED",
+  "refresh_synchronization": "STATIC PASS; LIVE NOT VERIFIED",
+  "filter_consistency": "STATIC PASS; LIVE NOT VERIFIED",
+  "browser_validation": "NOT EXECUTED"
+}

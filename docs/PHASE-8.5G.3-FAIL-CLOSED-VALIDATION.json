@@ -1,0 +1,10 @@
+{
+  "phase": "8.5G.3",
+  "non_production_environment_guard": "PASS",
+  "authorized_project_guard": "BLOCK - provisioning script does not contain project-specific guard",
+  "production_target_test": "NOT EXECUTED",
+  "production_fallback": "NOT VERIFIED",
+  "source_secret_scan": "PASS - no secret values detected; marker references are expected",
+  "git_secret_file_scan": "PASS - no tracked secret file; sensitive filename matches are documentation",
+  "status": "BLOCKED"
+}

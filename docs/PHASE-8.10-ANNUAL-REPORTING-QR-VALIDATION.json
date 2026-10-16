@@ -1,0 +1,7 @@
+{
+  "phase":"8.10",
+  "status":"BLOCKED_SCHEMA_GAP",
+  "qr_dependency":"qrcode.react_available",
+  "validation_route":"NOT_IMPLEMENTED",
+  "reason":"no canonical persistent report id/snapshot/hash entity"
+}

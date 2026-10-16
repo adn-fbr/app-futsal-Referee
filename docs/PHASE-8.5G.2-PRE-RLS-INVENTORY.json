@@ -1,0 +1,14 @@
+{
+  "phase":"8.5G.2",
+  "target":"shorsqyycpptxcutrqrb",
+  "rls_enabled":"CANONICAL_BASELINE_ENABLED",
+  "table":"public.event_assignments",
+  "policies": [
+    {"name":"Admins can manage assignments","command":"ALL","using":"is_admin(auth.uid()) OR has_role(auth.uid(),'panitia')","with_check":"ABSENT"},
+    {"name":"Admins can view all assignments","command":"SELECT","using":"is_admin(auth.uid()) OR has_role(auth.uid(),'panitia')","with_check":null},
+    {"name":"Referees can update their own assignment status","command":"UPDATE","using":"referee_id = auth.uid() AND deleted_at IS NULL","with_check":"referee_id = auth.uid() AND status IN (confirmed, declined)"},
+    {"name":"Referees can view their own assignments","command":"SELECT","using":"auth.uid() = referee_id","with_check":null}
+  ],
+  "root_cause":"is_admin includes admin_provinsi and admin_kab_kota",
+  "regional_source":"profiles.kabupaten_kota_id via get_user_kabupaten_kota"
+}

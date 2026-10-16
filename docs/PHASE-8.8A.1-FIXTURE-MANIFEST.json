@@ -1,0 +1,15 @@
+{
+  "phase": "8.8A.1",
+  "environment": "non-production",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "status": "BLOCKED",
+  "provisioned": false,
+  "admin_provinsi": { "user_id": null, "profile_id": null },
+  "admin_kab_kota_a": { "user_id": null, "profile_id": null, "region_id": null },
+  "admin_kab_kota_b": { "user_id": null, "profile_id": null, "region_id": null },
+  "referee": { "user_id": null, "profile_id": null },
+  "event_a": { "event_id": null, "region_id": null },
+  "event_b": { "event_id": null, "region_id": null },
+  "assignment_a": { "assignment_id": null },
+  "assignment_b": { "assignment_id": null }
+}

@@ -1,0 +1,8 @@
+PHASE-7.4A-CHECK-DUPLICATE-EVENT-CONTRACT-RECONCILIATION v1.0.0
+NORMALIZED ARTIFACT SET SHA-256
+
+RUN 1: d55ac52ad9121fcf25f086087c5dbff2c6333ad77f85b8e84117b63c132fceed
+RUN 2: d55ac52ad9121fcf25f086087c5dbff2c6333ad77f85b8e84117b63c132fceed
+IDENTICAL: YES
+
+The hash covers the six required Phase 7.4A markdown artifacts in deterministic path order. The hash file itself is excluded to avoid self-reference.

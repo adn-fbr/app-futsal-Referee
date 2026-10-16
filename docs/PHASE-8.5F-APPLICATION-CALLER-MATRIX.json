@@ -1,0 +1,12 @@
+{
+  "phase": "8.5F",
+  "active_callers": [
+    {"file": "src/hooks/useEvents.ts", "symbol": "useCheckDuplicateEvent", "contract": "p_kota_id, p_location, p_name -> boolean", "status": "RECONCILED"},
+    {"file": "src/pages/EventEdit.tsx", "symbol": "handleCheckDuplicate", "behavior": "consumes boolean and shows generic warning", "status": "RECONCILED"},
+    {"file": "src/integrations/supabase/types.ts", "symbol": "Functions.check_duplicate_event", "contract": "three string args -> boolean", "status": "REGENERATED"}
+  ],
+  "historical_rich_ui": {"file": "src/components/events/DuplicateEventDialog.tsx", "status": "DEAD_CODE_NO_IMPORTS_OR_CALLERS", "action": "left unchanged; not an active RPC requirement"},
+  "active_five_argument_calls": 0,
+  "active_rich_result_assumptions": 0,
+  "events_kota_id_active_references": 0
+}

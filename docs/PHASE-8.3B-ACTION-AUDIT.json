@@ -1,0 +1,13 @@
+{
+  "phase":"8.3B","scope":"Static actionable UI scan","button_occurrences":315,"action_audit_status":"PARTIAL_STATIC",
+  "findings":[
+    {"id":"A-001","severity":"P1","location":"src/components/layout/MobileNav.tsx","action":"Export Database","evidence":"navigate('/database-export') has no matching registered route","classification":"DEAD_LINK","impact":"404 from mobile navigation"},
+    {"id":"A-002","severity":"P1","location":"src/components/layout/MobileNav.tsx","action":"Event Approval for non-provinsi admin","evidence":"Rendered in non-admin-provinsi branch, route requires admin_provinsi","classification":"ROLE_VISIBILITY_GAP","impact":"Guaranteed forbidden navigation"},
+    {"id":"A-003","severity":"P1","location":"src/pages/EventDetail.tsx","action":"Tugaskan","evidence":"Visible to panitia path while assignment route requires requireAdmin","classification":"AUTHORIZATION_MISMATCH","impact":"CTA does not complete workflow"},
+    {"id":"A-004","severity":"P1","location":"src/pages/RefereeAssignment.tsx","action":"Role change/remove","evidence":"Mutation calls do not disable row controls while pending","classification":"DUPLICATE_CLICK_RISK","impact":"Repeated network mutations and stale state"},
+    {"id":"A-005","severity":"P0","location":"src/pages/DatabaseExport.tsx","action":"Generate testing data","evidence":"Seed tab describes creation of 21 users and dummy event/assignment/review data","classification":"PRODUCTION_RISKY_DEVELOPMENT_SUPPORT","impact":"Potential production data contamination"},
+    {"id":"A-006","severity":"P2","location":"src/pages/RefereeEvents.tsx","action":"Confirm/decline","evidence":"Mutation is awaited but query errors are not surfaced before normal empty states","classification":"MISSING_ERROR_RECOVERY","impact":"Failed retrieval indistinguishable from no events"}
+  ],
+  "static_patterns_checked":["TODO","FIXME","Coming Soon","Not Implemented","console.log","alert","disabled=true","empty handlers","mock/demo/seed/fake/dummy/sample/placeholder"],
+  "note":"No source was modified; not every button occurrence is a defect because many have valid handlers."
+}

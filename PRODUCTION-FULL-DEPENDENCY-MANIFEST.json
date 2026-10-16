@@ -1,0 +1,59 @@
+{
+  "artifact": "PRODUCTION-FULL-DEPENDENCY-NORMALIZATION",
+  "version": "3.0.0",
+  "source": "production-schema.sql",
+  "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "source_mode": "schema_only",
+  "production_execution": false,
+  "production_mutation": false,
+  "data_extraction": false,
+  "catalog": {
+    "tables": 27,
+    "columns": 249,
+    "primary_keys": 27,
+    "unique_constraints": 7,
+    "check_constraints": 3,
+    "foreign_keys": 30,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "policies": 86,
+    "indexes": 47,
+    "extensions": 7,
+    "enum_types": 2
+  },
+  "actual": {
+    "tables": 27,
+    "columns": 249,
+    "primary_keys": 27,
+    "unique_constraints": 7,
+    "check_constraints": 3,
+    "foreign_keys": 30,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "policies": 86,
+    "indexes": 47,
+    "extensions": 7,
+    "enum_types": 2
+  },
+  "dependency_counts": {
+    "total": 351,
+    "resolved": 282,
+    "unresolved": 47,
+    "not_exposed": 0,
+    "external_managed": 22,
+    "ambiguous": 0
+  },
+  "validation": {
+    "null_schema_identities": 0,
+    "numeric_oid_identities": 0,
+    "blank_identities": 0,
+    "ambiguous_canonical_identities": 0,
+    "false_check_constraints": 0,
+    "fk_canonical_dependency": "PASS",
+    "mismatches": []
+  },
+  "gate": "PASS",
+  "canonical_runtime_baseline_authorized": true
+}

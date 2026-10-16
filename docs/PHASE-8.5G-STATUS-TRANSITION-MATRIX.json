@@ -1,0 +1,7 @@
+{
+  "phase": "8.5G",
+  "actor": "admin_provinsi",
+  "allowed": [{"from":"pending","to":"confirmed"}],
+  "not_allowed_by_this_flow": ["pending->declined", "pending->cancelled", "confirmed->*", "declined->*", "cancelled->*"],
+  "basis": "Existing Phase 8.3A and hook contract only authorize pending to confirmed for this Admin Provinsi flow."
+}

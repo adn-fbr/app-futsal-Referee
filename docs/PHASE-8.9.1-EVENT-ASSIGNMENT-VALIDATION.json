@@ -1,0 +1,7 @@
+{
+  "phase": "8.9.1",
+  "status": "BLOCKED",
+  "route": "/administration/event-assignments",
+  "validated": false,
+  "reason": "AUTH_FIXTURE_UNAVAILABLE"
+}

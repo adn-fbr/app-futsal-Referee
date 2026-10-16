@@ -1,0 +1,12 @@
+{
+  "phase":"8.5C",
+  "target":"shorsqyycpptxcutrqrb",
+  "command":"supabase gen types --linked --lang=typescript --schema public",
+  "exit_code":0,
+  "output":"temporary file inspected then removed; application generated types not replaced",
+  "generated_contract":{"name":"check_duplicate_event","args":{"p_kota_id":"string","p_location":"string","p_name":"string"},"returns":"boolean"},
+  "production_source_used":false,
+  "application_types_updated":false,
+  "status":"PASS_TYPE_SOURCE; BLOCKED_APPLICATION_RECONCILIATION",
+  "block_reason":"canonical p_kota_id cannot be safely mapped: function body references events.kota_id while canonical events table exposes kabupaten_kota_id"
+}

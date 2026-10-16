@@ -1,0 +1,21 @@
+{
+  "phase": "8.5E",
+  "final_gate": "BLOCKED — SEMANTIC OWNERSHIP INCOMPLETE",
+  "function_identity": "public.check_duplicate_event(text,text,text)",
+  "parameter_semantics": {
+    "p_kota_id": "SEMANTICALLY UNRESOLVED",
+    "p_location": "intended event location text, but business duplicate rule is not authoritative",
+    "p_name": "intended event name text, but business duplicate rule is not authoritative"
+  },
+  "return": "boolean",
+  "true_means": "The body intends an exact matching row to exist, but execution is not safe to rely on because events.kota_id is absent.",
+  "false_means": "The body intends no exact matching row to exist, subject to the same unresolved reference.",
+  "null_behavior": "SQL equality is not NULL-safe; NULL input or NULL compared column does not produce a match.",
+  "visibility_scope": "UNRESOLVED; SECURITY DEFINER may read beyond caller RLS visibility.",
+  "security_model": "SECURITY DEFINER, VOLATILE, no fixed search_path in canonical definition",
+  "normalization": "Canonical body uses exact equality only; historical migration uses fuzzy/date logic but is not canonical.",
+  "concurrency": "Advisory check is race-prone; no uniqueness or idempotency mechanism is established.",
+  "semantic_ownership": "SEMANTICALLY UNRESOLVED",
+  "root_cause": "F — MULTI-LAYER CONTRACT CONFLICT",
+  "implementation_authorization": "NONE"
+}

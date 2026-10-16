@@ -1,0 +1,11 @@
+{
+  "phase":"8.5G.2A",
+  "target":"shorsqyycpptxcutrqrb",
+  "source":"local canonical schema plus linked migration inventory",
+  "live_database_snapshot":"NOT_AVAILABLE_CONNECTION_NOT_FOUND",
+  "event_assignments_rls":"CANONICAL_BASELINE_ENABLED",
+  "pre_policy_inventory":"documented in PHASE-8.5G.2-PRE-RLS-INVENTORY.json",
+  "is_admin":"SECURITY DEFINER, search_path public, user_roles role lookup",
+  "regional_helper":"get_user_kabupaten_kota reads profiles.kabupaten_kota_id",
+  "remote_history":"20260908085000 remote-only plus local/remote drift"
+}

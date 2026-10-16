@@ -1,0 +1,51 @@
+{
+  "phase": "1.8E.4B",
+  "status": "BLOCKED",
+  "production": {
+    "projectRef": "xfscfjwapwnkiinkgbjg",
+    "access": "READ-ONLY",
+    "sqlIdentity": "NOT CAPTURED"
+  },
+  "source": {
+    "artifact": "Phase 1.8B production schema-only runtime dump",
+    "dataIncluded": false,
+    "directLiveCatalogConnection": false
+  },
+  "metadata": {
+    "tablesExpected": 27,
+    "viewsExpected": 3,
+    "applicationFunctionsExpected": 47,
+    "securityDefinerExpected": 41,
+    "rlsPoliciesExpected": 86,
+    "appRoleValuesExpected": 5
+  },
+  "schemas": ["public", "auth", "storage"],
+  "tables": {"status": "PARTIAL", "captured": 27, "definitionsComplete": false},
+  "columns": {"status": "BLOCKED", "definitionsComplete": false},
+  "types": {"status": "PARTIAL", "appRoleLabelsCaptured": true, "definitionsComplete": false},
+  "domains": {"status": "BLOCKED"},
+  "sequences": {"status": "BLOCKED"},
+  "constraints": {"status": "BLOCKED"},
+  "indexes": {"status": "BLOCKED"},
+  "functions": {"status": "PARTIAL", "captured": 47, "definitionsComplete": false},
+  "function_acl": {"status": "BLOCKED"},
+  "views": {"status": "PARTIAL", "captured": 3, "definitionsComplete": false},
+  "triggers": {"status": "BLOCKED"},
+  "rls_policies": {"status": "PARTIAL", "captured": 86, "definitionsComplete": false},
+  "grants": {"status": "BLOCKED"},
+  "extensions": {"status": "BLOCKED"},
+  "dependencies": {"status": "PARTIAL", "complete": false},
+  "classification": {"status": "BLOCKED", "application": "PARTIAL", "extension": "BLOCKED", "supabaseSystem": "PARTIAL", "postgresSystem": "BLOCKED"},
+  "missingEvidence": [
+    "Production SQL identity query result",
+    "Complete pg_get_functiondef output for every application function",
+    "Function owners, proconfig, and expanded ACLs",
+    "Exact pg_policies roles/permissive/USING/WITH CHECK records",
+    "relforcerowsecurity values",
+    "Complete trigger definitions",
+    "Complete index definitions, expressions, and predicates",
+    "Complete constraints and dependency graph",
+    "Schema/table/view/function grants",
+    "Extension catalog and ownership classification"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "phase":"7.4J-D0.9B",
+  "algorithm":"SHA-256",
+  "scope":"13 D0.9B evidence artifacts, excluding both hash manifest artifacts",
+  "canonicalization":"UTF-8 records of workspace-relative path, tab, lowercase file SHA-256, newline; sorted by path; trailing newline included",
+  "files":[
+    {"path":"docs/PHASE-7.4J-D0.9B-AUTH-PROVENANCE.json","sha256":"340c19303eefa9168d05c75deb8afeef3445d0e828a8b3b153fe0763eaa817af"},
+    {"path":"docs/PHASE-7.4J-D0.9B-AUTH-PROVENANCE-REPORT.md","sha256":"71a0abc1cd8c42a794127e0396e9ede1aac7f260ccbfed95157fadc03aed7dde"},
+    {"path":"docs/PHASE-7.4J-D0.9B-D1-READINESS-MATRIX.md","sha256":"c8601285e427e5532c768ce8aef5551e01a86c8944d3c476ac26e66299b47871"},
+    {"path":"docs/PHASE-7.4J-D0.9B-DATA-INVENTORY.json","sha256":"0f28031381feceec1a0eb6c8b3a6cfd7d97af4a20e7efec5ec30e7f674abfdc6"},
+    {"path":"docs/PHASE-7.4J-D0.9B-DATA-PROVENANCE.json","sha256":"296a6115ee4b22311d98e596aee76ec0c71032d104eb0eb260db2ea731bc7a98"},
+    {"path":"docs/PHASE-7.4J-D0.9B-DATA-PROVENANCE-REPORT.md","sha256":"efc7dc0611ce20d058765551a648b220494373c59df9770a3842ea7ba874b761"},
+    {"path":"docs/PHASE-7.4J-D0.9B-FINAL-REPORT.md","sha256":"245a10c877a5779e88a827d46c2eb79ddb27854bb9cebd172205f3401e68d3b8"},
+    {"path":"docs/PHASE-7.4J-D0.9B-GOVERNANCE-DECISION.md","sha256":"1e9f6de84691c4c0445f4890c603fb6ce861c362f8e2777fe63290b7bc4cdda8"},
+    {"path":"docs/PHASE-7.4J-D0.9B-IDENTITY-RELATIONSHIP-REPORT.md","sha256":"bddd2f485994b4b3f283faaa90aaff2f1a141b0c72f3803bfce0b8826b661ae2"},
+    {"path":"docs/PHASE-7.4J-D0.9B-PRODUCTION-SAFETY.md","sha256":"e118a8cf3ae36db8841d076c421e3fc0bcae98833a6542687e73982679f0b231"},
+    {"path":"docs/PHASE-7.4J-D0.9B-RECONSTRUCTION-DATA-POLICY.md","sha256":"1373e705f17dffa16024e4e911230b94f6e13aa61d6274df42feede64e875f44"},
+    {"path":"docs/PHASE-7.4J-D0.9B-RLS-DEPENDENCY-IMPACT.md","sha256":"7ff24064ab02e38c5aee4d7589174d29897a078148b4297960af27331b50c2b5"},
+    {"path":"docs/PHASE-7.4J-D0.9B-STORAGE-PROVENANCE-REPORT.md","sha256":"14fe64cf3bc1424b411eb59eb4b45c9e30d923ecd172f97bed69ab4b5e01728d"}
+  ],
+  "manifest_sha256":"3a78a1b16e92372556efa5e6adf8fa65cc2799ddaa71b7694929aa97dc5e8609",
+  "run1_hash":"3a78a1b16e92372556efa5e6adf8fa65cc2799ddaa71b7694929aa97dc5e8609",
+  "run2_hash":"3a78a1b16e92372556efa5e6adf8fa65cc2799ddaa71b7694929aa97dc5e8609",
+  "match":true,
+  "determinism":"PASS",
+  "gate":"BLOCKED"
+}

@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "views",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": 3,
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No view definition or `security_invoker` verification occurred."
+}

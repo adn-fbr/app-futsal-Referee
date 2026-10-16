@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2A",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "existing_trigger":"public.log_referee_assignment",
+  "audit_schema_changed":false,
+  "unauthorized_success_audit":"NOT_TESTED"
+}

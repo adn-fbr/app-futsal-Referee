@@ -1,0 +1,15 @@
+PHASE-7.3B-BUSINESS-CONTRACT-BLOCKER-RESOLUTION v1.0.0
+NORMALIZED ARTIFACT SET SHA-256
+
+INPUTS:
+docs/PHASE-7.3B-CONTRACT-DECISION-TABLE.md
+docs/PHASE-7.3B-DYNAMIC-TABLE-RESOLUTION.md
+docs/PHASE-7.3B-RPC-RESOLUTION.md
+docs/PHASE-7.3B-MIGRATION-IMPACT.md
+docs/PHASE-7.3B-FINAL-REPORT.md
+
+RUN 1: 1f52631772e2f3fc5110f090a55e6998f835d3ed9781953229c21eb1cd6cf25d
+RUN 2: 1f52631772e2f3fc5110f090a55e6998f835d3ed9781953229c21eb1cd6cf25d
+IDENTICAL: YES
+
+Hash input is the deterministic UTF-8 concatenation of each listed relative path, a newline, and its file bytes, in listed order. The hash file itself is excluded to avoid self-reference.

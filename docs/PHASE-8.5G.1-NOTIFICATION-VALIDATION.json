@@ -1,0 +1,8 @@
+{
+  "phase": "8.5G.1",
+  "existing_notification_path": "send-assignment-notification",
+  "status_notification": "NOT_VALIDATED",
+  "duplicate_notification": "NOT VERIFIED",
+  "architecture_changed": false,
+  "result": "NOT_VALIDATED"
+}

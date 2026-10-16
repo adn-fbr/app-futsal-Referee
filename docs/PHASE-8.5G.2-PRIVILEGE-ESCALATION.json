@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2",
+  "status":"NOT_EXECUTED",
+  "event_id_region_escape":"NOT_TESTED_POST_REMEDIATION",
+  "with_check_policy_prepared":true,
+  "database_readback":"NOT_EXECUTED"
+}

@@ -1,0 +1,16 @@
+{
+  "phase": "8.2",
+  "startup": {"getSession": "existing AuthRepository", "session_user": "session.user.id", "profile_resolution": "profiles.id lookup", "role_resolution": "user_roles.user_id lookup", "ready_state": "isLoading=false after resolution"},
+  "events": ["INITIAL_SESSION/equivalent startup callback","SIGNED_IN","SIGNED_OUT","TOKEN_REFRESHED","USER_UPDATED"],
+  "event_behavior": "AuthContext listener schedules establishSession for every SDK auth event and cleans up the subscription on unmount.",
+  "authenticated": "user and session non-null; isAuthenticated=true",
+  "unauthenticated": "user/session null; profile and role resolution cleared",
+  "profile_loading": "profileResolution.status=loading",
+  "profile_available": "profileResolution.status=ready",
+  "profile_missing": "profileResolution.status=missing",
+  "role_loading": "roleResolution.status=loading",
+  "role_available": "roleResolution.status=ready with canonical AppRole values",
+  "role_missing": "roleResolution.status=ready with empty roles; ProtectedRoute shows waiting/unauthorized state",
+  "error": "authError or profile/role error state; protected content is not rendered",
+  "logout": "supabase.auth.signOut through SupabaseAuthRepository, then clear application session state"
+}

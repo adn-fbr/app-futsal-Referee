@@ -1,0 +1,9 @@
+{
+  "phase": "8.5F",
+  "typecheck": {"status": "PASS", "command": "npm run typecheck"},
+  "tests": {"status": "PASS", "command": "npm test", "test_files": 10, "tests": 28},
+  "build": {"status": "PASS", "command": "npm run build", "note": "existing chunk-size and outdated browserslist warnings"},
+  "lint": {"status": "BASELINE_UNCHANGED", "command": "npm run lint", "errors": 66, "warnings": 11, "new_errors_introduced": 0},
+  "browser_validation": "NOT_EXECUTED",
+  "transaction_workflow": "NOT_CHANGED; deferred to Phase 8.5G"
+}

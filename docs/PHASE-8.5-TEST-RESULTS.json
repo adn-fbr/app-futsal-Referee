@@ -1,0 +1,9 @@
+{
+  "phase":"8.5",
+  "focused_tests":{"command":"npx vitest run src/test/phase-8-5-historical-event.test.ts","exit_code":0,"tests":2,"result":"PASS"},
+  "full_tests":{"command":"npm test -- --run","exit_code":0,"test_files":10,"tests":28,"result":"PASS"},
+  "typecheck":{"command":"npm run typecheck","exit_code":0,"result":"PASS"},
+  "build":{"command":"npm run build","exit_code":0,"result":"PASS","warnings":["stale Browserslist data","large chunk"]},
+  "lint":{"command":"npm run lint","exit_code":1,"errors":66,"warnings":11,"classification":"PRE_EXISTING"},
+  "remote_tests":{"browser":"NOT_EXECUTED","rls":"NOT_EXECUTED","mutation":"NOT_EXECUTED","reason":"synthetic Non-Production identities/fixtures unavailable"}
+}

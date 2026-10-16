@@ -1,0 +1,15 @@
+PHASE-7.3A-BUSINESS-CONTRACT-REFERENCE-RESOLUTION v1.0.0
+NORMALIZED ARTIFACT SET SHA-256
+
+INPUTS:
+docs/PHASE-7.3A-CONTRACT-BLOCKERS.md
+docs/PHASE-7.3A-CONTRACT-MATRIX.md
+docs/PHASE-7.3A-MIGRATION-READINESS.md
+docs/PHASE-7.3A-BATCH-PLAN.md
+docs/PHASE-7.3A-FINAL-REPORT.md
+
+RUN 1: 9bcef2b72199b3388c4649f6412edae09166572b1c5a0ca26ad4c52b4acd6385
+RUN 2: 9bcef2b72199b3388c4649f6412edae09166572b1c5a0ca26ad4c52b4acd6385
+IDENTICAL: YES
+
+Hash input is the deterministic UTF-8 concatenation of each listed relative path, a newline, and its file bytes, in listed order. The hash file itself is excluded to avoid self-reference.

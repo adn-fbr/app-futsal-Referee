@@ -1,0 +1,28 @@
+{
+  "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "canonical_hash_matches": true,
+  "graph_records": 351,
+  "manifest_dependency_counts": {
+    "total": 351,
+    "resolved": 282,
+    "unresolved": 47,
+    "not_exposed": 0,
+    "external_managed": 22,
+    "ambiguous": 0
+  },
+  "graph_resolution_counts": {
+    "RESOLVED": 282,
+    "UNRESOLVED": 47,
+    "NOT_EXPOSED_BY_DUMP": 0,
+    "EXTERNAL_MANAGED_SCHEMA": 22
+  },
+  "manifest_matches_graph": true,
+  "foreign_keys_in_canonical": 30,
+  "foreign_key_manifest_claim": "PASS",
+  "notes": [
+    "auth.users references are external-managed dependencies",
+    "47 unresolved records are function-body static-analysis markers",
+    "overloaded functions retain full identity arguments",
+    "no missing canonical identity was inferred"
+  ]
+}

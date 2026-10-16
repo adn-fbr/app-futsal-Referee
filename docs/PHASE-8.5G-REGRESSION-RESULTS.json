@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G",
+  "typecheck": "PASS",
+  "focused_tests": "PASS",
+  "full_test_suite": "PASS (11 files, 33 tests)",
+  "build": "PASS (warnings: large chunk and stale Browserslist data)",
+  "lint": "FAIL baseline (29 errors, 11 warnings; unrelated existing files)",
+  "production_access": 0
+}

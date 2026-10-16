@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2C",
+  "migration_file":"20260908184851_phase_8_5g_2_regional_rls_authorization.sql",
+  "sha256":"E486E50AED37526124FFD502ECFB154C5D5910EB9F9828B1E96AA76E39015F54",
+  "content_profile":{"drop_policy":2,"create_policy":2,"unrelated_operations":0},
+  "integrity":"PASS",
+  "executed":false
+}

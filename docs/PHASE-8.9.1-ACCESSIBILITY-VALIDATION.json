@@ -1,0 +1,10 @@
+{
+  "phase": "8.9.1",
+  "status": "PARTIAL",
+  "public_routes_dom_snapshot": "AVAILABLE",
+  "public_form_labels_observed": true,
+  "keyboard_navigation": "NOT_VALIDATED",
+  "dialog_focus": "NOT_VALIDATED",
+  "protected_routes": "NOT_VALIDATED",
+  "reason": "AUTH_FIXTURE_UNAVAILABLE"
+}

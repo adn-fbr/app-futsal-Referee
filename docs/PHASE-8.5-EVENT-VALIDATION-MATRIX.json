@@ -1,0 +1,19 @@
+{
+  "phase":"8.5",
+  "historical_rule":"start_date before current day is valid for Admin Provinsi creation; no new database status/field introduced",
+  "tests":[
+    {"id":"EV-HIST-001","case":"Admin Provinsi authenticated","result":"STATIC_PASS","evidence":"AuthContext + existing protected event route"},
+    {"id":"EV-HIST-002","case":"Non-admin rejected","result":"BLOCKED_LIVE","evidence":"route/RLS test not executed"},
+    {"id":"EV-HIST-003","case":"Anonymous rejected","result":"STATIC_PASS_ROUTE; LIVE_BLOCKED","evidence":"ProtectedRoute"},
+    {"id":"EV-HIST-004","case":"future date","result":"STATIC_SUPPORTED","evidence":"existing calendar path"},
+    {"id":"EV-HIST-005","case":"today date","result":"STATIC_SUPPORTED","evidence":"date predicate"},
+    {"id":"EV-HIST-006","case":"past date Admin Provinsi","result":"IMPLEMENTED_STATIC","evidence":"EventSubmission allows past dates when isAdminProvinsi()"},
+    {"id":"EV-HIST-007","case":"Historical indicator","result":"IMPLEMENTED_STATIC","evidence":"Historical Event status message"},
+    {"id":"EV-HIST-008","case":"past date not rejected solely by date","result":"IMPLEMENTED_STATIC","evidence":"calendar disabled predicate is role-scoped"},
+    {"id":"EV-HIST-009","case":"validate valid historical event","result":"EXISTING_WORKFLOW_LIVE_BLOCKED","evidence":"existing approval path; no new status"},
+    {"id":"EV-HIST-010","case":"invalid event","result":"PARTIAL","evidence":"form required fields exist; live validation unavailable"},
+    {"id":"EV-HIST-011","case":"duplicate detection","result":"BLOCKED_CONTRACT_GAP","evidence":"canonical boolean RPC conflicts with generated/application five-arg contract"},
+    {"id":"EV-HIST-012","case":"unauthorized validation","result":"BLOCKED_LIVE","evidence":"RLS/browser unavailable"}
+  ],
+  "status":"PARTIAL"
+}

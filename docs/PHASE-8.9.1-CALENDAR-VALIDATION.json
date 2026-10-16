@@ -1,0 +1,7 @@
+{
+  "phase": "8.9.1",
+  "status": "BLOCKED",
+  "route": "/events/calendar",
+  "validated": false,
+  "reason": "AUTH_FIXTURE_UNAVAILABLE"
+}

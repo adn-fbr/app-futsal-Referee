@@ -1,0 +1,9 @@
+{
+  "phase": "8.8A.1",
+  "status": "BLOCKED",
+  "canonical_tables": ["public.provinsi", "public.kabupaten_kota"],
+  "region_a_id": null,
+  "region_b_id": null,
+  "regions_distinct": null,
+  "reason": "Target environment was rejected before live schema/reference-data inspection"
+}

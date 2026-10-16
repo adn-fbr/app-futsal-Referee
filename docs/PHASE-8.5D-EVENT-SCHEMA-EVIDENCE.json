@@ -1,0 +1,31 @@
+{
+  "phase": "8.5D",
+  "source": "production-schema.sql",
+  "table": "public.events",
+  "columns": {
+    "id": {"type": "uuid", "nullable": false, "default": "gen_random_uuid()"},
+    "name": {"type": "text", "nullable": false},
+    "date": {"type": "date", "nullable": false},
+    "start_date": {"type": "date", "nullable": true},
+    "end_date": {"type": "date", "nullable": true},
+    "location": {"type": "text", "nullable": true},
+    "category": {"type": "text", "nullable": true},
+    "description": {"type": "text", "nullable": true},
+    "status": {"type": "text", "nullable": true, "default": "DIAJUKAN", "check": ["DIAJUKAN", "DISETUJUI", "DITOLAK", "SELESAI"]},
+    "kabupaten_kota_id": {"type": "uuid", "nullable": true},
+    "created_by": {"type": "uuid", "nullable": true},
+    "deleted_at": {"type": "timestamp with time zone", "nullable": true},
+    "created_at": {"type": "timestamp with time zone", "nullable": true, "default": "now()"},
+    "updated_at": {"type": "timestamp with time zone", "nullable": true, "default": "now()"}
+  },
+  "absent_column": "kota_id",
+  "primary_key": "events_pkey(id)",
+  "foreign_keys": [
+    "events_created_by_fkey: created_by -> profiles.id",
+    "events_kabupaten_kota_id_fkey: kabupaten_kota_id -> kabupaten_kota.id"
+  ],
+  "indexes": ["idx_events_created_by", "idx_events_date", "idx_events_deleted_at", "idx_events_kabupaten_kota_id", "idx_events_status"],
+  "direct_triggers": [],
+  "rls": {"enabled": true, "policies": ["Admins can create events", "Admins can delete events", "Admins can update events", "Everyone can view events"]},
+  "evidence": ["production-schema.sql:1760-1775", "production-schema.sql:2134-2155", "production-schema.sql:2392-2398", "production-schema.sql:2540-2572", "production-schema.sql:2694", "production-schema.sql:2904"]
+}

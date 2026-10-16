@@ -1,0 +1,14 @@
+{
+  "auth_access":false,
+  "auth_enumeration_method":"NONE_SAFE_AVAILABLE",
+  "auth_user_count":"UNKNOWN",
+  "auth_state":"UNKNOWN",
+  "auth_provenance":"UNKNOWN",
+  "auth_boundary":"EXTERNAL_MANAGED",
+  "blocker_type":"F",
+  "supporting_types":["C","D"],
+  "evidence":["publishable/PostgREST does not expose auth.users rows","supported CLI surface has no Auth-user enumeration command","no approved read-only database credential"],
+  "secrets_requested":false,
+  "secrets_printed":false,
+  "production_targeted":false
+}

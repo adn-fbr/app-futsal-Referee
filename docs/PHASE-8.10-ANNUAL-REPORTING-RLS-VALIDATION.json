@@ -1,0 +1,8 @@
+{
+  "phase":"8.10",
+  "status":"BLOCKED",
+  "frontend_filter_security":false,
+  "canonical_query_scope_wired":true,
+  "live_rls_scope_validation":"BLOCKED_BY_PHASE_8_5G_2C",
+  "cross_region_access":"KNOWN_PRE_REMEDIATION_LEAKAGE"
+}

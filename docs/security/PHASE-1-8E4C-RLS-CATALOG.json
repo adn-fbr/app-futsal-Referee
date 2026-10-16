@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "expected": 86,
+  "capturedCount": 86,
+  "completeCount": 0,
+  "missing":["exact roles","permissive/restrictive","USING","WITH CHECK","relrowsecurity","relforcerowsecurity"]
+}

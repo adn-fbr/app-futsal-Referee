@@ -1,0 +1,9 @@
+{
+  "remote_schema_dump_sha256":"15bd39c8b6d0c7abb76177ea694bf7c4f8cfa2dc07a9c6dcce59732e731a3814",
+  "canonical_baseline_sha256":"b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "rows":[
+    {"object":"events","remote":"PRESENT_DRIFTED","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"profiles","remote":"PRESENT_DRIFTED","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"user_roles","remote":"PRESENT_DRIFTED","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"pengurus","remote":"ABSENT","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"honors","remote":"PRESENT_DRIFTED","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"event_assignments","remote":"PRESENT_DRIFTED","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"referee_reviews","remote":"PRESENT_EMPTY","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"application_tables_other_20","remote":"ABSENT_OR_UNKNOWN","canonical":"PRESENT","action":"RECONSTRUCT"},{"object":"auth.users","remote":"EXTERNAL_PRESENT","canonical":"EXTERNAL_MANAGED","action":"EXTERNAL_MANAGED"},{"object":"storage.*","remote":"SCHEMA_PRESENT_ZERO_BUCKETS","canonical":"EXTERNAL_MANAGED","action":"EXTERNAL_MANAGED"},{"object":"public.check_duplicate_event(text,text,text)","remote":"ABSENT","canonical":"PRESENT","action":"GOVERNANCE_REQUIRED"},{"object":"rich_duplicate_search","remote":"ABSENT","canonical":"FUTURE_TBD","action":"GOVERNANCE_REQUIRED"},{"object":"functions_views_triggers_indexes_rls_extensions","remote":"PARTIAL","canonical":"PRESENT","action":"RECONSTRUCT"}
+  ],
+  "allowed_actions_used":["RECONSTRUCT","EXTERNAL_MANAGED","GOVERNANCE_REQUIRED"],
+  "execution":"NOT AUTHORIZED"
+}

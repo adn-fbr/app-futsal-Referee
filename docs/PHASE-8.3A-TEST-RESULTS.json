@@ -1,0 +1,28 @@
+{
+  "phase": "8.3A",
+  "automated": {
+    "typescript": {"command":"npx tsc --noEmit","status":"PASS"},
+    "tests": {"command":"npm test","status":"PASS","test_files":4,"tests":11},
+    "build": {"command":"npm run build","status":"PASS"},
+    "feature_lint": {"command":"npx eslint src/hooks/useAdminEventAssignments.ts src/pages/AdminEventAssignments.tsx src/App.tsx src/components/layout/MobileNav.tsx","status":"PASS"},
+    "feature_diagnostics": "PASS"
+  },
+  "matrix": [
+    {"id":"PA-001","scenario":"Admin Provinsi authenticated","result":"IMPLEMENTED","evidence":"ProtectedRoute requireRole and MobileNav isAdminProvinsi"},
+    {"id":"PA-002","scenario":"Non-Admin menu hidden","result":"IMPLEMENTED","evidence":"MobileNav conditional role branch"},
+    {"id":"PA-003","scenario":"Non-Admin direct URL","result":"IMPLEMENTED","evidence":"ProtectedRoute role guard"},
+    {"id":"PA-004","scenario":"Canonical assignment rows","result":"IMPLEMENTED","evidence":"event_assignments query with events/profiles joins"},
+    {"id":"PA-005","scenario":"Change Status dialog","result":"IMPLEMENTED","evidence":"AdminEventAssignments status dialog"},
+    {"id":"PA-006","scenario":"Empty password","result":"IMPLEMENTED","evidence":"Verify button disabled and mutation rejects empty password"},
+    {"id":"PA-007","scenario":"Wrong password","result":"IMPLEMENTED","evidence":"signInWithPassword failure preserves status"},
+    {"id":"PA-008","scenario":"Role changes before mutation","result":"IMPLEMENTED","evidence":"post-auth user_roles re-check"},
+    {"id":"PA-009","scenario":"Correct password and role","result":"IMPLEMENTED","evidence":"canonical id update after dual verification"},
+    {"id":"PA-010","scenario":"RLS denial","result":"IMPLEMENTED","evidence":"mutation error is surfaced safely; no bypass"},
+    {"id":"PA-011","scenario":"Double verify","result":"IMPLEMENTED","evidence":"mutation pending disables action"},
+    {"id":"PA-012","scenario":"Session expiry","result":"IMPLEMENTED","evidence":"getUser validation before and after re-auth"},
+    {"id":"PA-013","scenario":"Password handling","result":"IMPLEMENTED","evidence":"password is local dialog state only and cleared"},
+    {"id":"PA-014","scenario":"Production endpoint","result":"PASS","evidence":"no database/Production access performed"}
+  ],
+  "nonproduction_mutation_test_executed": false,
+  "synthetic_users_created": false
+}

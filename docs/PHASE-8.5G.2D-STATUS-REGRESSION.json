@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2D",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "canonical_statuses":["pending","confirmed","declined","cancelled"],
+  "pending_to_confirmed":"NOT_TESTED",
+  "pending_to_declined":"NOT_TESTED",
+  "pending_to_cancelled":"NOT_TESTED",
+  "confirmed_to_cancelled":"NOT_TESTED"
+}

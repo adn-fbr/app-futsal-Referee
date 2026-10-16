@@ -1,0 +1,10 @@
+{
+  "phase": "8.7",
+  "timezone": "Asia/Makassar",
+  "today": "explicit timezone formatter",
+  "current_year": "explicit timezone formatter",
+  "annual_period": "explicit timezone formatter",
+  "year_boundary_test": "PASS - UTC 2026-12-31T16:30Z resolves to WITA 2027-01-01",
+  "date_only_semantics": "getYearFromDate preserves YYYY prefix",
+  "browser_timezone_dependency": false
+}

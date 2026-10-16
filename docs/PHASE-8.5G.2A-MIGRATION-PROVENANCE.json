@@ -1,0 +1,16 @@
+{
+  "phase":"8.5G.2A",
+  "version":"20260908085000",
+  "classification":"CLASS_B_HISTORICAL_MIGRATION_WITH_VERIFIED_LOCAL_SOURCE",
+  "workspace_source":"tmp/d1d6-work/supabase/migrations/20260908085000_canonical_baseline_reconstruction.sql",
+  "git_provenance":"NOT_FOUND",
+  "sql_recoverable":true,
+  "sql_sha256":"FC26028F25598FF61A151306A7EAA9340F0C23D2529B5D865E65CCC2EDC688DF",
+  "line_count":3900,
+  "schema_effect":"DESTRUCTIVE_BASELINE_RECONSTRUCTION",
+  "data_effect":"NOT_EXECUTED",
+  "security_effect":"FUNCTIONS_AND_POLICIES_RECREATED",
+  "already_applied_remotely":true,
+  "reconciliation_action":"KEEP_REMOTE_HISTORY_DO_NOT_REPLAY",
+  "reason":"remote migration is unrelated and destructive; exact SQL must not be replayed to reconcile current RLS migration"
+}

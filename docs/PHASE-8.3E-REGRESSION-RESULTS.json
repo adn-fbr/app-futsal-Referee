@@ -1,0 +1,15 @@
+{
+  "phase":"8.3E",
+  "status":"PASS_LOCAL_REGRESSION_WITH_INTEGRATION_BLOCKER",
+  "checks":[
+    {"command":"npm run typecheck","exit_code":0,"result":"PASS"},
+    {"command":"npm test -- --run","exit_code":0,"result":"PASS: 9 files, 26 tests"},
+    {"command":"npm run lint","exit_code":1,"result":"PRE_EXISTING FAILURE: 66 errors, 11 warnings; no Phase 8.3D modified file reported"},
+    {"command":"npm run build","exit_code":0,"result":"PASS local build; existing Browserslist/chunk warnings"},
+    {"command":"static F-007 bundle scan","exit_code":0,"result":"PASS: seed references absent"}
+  ],
+  "regression_classification":{"lint":"PRE_EXISTING","introduced_by_8_3d":"NONE_FOUND","resolved_by_8_3e":"NOT_APPLICABLE"},
+  "phase_8_3a_regression":"NO_STATIC_REGRESSION_FOUND",
+  "integration_regression":"NOT_VERIFIED",
+  "remaining":"Browser/RLS/mutation validation blocked by target and fixture boundary"
+}

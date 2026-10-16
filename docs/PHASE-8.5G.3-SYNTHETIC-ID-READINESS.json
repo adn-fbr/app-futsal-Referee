@@ -1,0 +1,13 @@
+{
+  "phase": "8.5G.3",
+  "identifiers": {
+    "FIXTURE_ADMIN_PROVINSI": "NOT READY",
+    "FIXTURE_NON_ADMIN": "NOT READY",
+    "FIXTURE_REFEREE": "NOT READY",
+    "FIXTURE_EVENT": "NOT READY",
+    "FIXTURE_EVENT_ASSIGNMENT": "NOT READY"
+  },
+  "generation_strategy": "NOT AVAILABLE IN APPROVED TOOL",
+  "approved_existing_ids": false,
+  "status": "BLOCKED"
+}

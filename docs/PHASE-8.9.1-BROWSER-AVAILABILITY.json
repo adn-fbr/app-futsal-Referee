@@ -1,0 +1,11 @@
+{
+  "phase": "8.9.1",
+  "browser": "AVAILABLE",
+  "engine": "integrated Chromium browser channel",
+  "local_url": "http://localhost:8080/",
+  "application_startup": "PASS",
+  "runtime_target_verified": false,
+  "production_target_detected": false,
+  "protected_auth_fixture_available": false,
+  "status": "BLOCKED"
+}

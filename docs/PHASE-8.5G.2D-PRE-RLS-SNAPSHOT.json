@@ -1,0 +1,11 @@
+{
+  "phase":"8.5G.2D",
+  "target":"shorsqyycpptxcutrqrb",
+  "target_url":"NON_PRODUCTION",
+  "migration_hash":"E486E50AED37526124FFD502ECFB154C5D5910EB9F9828B1E96AA76E39015F54",
+  "rls_state":"CANONICAL_BASELINE_ENABLED",
+  "policy_snapshot":"PHASE-8.5G.2-PRE-RLS-INVENTORY.json",
+  "function_snapshot":"is_admin and get_user_kabupaten_kota from canonical schema",
+  "fixture_snapshot":"PHASE-8.8A.1B manifest",
+  "live_query_channel":"UNAVAILABLE"
+}

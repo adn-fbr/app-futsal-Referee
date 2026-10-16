@@ -1,0 +1,14 @@
+{
+  "phase": "8.5G.3",
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_auth_operations": 0,
+  "production_storage_operations": 0,
+  "production_deployments": 0,
+  "non_production_auth_mutations": 0,
+  "non_production_data_mutations": 0,
+  "schema_changes": 0,
+  "rls_changes": 0,
+  "migration_created": 0,
+  "migration_applied": 0
+}

@@ -1,0 +1,10 @@
+{
+  "phase":"8.10",
+  "status":"PARTIAL",
+  "preview":"PASS",
+  "browser_print_to_pdf":"SUPPORTED",
+  "a4_print_css":"PASS",
+  "official_issued_pdf":"BLOCKED_SCHEMA_GAP",
+  "immutable_snapshot":"NOT_AVAILABLE",
+  "page_break_rules":"PASS_IMPLEMENTATION"
+}

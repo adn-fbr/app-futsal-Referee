@@ -1,0 +1,10 @@
+{
+  "phase": "8.8",
+  "regional_filter": "PASS static",
+  "regional_color": "PASS static",
+  "legend": "PASS static",
+  "status_filter": "PASS",
+  "year_filter": "PASS via Phase 8.7 context",
+  "pending_visibility": "PASS static",
+  "cross_region_live_validation": "NOT VERIFIED"
+}

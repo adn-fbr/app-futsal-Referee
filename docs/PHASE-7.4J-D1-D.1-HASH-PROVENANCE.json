@@ -1,0 +1,57 @@
+{
+  "phase": "PHASE 7.4J-D1-D.1",
+  "purpose": "CANONICAL BASELINE INTEGRITY RESOLUTION",
+  "status": "BLOCKED",
+  "classification": "BLOCKED — BASELINE PROVENANCE UNRESOLVED",
+  "expected_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88bbf1c6a816f1f1c9ed98db1",
+  "actual_file_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "hash_reproduction": {
+    "status": "PASS",
+    "independent_methods": [
+      "Get-FileHash -Algorithm SHA256",
+      ".NET System.Security.Cryptography.SHA256 over raw file bytes"
+    ],
+    "match": true,
+    "notes": "Both methods returned the same observed hash for the actual file bytes."
+  },
+  "file_provenance": {
+    "path": "D:\\AFP SULSEL\\app-futsal\\production-schema.sql",
+    "length_bytes": 126597,
+    "last_write_utc": "2026-09-07T07:23:53.3207946Z",
+    "bom_prefix_bytes": [10, 10, 10, 83],
+    "crlf": true,
+    "lf": true,
+    "encoding_evidence": "UTF-8 text stream; not normalized or regenerated during this phase.",
+    "source_status": "UNRESOLVED"
+  },
+  "hash_origin": {
+    "expected_hash_found_in_repository": false,
+    "observed_hash_found_in_repository": true,
+    "located_in": [
+      "CANONICAL-RUNTIME-BASELINE-HASH.txt",
+      "CANONICAL-RUNTIME-BASELINE-MANIFEST.json",
+      "CANONICAL-RUNTIME-BASELINE-REPORT.md",
+      "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+      "PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+      "docs/PHASE-7.4J-D1-D-PREFLIGHT.json",
+      "docs/PHASE-7.4J-D1-D-SCHEMA-COMPARISON.json",
+      "docs/PHASE-7.4J-D1-D-EXECUTION-REPORT.md"
+    ],
+    "notes": "The observed hash is present in generated baseline and report artifacts, while no actual copy of the expected hash was found in the checked repository inventory."
+  },
+  "baseline_modification": {
+    "status": "DETECTED",
+    "meaning": "The actual file hash differs from the expected canonical baseline hash.",
+    "provenance": "UNRESOLVED"
+  },
+  "reporting_artifact_error": {
+    "status": "NO",
+    "reason": "The actual file itself matches the observed hash, not the expected hash."
+  },
+  "non_production_access": {
+    "status": "NO ACCESS",
+    "production": "NO ACCESS",
+    "mutations": 0
+  },
+  "final_gate": "BLOCKED — BASELINE PROVENANCE UNRESOLVED"
+}

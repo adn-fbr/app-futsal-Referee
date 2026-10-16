@@ -1,0 +1,18 @@
+{
+  "phase": "8.5G.1",
+  "canonical_values": ["pending", "confirmed", "declined", "cancelled"],
+  "admin_provinsi_existing_allowed_transition": "pending -> confirmed",
+  "validation": {
+    "pending -> confirmed": "PASS",
+    "pending -> declined": "PASS via referee canonical path",
+    "pending -> cancelled": "PASS via canonical cancellation path",
+    "confirmed -> pending": "NOT VERIFIED",
+    "confirmed -> declined": "NOT VERIFIED",
+    "confirmed -> cancelled": "NOT VERIFIED",
+    "declined -> confirmed": "NOT VERIFIED",
+    "declined -> pending": "NOT VERIFIED",
+    "cancelled -> confirmed": "NOT VERIFIED",
+    "cancelled -> pending": "NOT VERIFIED"
+  },
+  "schema_change": 0
+}

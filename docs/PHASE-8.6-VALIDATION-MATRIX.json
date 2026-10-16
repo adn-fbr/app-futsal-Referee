@@ -1,0 +1,21 @@
+{
+  "phase": "8.6",
+  "automated": {
+    "HE-003_future_event_normal_workflow":"PASS static",
+    "HE-004_historical_detection":"PASS",
+    "HE-005_password_dialog":"PASS static",
+    "HE-006_correct_password":"NOT VERIFIED live",
+    "HE-007_wrong_password":"PASS static; NOT VERIFIED live",
+    "HE-008_password_not_persisted":"PASS static",
+    "HE-009_password_not_logged":"PASS static",
+    "HE-010_independent_role_check":"PASS static",
+    "HE-011_direct_route":"PASS static; NOT VERIFIED live",
+    "HE-012_duplicate_submission":"PASS static",
+    "HE-013_validation":"PASS existing validation preserved",
+    "HE-014_refresh":"PASS existing query invalidation",
+    "HE-015_audit_record":"PASS static; NOT VERIFIED live",
+    "HE-019_before_after_schema":"PASS static",
+    "HE-020_production_rejected":"PASS target guard; no Production access"
+  },
+  "live_status": "BLOCKED - synthetic Auth fixture unavailable"
+}

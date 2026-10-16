@@ -1,0 +1,9 @@
+{
+  "phase": "8.8A",
+  "status": "BLOCKED",
+  "requirement": "Prove no Region A user can retrieve Region B event data",
+  "live_validation": "NOT_EXECUTED",
+  "reason": "Official Non-Production fixtures / Auth identities were unavailable in this workspace.",
+  "unauthorized_event_records": null,
+  "evidence": "No live login context or fixture provisioning path was available to run the cross-region verification."
+}

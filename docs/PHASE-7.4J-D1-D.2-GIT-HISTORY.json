@@ -1,0 +1,42 @@
+{
+  "phase": "PHASE 7.4J-D1-D.2",
+  "path": "production-schema.sql",
+  "tracked": true,
+  "ignored": false,
+  "first_introducing_commit": "74dcc12efc1e46c38a5466bb0d2b04405009f535",
+  "latest_modifying_commit": "74dcc12efc1e46c38a5466bb0d2b04405009f535",
+  "branches": ["main"],
+  "tags": [],
+  "working_tree_diff": false,
+  "staged_diff": false,
+  "git_config": {
+    "core.autocrlf": true,
+    "eol_index": "lf",
+    "eol_worktree": "mixed"
+  },
+  "commits": [
+    {
+      "commit": "74dcc12efc1e46c38a5466bb0d2b04405009f535",
+      "commit_date": "2026-09-07T21:26:19+08:00",
+      "subject": "feat(auth): implement Supabase authentication and user profile management",
+      "path_mode": "100644",
+      "blob_sha1": "e3e5537795d2062a2a1a70bd2f3afcd93e3be822",
+      "raw_bytes": 125722,
+      "raw_sha256": "d4599d721b11ee2510bdcc16f3ad19916a8ce2e802a5f9ee05b12701b6a38995",
+      "contains_expected_sha256": false,
+      "contains_observed_sha256": false,
+      "refs": ["main"]
+    }
+  ],
+  "head": {
+    "commit": "095db4fd146f7354b9cd60f5b6f08762a226e194",
+    "commit_date": "2026-09-07T22:35:24+08:00",
+    "path_blob_sha1": "e3e5537795d2062a2a1a70bd2f3afcd93e3be822",
+    "path_unchanged_since_latest_modification": true
+  },
+  "history_hash_search": {
+    "expected_sha256_found": false,
+    "observed_sha256_found": true,
+    "observed_hash_commits": ["095db4fd146f7354b9cd60f5b6f08762a226e194", "74dcc12efc1e46c38a5466bb0d2b04405009f535"]
+  }
+}

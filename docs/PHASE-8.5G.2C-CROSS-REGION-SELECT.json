@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2C",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "admin_a_region_a":"NOT_TESTED",
+  "admin_a_region_b":"PRE_REMEDIATION_LEAKAGE_CONFIRMED",
+  "admin_b_region_b":"NOT_TESTED",
+  "admin_b_region_a":"NOT_TESTED"
+}

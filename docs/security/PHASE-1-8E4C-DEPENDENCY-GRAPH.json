@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "verifiedEdges": ["profiles.id -> auth.users.id","user_roles.user_id -> auth.users.id","profiles.kabupaten_kota_id -> kabupaten_kota.id","kabupaten_kota.provinsi_id -> provinsi.id","events.kabupaten_kota_id -> kabupaten_kota.id","event_assignments.event_id -> events.id","event_assignments.referee_id -> profiles.id"],
+  "missing":["complete catalog dependency edges for tables, types, sequences, constraints, indexes, triggers, functions, views, policies, extensions"]
+}

@@ -1,0 +1,52 @@
+{
+  "phase": "PHASE 7.4J-D1-D.5",
+  "mode": "FINAL_READ_ONLY_PREFLIGHT",
+  "authorized_target": "shorsqyycpptxcutrqrb",
+  "production_project": "xfscfjwapwnkiinkgbjg",
+  "human_authorization": "APPROVED D01-D10 — AUTHORIZE NON-PRODUCTION RECONSTRUCTION ONLY",
+  "baseline": {
+    "path": "production-schema.sql",
+    "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "bytes": 126597,
+    "git_commit": "74dcc12efc1e46c38a5466bb0d2b04405009f535",
+    "git_worktree_diff": false,
+    "git_staged_diff": false,
+    "hash_methods_match": true
+  },
+  "target_lock": {
+    "source": "docs/PHASE-7.4J-D1-D.4-CANONICAL-INVENTORY.json",
+    "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "exact_object_lists_match_counts": true,
+    "target_reconciled": true,
+    "events_deleted_at": true,
+    "events_kabupaten_kota_id": true,
+    "canonical_duplicate_function": "public.check_duplicate_event(text,text,text) RETURNS boolean",
+    "rich_duplicate_function_present": false
+  },
+  "nonproduction_lock": {
+    "configured_project": "shorsqyycpptxcutrqrb",
+    "linked_project": "shorsqyycpptxcutrqrb",
+    "linked_healthy": true,
+    "production_linked": false,
+    "production_id_in_commands": false
+  },
+  "recovery_lock": {
+    "snapshot_path": "tmp/PHASE-7.4J-D1-D.5-NONPROD-SNAPSHOT.sql",
+    "snapshot_sha256": "c214e785cff8f5323158d0dc5e9d9e51d88f21a56968a00c816c2640398210da",
+    "snapshot_bytes": 67413,
+    "snapshot_timestamp_utc": "2026-09-08T08:40:01.8759299Z",
+    "migration_history_path": "tmp/PHASE-7.4J-D1-D.5-MIGRATION-HISTORY.txt",
+    "migration_history_sha256": "402017b5cadc07ead8950cafab52ca86704730c252fb521e176221fcf538232b",
+    "migration_history_timestamp_utc": "2026-09-08T08:40:05.2386341Z",
+    "project_ref": "shorsqyycpptxcutrqrb",
+    "usable": true
+  },
+  "migration_policy": {
+    "method": "CANONICAL_BASELINE_ONLY",
+    "historical_migration_count": 55,
+    "historical_migrations": "ARCHIVE_AS_HISTORICAL",
+    "blind_replay": false,
+    "known_conflicts_auto_replay": false
+  },
+  "decision": "PASS — FINAL NON-PRODUCTION RECONSTRUCTION PREFLIGHT LOCKED"
+}

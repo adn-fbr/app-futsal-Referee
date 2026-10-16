@@ -1,0 +1,8 @@
+{
+  "phase": "8.5G",
+  "source": "event_assignments.event_id -> events.id -> events.kabupaten_kota_id -> kabupaten_kota.id/name",
+  "display_column": "DAERAH",
+  "null_display": "Belum ditentukan",
+  "filter_identity": "kabupaten_kota.id",
+  "free_text_location_inference": false
+}

@@ -1,0 +1,49 @@
+{
+  "phase": "7.4J-D1-D",
+  "status": "BLOCKED",
+  "execution_attempted": false,
+  "reason": "Canonical baseline hash mismatch and non-destructive governance guardrail; no reconstruction was executed.",
+  "before_counts": {
+    "tables": 6,
+    "columns": 48,
+    "functions": 3,
+    "views": 1,
+    "triggers": 4,
+    "rls_policies": 23,
+    "indexes": 0,
+    "extensions": 0,
+    "enum_types": 0,
+    "pk": 0,
+    "unique": 0,
+    "check": 0,
+    "fk": 0
+  },
+  "after_counts": {
+    "tables": 0,
+    "columns": 0,
+    "functions": 0,
+    "views": 0,
+    "triggers": 0,
+    "rls_policies": 0,
+    "indexes": 0,
+    "extensions": 0,
+    "enum_types": 0,
+    "pk": 0,
+    "unique": 0,
+    "check": 0,
+    "fk": 0,
+    "status": "NOT_EXECUTED"
+  },
+  "validation": {
+    "catalog": "NOT_RUN",
+    "constraints": "NOT_RUN",
+    "fk_validation": "NOT_RUN",
+    "function_validation": "NOT_RUN",
+    "view_validation": "NOT_RUN",
+    "trigger_validation": "NOT_RUN",
+    "rls_validation": "NOT_RUN",
+    "deterministic_second_pass": "NOT_RUN",
+    "baseline_comparison": "BLOCKED"
+  },
+  "final_gate": "BLOCKED — NON-PRODUCTION RECONSTRUCTION NOT COMPLETED"
+}

@@ -1,0 +1,19 @@
+{
+  "phase": "8.1",
+  "canonical_policy_count": 86,
+  "application_role_source": "AuthContext roles from public.user_roles",
+  "application_identity_source": "Supabase session user.id",
+  "edge_function_authorization": "Shared resolveCaller verifies bearer token, user_roles, and profiles.kabupaten_kota_id in supabase/functions/_shared/authorization.ts",
+  "rls_dependencies": [
+    "Direct public table reads/writes rely on database RLS rather than repository authorization.",
+    "Client route/UI guards use role checks but are not a database security boundary.",
+    "Region-sensitive logic uses kabupaten_kota_id and can_access_region.",
+    "Public review paths rely on canonical views/RPCs and public RLS exposure."
+  ],
+  "risks": [
+    {"id":"APP-RLS-001","severity":"P1","finding":"Direct table mutations are distributed through hooks and pages, so RLS compatibility is not centralized or mechanically enforced in the application layer.","evidence":"229 direct from/rpc references across 33 files","classification":"RLS DEPENDENCY / OPEN"},
+    {"id":"APP-RLS-002","severity":"P2","finding":"Some client-side filtering and role checks occur before direct queries; security must remain dependent on canonical RLS, not hidden UI.","evidence":"src/hooks/useOrganization.ts:239-368; src/components/auth/ProtectedRoute.tsx","classification":"CLIENT AUTHORIZATION AWARENESS"}
+  ],
+  "user_metadata_authorization": "No direct application role decision from user_metadata found; edge functions use user_metadata for profile creation payloads in observed code.",
+  "status": "AUDITED; NO POLICY MODIFICATION"
+}

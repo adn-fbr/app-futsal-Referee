@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "direct_uuid_region_b_select":"NOT_TESTED",
+  "direct_uuid_region_b_update":"NOT_TESTED",
+  "pre_remediation_leakage":"CONFIRMED"
+}

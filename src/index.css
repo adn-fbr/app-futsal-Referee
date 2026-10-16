@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Safe area utilities for mobile devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* FFSS Design System - Dark Green Professional Sports Theme */
+/* All colors MUST be HSL */
+
+@layer base {
+  :root {
+    /* Dark Green Primary Theme */
+    --background: 0 0% 98%;
+    --foreground: 150 30% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 150 30% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 30% 10%;
+
+    /* Dark Green Primary */
+    --primary: 150 40% 22%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 10% 94%;
+    --secondary-foreground: 150 30% 15%;
+
+    --muted: 150 5% 92%;
+    --muted-foreground: 150 10% 40%;
+
+    --accent: 150 35% 28%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Status Colors */
+    --success: 142 70% 40%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+    
+    --info: 210 90% 50%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 150 10% 88%;
+    --input: 150 10% 88%;
+    --ring: 150 40% 22%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 150 35% 15%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 150 50% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 150 30% 20%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 150 25% 25%;
+    --sidebar-ring: 150 50% 45%;
+  }
+
+  .dark {
+    --background: 150 25% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 150 20% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 150 20% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 150 50% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 15% 18%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 150 15% 15%;
+    --muted-foreground: 150 10% 60%;
+
+    --accent: 150 40% 35%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 55%;
+    --warning-foreground: 0 0% 10%;
+    
+    --info: 210 90% 55%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 150 15% 20%;
+    --input: 150 15% 20%;
+    --ring: 150 50% 45%;
+
+    --sidebar-background: 150 30% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 150 50% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 150 25% 18%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 150 20% 18%;
+    --sidebar-ring: 150 50% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+
+  .icon-circle {
+    @apply w-12 h-12 rounded-full flex items-center justify-center;
+  }
+
+  .icon-circle-sm {
+    @apply w-10 h-10 rounded-full flex items-center justify-center;
+  }
+
+  .card-elevated {
+    @apply bg-card border border-border shadow-md rounded-xl;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm;
+  }
+
+  body {
+    background: white !important;
+    color: #111827 !important;
+  }
+
+  .print\:hidden,
+  nav,
+  header.sticky {
+    display: none !important;
+  }
+
+  .report-print-surface {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .report-print-surface .rounded-lg,
+  .report-print-surface .rounded-xl {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+
+  .report-print-surface table {
+    font-size: 9pt;
+  }
+}

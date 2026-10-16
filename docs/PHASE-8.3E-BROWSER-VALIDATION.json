@@ -1,0 +1,21 @@
+{
+  "phase":"8.3E",
+  "environment":"BLOCKED_BEFORE_BROWSER_EXECUTION",
+  "authorized_non_production_project":"shorsqyycpptxcutrqrb",
+  "configured_project_ref":"xfscfjwapwnkiinkgbjg",
+  "production_browser_access":0,
+  "browser_validation_status":"BLOCKED — configured client resolves to Production",
+  "required_viewports":[390,768,1280],
+  "evidence":[
+    {"gap_id":"F-001","test_id":"B001","environment":"local source only","user_role":"not executed","route":"/events/:id -> /events/:id/assign-referees","action":"assignment CTA/direct URL","expected":"CTA and route align with admin role","actual":"Static contract tests pass; browser role test not executed","database_effect":"none","rls_result":"NOT_EXECUTED","ui_result":"PASS_STATIC","status":"BLOCKED"},
+    {"gap_id":"F-002","test_id":"B002","environment":"local source only","user_role":"not executed","route":"mobile /export","action":"tap Export Database","expected":"registered /export route opens","actual":"Static navigation test passes; browser not executed","database_effect":"none","rls_result":"NOT_APPLICABLE","ui_result":"PASS_STATIC","status":"BLOCKED"},
+    {"gap_id":"F-003","test_id":"B003","environment":"local source only","user_role":"admin_kab_kota not executed","route":"mobile menu /approvals","action":"inspect menu/direct URL","expected":"menu hidden and direct route forbidden","actual":"Static navigation test passes; browser not executed","database_effect":"none","rls_result":"NOT_EXECUTED","ui_result":"PASS_STATIC","status":"BLOCKED"},
+    {"gap_id":"F-004","test_id":"B004","environment":"not executed","user_role":"Admin Provinsi not available safely","route":"/events/:id/assign-referees","action":"load failure then retry","expected":"error, retry, loading, success","actual":"Static error/retry contract passes; non-production browser unavailable","database_effect":"none","rls_result":"NOT_EXECUTED","ui_result":"NOT_EXECUTED","status":"BLOCKED"},
+    {"gap_id":"F-005","test_id":"B005","environment":"not executed","user_role":"Admin Provinsi fixture unavailable","route":"/administration/event-assignments","action":"step-up and confirm status","expected":"pending -> confirmed after independent role verification","actual":"No browser or remote mutation executed; configured target is Production","database_effect":"none","rls_result":"BLOCKED","ui_result":"NOT_EXECUTED","status":"BLOCKED"},
+    {"gap_id":"F-006","test_id":"B006","environment":"not executed","user_role":"Admin Provinsi fixture unavailable","route":"/administration/event-assignments","action":"double-click/slow network","expected":"one mutation and second submit blocked","actual":"Static disabled-control contract passes; browser unavailable","database_effect":"none","rls_result":"NOT_EXECUTED","ui_result":"NOT_EXECUTED","status":"BLOCKED"},
+    {"gap_id":"F-008","test_id":"B008","environment":"not executed","user_role":"wasit fixture unavailable","route":"/referee/events","action":"failure then retry","expected":"error, retry, success without duplicate state","actual":"Static error/retry contract passes; browser unavailable","database_effect":"none","rls_result":"NOT_EXECUTED","ui_result":"NOT_EXECUTED","status":"BLOCKED"},
+    {"gap_id":"F-011","test_id":"B011","environment":"local","user_role":"not applicable","route":"project quality gate","action":"npm run typecheck","expected":"exit 0 without masking","actual":"exit 0; script is tsc --noEmit","database_effect":"none","rls_result":"NOT_APPLICABLE","ui_result":"PASS","status":"PASS"}
+  ],
+  "blocking_evidence":[".env VITE_SUPABASE_URL host is xfscfjwapwnkiinkgbjg.supabase.co","authorized target is shorsqyycpptxcutrqrb","Phase 7.2 type-source report says test target has no authorized credential or local schema source","Auth provenance is UNKNOWN","No approved fixture identity/assignment IDs are configured"],
+  "no_browser_started":true
+}

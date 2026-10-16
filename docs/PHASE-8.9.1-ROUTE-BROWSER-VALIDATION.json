@@ -1,0 +1,13 @@
+{
+  "phase": "8.9.1",
+  "status": "BLOCKED",
+  "public_routes_validated": [
+    {"route":"/login","rendered":true,"horizontal_overflow":false},
+    {"route":"/signup","rendered":true,"horizontal_overflow":false},
+    {"route":"/forgot-password","rendered":true,"horizontal_overflow":false},
+    {"route":"/reset-password","rendered":true,"horizontal_overflow":false},
+    {"route":"/review","rendered":true,"horizontal_overflow":false}
+  ],
+  "protected_routes_validated": 0,
+  "protected_route_reason": "AUTH_FIXTURE_UNAVAILABLE"
+}

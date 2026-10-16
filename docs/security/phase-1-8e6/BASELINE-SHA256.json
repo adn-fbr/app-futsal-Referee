@@ -1,0 +1,8 @@
+{
+  "status": "BLOCKED",
+  "phase": "1.8E.6",
+  "reason": "No canonical runtime SQL baseline was generated; SHA-256 integrity cannot be claimed without complete production-derived runtime definitions in the workspace.",
+  "canonical_runtime_baseline_sha256": "NOT GENERATED",
+  "catalog_extraction_sha256": "NOT GENERATED",
+  "artifacts": {}
+}

@@ -1,0 +1,6 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "canonical_access_preserved_in_sql":"PREPARED",
+  "live_access":"NOT_VERIFIED"
+}

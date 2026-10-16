@@ -1,0 +1,140 @@
+{
+  "source_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "current_hash": "77d9d8e4fe1f439a1118edc5f0ac5454cf9a2a38cfc72f0253f9653c300c9260",
+  "second_hash": "77d9d8e4fe1f439a1118edc5f0ac5454cf9a2a38cfc72f0253f9653c300c9260",
+  "deterministic": true,
+  "comparisons": {
+    "tables": {
+      "expected_count": 27,
+      "actual_count": 27,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "columns": {
+      "expected_count": 249,
+      "actual_count": 249,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "constraints": {
+      "expected_count": 67,
+      "actual_count": 67,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "functions": {
+      "expected_count": 47,
+      "actual_count": 47,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "views": {
+      "expected_count": 3,
+      "actual_count": 3,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "triggers": {
+      "expected_count": 22,
+      "actual_count": 22,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "policies": {
+      "expected_count": 86,
+      "actual_count": 86,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "indexes": {
+      "expected_count": 47,
+      "actual_count": 47,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    "enums": {
+      "expected_count": 2,
+      "actual_count": 2,
+      "diff": {
+        "missing": [],
+        "unexpected": []
+      }
+    }
+  },
+  "definition_comparisons": {
+    "functions": {
+      "compared": 47,
+      "mismatches": []
+    },
+    "views": {
+      "compared": 3,
+      "mismatches": []
+    },
+    "triggers": {
+      "compared": 22,
+      "mismatches": []
+    },
+    "policies": {
+      "compared": 86,
+      "mismatches": []
+    },
+    "indexes": {
+      "compared": 47,
+      "mismatches": []
+    }
+  },
+  "table_definition_comparisons": {
+    "compared": 27,
+    "mismatches": [
+      "public.referee_cards"
+    ]
+  },
+  "constraint_definition_comparisons": {
+    "compared": 67,
+    "mismatches": []
+  },
+  "current_counts": {
+    "tables": 27,
+    "columns": 249,
+    "constraints": 67,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "policies": 86,
+    "indexes": 47,
+    "enums": 2
+  },
+  "managed_storage_objects": {
+    "tables": 8,
+    "functions": 17,
+    "policies": 8,
+    "indexes": 11,
+    "enums": 1
+  },
+  "events": {
+    "has_deleted_at": true,
+    "has_kabupaten_kota_id": true
+  },
+  "duplicate_function": [
+    "public.check_duplicate_event(text,text,text)"
+  ],
+  "rich_duplicate_functions": [],
+  "auth_users_definition": false,
+  "data_statements": 0
+}

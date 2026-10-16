@@ -1,0 +1,30 @@
+{
+  "status": "BLOCKED",
+  "phase": "1.8E.5B",
+  "objective": "Complete authorized read-only catalog extraction from LIVE production PostgreSQL",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "test_project_ref": "shorsqyycpptxcutrqrb",
+  "production_project_name": "AFP SULSEL",
+  "test_project_name": "test APP",
+  "production_mutations": "NONE",
+  "data_exported": "NONE",
+  "access_channel": "BLOCKED",
+  "reason": "No authorized live production PostgreSQL SQL session or direct read-only catalog channel is configured in the current workspace.",
+  "current_database": null,
+  "current_user": null,
+  "session_user": null,
+  "current_schema": null,
+  "server_version": null,
+  "transaction_read_only": null,
+  "sql_identity_verified": false,
+  "read_only_posture_verified": false,
+  "production_schema_access_verified": false,
+  "credentials_exposed": false,
+  "baseline_created": false,
+  "migration_applied": false,
+  "notes": [
+    "Production remains read-only by policy and project metadata only.",
+    "No SELECT against production application tables, functions, or catalog views was executed in this workspace.",
+    "No DDL, DML, GRANT, REVOKE, migration, or baseline generation occurred."
+  ]
+}

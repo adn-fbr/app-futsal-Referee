@@ -1,0 +1,15 @@
+{
+  "phase":"CODEBASE-WIDE-MODULE-GAP-ANALYSIS",
+  "canonical_source":"production-schema.sql + PHASE-7.4J-D1-D.4-CANONICAL-INVENTORY.json",
+  "direct_access_counts":{"from_occurrences":233,"rpc_occurrences":25,"functions_invoke_occurrences":16,"files_with_direct_access":49,"supabase_dot_occurrences":84},
+  "repository_boundary":{"auth_profile_role_repositories":"IMPLEMENTED","general_domain_repositories":"MISSING","services_directory":"MISSING","direct_access_files_reported_by_8_1":33},
+  "contract_findings":[
+    {"id":"BC-001","severity":"P1","category":"API_CONTRACT","object":"public.check_duplicate_event(text,text,text) RETURNS boolean","callers":["src/hooks/useEvents.ts:556"],"current":"application sends five named arguments and expects duplicate records/array","expected":"canonical three text arguments and boolean result","status":"OPEN","recommendation":"Resolve caller contract in an authorized application phase; do not create rich RPC."},
+    {"id":"BC-002","severity":"P1","category":"DATABASE","object":"public.increment_view_count(uuid)","callers":["src/hooks/useDiscussions.ts:118"],"current":"application invokes schema-gap function","expected":"canonical object or governed alternative","status":"OPEN_SCHEMA_GAP","recommendation":"Obtain contract decision before implementation."},
+    {"id":"BC-003","severity":"P1","category":"DATABASE","object":"public_system_settings","callers":["src/hooks/useSettings.ts:31,46"],"current":"historical/noncanonical view dependency","expected":"canonical settings object","status":"OPEN_SCHEMA_GAP","recommendation":"Reconcile settings contract before production use."},
+    {"id":"BC-004","severity":"P1","category":"STATE","object":"event_assignments cache contract","callers":["useAdminEventAssignments","useEventAssignments","useRefereeEvents"],"current":"different query keys/invalidation paths and direct hooks","expected":"canonical query/revalidation contract","status":"OPEN","recommendation":"Document/test before repository consolidation."},
+    {"id":"BC-005","severity":"P2","category":"ARCHITECTURE","object":"domain repository layer","callers":["most business hooks"],"current":"UI hooks directly call Supabase","expected":"Pages -> hooks/query -> repositories/services -> Supabase","status":"OPEN","recommendation":"Introduce incrementally by highest-risk domains."}
+  ],
+  "canonical_rpc_status":"Most RPCs map to canonical functions; duplicate-event and increment-view-count are the confirmed exceptions.",
+  "historical_findings_resolved_or_retained":{"seed_ui_F007":"resolved from production page/bundle; Edge Function remains a privileged capability","passwords_in_seed_summary":"historical Phase 8.1 finding; current page no longer imports seed hook, but hook remains isolated tooling"}
+}

@@ -1,0 +1,10 @@
+{
+  "phase": "8.5G.2",
+  "status": "BLOCKED",
+  "synthetic_event": "NOT CREATED",
+  "created_by_fk": "profiles.id",
+  "region_fk": "events.kabupaten_kota_id -> kabupaten_kota.id",
+  "event_status": "NOT VERIFIED REMOTELY",
+  "event_read_back": "NOT EXECUTED",
+  "reason": "No authorized fixture mutation mechanism or approved fixture identity is available."
+}

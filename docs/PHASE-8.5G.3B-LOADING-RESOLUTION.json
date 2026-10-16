@@ -1,0 +1,15 @@
+{
+  "phase": "8.5G.3B",
+  "root_cause": ["ENV_LOADER_MISSING", "VITE_NODE_RUNTIME_MISMATCH", "VARIABLE_NAME_MISMATCH"],
+  "runtime": "Deno",
+  "runner": "No package script or supported runner registered",
+  "script": "supabase/tests/seed-security-fixtures.ts",
+  "working_directory": "D:/AFP SULSEL/app-futsal - Salin",
+  "script_environment_api": "Deno.env",
+  "explicit_loader": "ABSENT",
+  "vite_env_applies_to_deno": false,
+  "configuration_order": ["process environment", "explicit Deno env-file or secure provider", "no production fallback"],
+  "safe_fix_applied": false,
+  "reason": "Provisioning credentials and approved channel are absent; adding a mutating runner would be unsafe.",
+  "status": "BLOCKED"
+}

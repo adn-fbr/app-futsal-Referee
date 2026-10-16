@@ -1,0 +1,9 @@
+-- PHASE 1.8E.6 production catalog extraction was not executed by this agent.
+-- The production channel is reported as externally verified, but the agent
+-- execution environment cannot access a PostgreSQL SQL session.
+-- This placeholder intentionally contains no executable SQL and no data.
+-- Execute the catalog-only extraction in the approved read-only environment:
+-- BEGIN;
+-- SET TRANSACTION READ ONLY;
+-- <catalog SELECT statements only>
+-- ROLLBACK;

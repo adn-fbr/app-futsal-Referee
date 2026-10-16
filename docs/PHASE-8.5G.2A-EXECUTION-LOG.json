@@ -1,0 +1,14 @@
+{
+  "phase":"8.5G.2A",
+  "target":"shorsqyycpptxcutrqrb",
+  "steps": [
+    {"step":"target_preflight","result":"PASS"},
+    {"step":"remote_history_inventory","result":"PASS"},
+    {"step":"remote_migration_provenance","result":"CLASS_B_RECOVERED_LOCAL_SOURCE"},
+    {"step":"remote_migration_replay","result":"NOT_EXECUTED"},
+    {"step":"migration_repair","result":"NOT_EXECUTED"},
+    {"step":"include_all_apply","result":"NOT_EXECUTED"},
+    {"step":"approved_rls_apply","result":"BLOCKED_NO_SAFE_SINGLE_MIGRATION_CHANNEL"},
+    {"step":"post_rls_tests","result":"NOT_EXECUTED"}
+  ]
+}

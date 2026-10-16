@@ -1,0 +1,9 @@
+{
+  "phase": "8.9",
+  "status": "PARTIAL",
+  "desktop_kpi_layout": "STRUCTURALLY_RESPONSIVE",
+  "tablet_kpi_layout": "NOT_VALIDATED",
+  "mobile_kpi_layout": "STATIC_REVIEW_ONLY",
+  "visual_gap_check": "NOT_BROWSER_PROVEN",
+  "browser_validation": "NOT_AVAILABLE"
+}

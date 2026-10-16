@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "capturedCount": 0,
+  "expectedSource": "production pg_constraint catalog",
+  "missing": ["primary keys","unique constraints","foreign keys/actions","check constraints","exclusion constraints","deferrability","validation state","exact pg_get_constraintdef output"]
+}

@@ -1,0 +1,10 @@
+{
+  "phase": "8.8",
+  "today_indicator": "ring/background plus Hari Ini label",
+  "request_indicator": "separate sky marker plus Request text",
+  "status_indicator": "badge text plus semantic variant",
+  "region_indicator": "name plus border/background plus legend",
+  "keyboard_controls": "existing Button/Select/Calendar controls",
+  "screen_reader": "aria-label on today badge; remaining native labels",
+  "live_accessibility_audit": "NOT EXECUTED"
+}

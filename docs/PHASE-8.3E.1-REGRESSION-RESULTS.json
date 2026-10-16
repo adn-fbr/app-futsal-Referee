@@ -1,0 +1,16 @@
+{
+  "phase":"8.3E.1",
+  "environment_changes":false,
+  "checks":[
+    {"command":"npm run typecheck","exit_code":0,"result":"PASS"},
+    {"command":"npm test -- --run","exit_code":0,"result":"PASS: 9 files, 26 tests"},
+    {"command":"npm run build","exit_code":0,"result":"PASS local build; existing Browserslist/chunk warnings"},
+    {"command":"npm run lint","exit_code":1,"result":"PRE_EXISTING FAILURE: 66 errors, 11 warnings; no Phase 8.3D modified file reported"}
+  ],
+  "lint_regression":"NONE",
+  "application_source_changes_in_phase":"NONE",
+  "schema_or_rls_changes":"NONE",
+  "production_access":"NONE",
+  "fixture_regression":"NOT_APPLICABLE — no fixtures created",
+  "browser_regression":"NOT_EXECUTED — environment target blocked"
+}

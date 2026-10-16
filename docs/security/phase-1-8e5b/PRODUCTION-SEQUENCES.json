@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "sequences",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "all public sequences",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No live sequence metadata was queried."
+}

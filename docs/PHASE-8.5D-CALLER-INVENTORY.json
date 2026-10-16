@@ -1,0 +1,18 @@
+{
+  "phase": "8.5D",
+  "canonical_callers": [
+    {"file": "src/hooks/useEvents.ts", "line": 556, "consumer": "useCheckDuplicateEvent", "arguments": ["p_name", "p_date", "p_location", "p_kabupaten_kota_id", "p_exclude_event_id"], "expected_result": "duplicate row array", "status": "HISTORICAL_CONTRACT_MISMATCH"},
+    {"file": "src/pages/EventEdit.tsx", "line": 83, "consumer": "handleCheckDuplicate", "uses": ["date", "result.isDuplicate", "result.duplicates[0].name"], "status": "DEPENDS_ON_HISTORICAL_RESULT"},
+    {"file": "src/integrations/supabase/types.ts", "line": 1430, "consumer": "generated Functions type", "signature": "five args -> duplicate row array", "status": "STALE_GENERATED_CONTRACT"}
+  ],
+  "historical_arguments": {
+    "p_name": "event name",
+    "p_date": "event date",
+    "p_location": "optional location",
+    "p_kabupaten_kota_id": "optional region filter",
+    "p_exclude_event_id": "optional event exclusion"
+  },
+  "canonical_arguments": ["p_kota_id text", "p_location text", "p_name text"],
+  "additional_rpc_callers": "none found in source search",
+  "application_changes": "required after governance decision; prohibited in this forensic phase"
+}

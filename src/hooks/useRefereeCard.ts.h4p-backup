@@ -1,0 +1,548 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+
+export interface RefereeCard {
+  id: string;
+  referee_id: string;
+  card_number: string;
+  // Not returned in public verification (never expose)
+  verification_code?: string;
+  issued_at: string;
+  expires_at: string | null;
+  status: "active" | "suspended" | "revoked" | "expired";
+  last_verified_at: string | null;
+  verification_count: number;
+  created_at: string;
+  updated_at: string;
+  // Joined data
+  referee?: {
+    id: string;
+    full_name: string;
+    profile_photo_url: string | null;
+    license_level: string | null;
+    license_expiry: string | null;
+    afk_origin: string | null;
+    is_active: boolean | null;
+    kabupaten_kota?: {
+      name: string;
+    } | null;
+  };
+}
+
+export interface CardVerificationLog {
+  id: string;
+  card_id: string;
+  verified_at: string;
+  ip_address: string | null;
+  user_agent: string | null;
+  location: string | null;
+}
+
+// Generate a UUID v4-style verification code without relying solely on randomUUID.
+export function generateVerificationCode(): string {
+  const cryptoApi = globalThis.crypto;
+
+  if (cryptoApi && typeof cryptoApi.randomUUID === "function") {
+    return cryptoApi.randomUUID().replace(/-/g, "").toLowerCase();
+  }
+
+  if (cryptoApi && typeof cryptoApi.getRandomValues === "function") {
+    const bytes = new Uint8Array(16);
+    cryptoApi.getRandomValues(bytes);
+    return Array.from(bytes)
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
+  }
+
+  throw new Error("Secure random number generation is unavailable in this runtime.");
+}
+
+// Hook: Get current user's referee card
+export function useMyRefereeCard() {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ["my-referee-card", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+
+      const { data, error } = await supabase
+        .from("referee_cards")
+        .select(`
+          *,
+          referee:profiles(
+            id,
+            full_name,
+            profile_photo_url,
+            license_level,
+            license_expiry,
+            afk_origin,
+            is_active,
+            kabupaten_kota:kabupaten_kota(name)
+          )
+        `)
+        .eq("referee_id", user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data as RefereeCard | null;
+    },
+    enabled: !!user?.id,
+  });
+}
+
+// Hook: Get all referee cards (admin) - alias for Settings page
+export function useAllRefereeCards() {
+  return useRefereeCards();
+}
+
+// Hook: Get all referee cards (admin)
+export function useRefereeCards(filters?: {
+  status?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
+}) {
+  return useQuery({
+    queryKey: ["referee-cards", filters],
+    queryFn: async () => {
+      const page = filters?.page || 1;
+      const pageSize = filters?.pageSize || 50;
+      const offset = (page - 1) * pageSize;
+
+      // Use optimized RPC function for server-side search
+      const { data, error } = await supabase.rpc("search_referee_cards", {
+        p_search: filters?.search || null,
+        p_status: filters?.status || null,
+        p_limit: pageSize,
+        p_offset: offset,
+      });
+      
+      if (error) throw error;
+
+      // Transform RPC result to match RefereeCard interface
+      const cards = (data || []).map((row: any) => ({
+        id: row.id,
+        referee_id: row.referee_id,
+        card_number: row.card_number,
+        issued_at: row.issued_at,
+        expires_at: row.expires_at,
+        status: row.status,
+        last_verified_at: row.last_verified_at,
+        verification_count: row.verification_count,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        referee: {
+          id: row.referee_id,
+          full_name: row.full_name,
+          profile_photo_url: row.profile_photo_url,
+          license_level: row.license_level,
+          license_expiry: row.license_expiry,
+          afk_origin: row.afk_origin,
+          is_active: row.is_active,
+          kabupaten_kota: row.kabupaten_kota_name ? { name: row.kabupaten_kota_name } : null,
+        },
+      }));
+
+      return cards as RefereeCard[];
+    },
+  });
+}
+
+// Hook: Count referee cards (for pagination)
+export function useRefereeCardsCount(filters?: {
+  status?: string;
+  search?: string;
+}) {
+  return useQuery({
+    queryKey: ["referee-cards-count", filters],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("count_referee_cards", {
+        p_search: filters?.search || null,
+        p_status: filters?.status || null,
+      });
+      
+      if (error) throw error;
+      return data as number;
+    },
+  });
+}
+
+// Hook: Revoke card (admin)
+export function useRevokeCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (cardId: string) => {
+      const { data, error } = await supabase
+        .from("referee_cards")
+        .update({ status: "revoked" })
+        .eq("id", cardId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+      toast.success("ID Card berhasil dicabut");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Gagal mencabut ID Card");
+    },
+  });
+}
+
+// Hook: Renew expired card (admin)
+export function useRenewCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (cardId: string) => {
+      // Get the card to find referee's license expiry
+      const { data: card } = await supabase
+        .from("referee_cards")
+        .select("referee_id")
+        .eq("id", cardId)
+        .single();
+
+      if (!card) throw new Error("Card not found");
+
+      // Get referee's updated license expiry
+      const { data: referee } = await supabase
+        .from("profiles")
+        .select("license_expiry")
+        .eq("id", card.referee_id)
+        .single();
+
+      const { data, error } = await supabase
+        .from("referee_cards")
+        .update({ 
+          status: "active",
+          expires_at: referee?.license_expiry || null,
+          issued_at: new Date().toISOString(),
+        })
+        .eq("id", cardId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+      toast.success("ID Card berhasil diperpanjang");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Gagal memperpanjang ID Card");
+    },
+  });
+}
+
+// Hook: Generate new card for a referee
+export function useGenerateCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (refereeId: string) => {
+      // First check if card already exists
+      const { data: existing } = await supabase
+        .from("referee_cards")
+        .select("id")
+        .eq("referee_id", refereeId)
+        .maybeSingle();
+
+      if (existing) {
+        throw new Error("Wasit ini sudah memiliki ID Card");
+      }
+
+      // Get card number from database function
+      const { data: cardNumber, error: cardNumError } = await supabase
+        .rpc("generate_card_number", { p_referee_id: refereeId });
+
+      if (cardNumError) throw cardNumError;
+
+      // Get referee license expiry for card expiry
+      const { data: referee } = await supabase
+        .from("profiles")
+        .select("license_expiry")
+        .eq("id", refereeId)
+        .single();
+
+      const verificationCode = generateVerificationCode();
+
+      const { data, error } = await supabase
+        .from("referee_cards")
+        .insert({
+          referee_id: refereeId,
+          card_number: cardNumber,
+          verification_code: verificationCode,
+          expires_at: referee?.license_expiry || null,
+          status: "active",
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+      toast.success("ID Card berhasil dibuat");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Gagal membuat ID Card");
+    },
+  });
+}
+
+// Hook: Regenerate the current user's card through the self-scoped RPC.
+export function useRegenerateCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc(
+        "regenerate_my_referee_card"
+      );
+
+      if (error) throw error;
+      return data as RefereeCard;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+      toast.success("ID Card berhasil di-regenerate");
+    },
+    onError: (error: unknown) => {
+      toast.error(error instanceof Error ? error.message : "Gagal regenerate ID Card");
+    },
+  });
+}
+
+// Hook: Regenerate a selected card (admin flow)
+export function useAdminRegenerateCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (cardId: string) => {
+      const newVerificationCode = generateVerificationCode();
+
+      const { data, error } = await supabase
+        .from("referee_cards")
+        .update({
+          verification_code: newVerificationCode,
+          issued_at: new Date().toISOString(),
+        })
+        .eq("id", cardId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+      toast.success("ID Card berhasil di-regenerate");
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Gagal regenerate ID Card");
+    },
+  });
+}
+
+// Hook: Update card status
+export function useUpdateCardStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      cardId,
+      status,
+    }: {
+      cardId: string;
+      status: "active" | "suspended" | "revoked";
+    }) => {
+      const { data, error } = await supabase
+        .from("referee_cards")
+        .update({ status })
+        .eq("id", cardId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+      const statusLabels = {
+        active: "diaktifkan",
+        suspended: "disuspend",
+        revoked: "dicabut",
+      };
+      toast.success(`ID Card berhasil ${statusLabels[variables.status]}`);
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Gagal mengubah status");
+    },
+  });
+}
+
+// Hook: Verify card (public)
+export function useVerifyCard(code: string) {
+  return useQuery({
+    queryKey: ["verify-card", code],
+    queryFn: async () => {
+      if (!code) return null;
+
+      const { data, error } = await supabase.rpc("verify_referee_card", {
+        p_code: code,
+      });
+
+      if (error) throw error;
+      if (!data) return { valid: false, message: "Kartu tidak ditemukan" };
+
+      const result = data as unknown as {
+        valid: boolean;
+        message?: string | null;
+        card?: RefereeCard;
+      };
+
+      if (!result.valid) {
+        return { valid: false, message: result.message || "Kartu tidak valid" };
+      }
+
+      return {
+        valid: true,
+        card: result.card as RefereeCard,
+      };
+    },
+    enabled: !!code,
+    staleTime: 0, // Always fresh for verification
+  });
+}
+
+// Hook: Get verification logs for a card
+export function useCardVerificationLogs(cardId: string) {
+  return useQuery({
+    queryKey: ["card-verification-logs", cardId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("card_verification_logs")
+        .select("*")
+        .eq("card_id", cardId)
+        .order("verified_at", { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+      return data as CardVerificationLog[];
+    },
+    enabled: !!cardId,
+  });
+}
+
+// Hook: Bulk generate cards for referees without cards
+export function useBulkGenerateCards() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      // Get all referees without cards
+      const { data: referees, error: refError } = await supabase
+        .from("profiles")
+        .select("id, license_expiry")
+        .eq("is_active", true)
+        .eq("is_profile_complete", true)
+        .is("deleted_at", null);
+
+      if (refError) throw refError;
+
+      // Get existing cards
+      const { data: existingCards } = await supabase
+        .from("referee_cards")
+        .select("referee_id");
+
+      const existingRefereeIds = new Set(
+        existingCards?.map((c) => c.referee_id) || []
+      );
+
+      // Filter referees without cards
+      const refereesWithoutCards = referees?.filter(
+        (r) => !existingRefereeIds.has(r.id)
+      ) || [];
+
+      let created = 0;
+      let failed = 0;
+
+      for (const referee of refereesWithoutCards) {
+        try {
+          const { data: cardNumber } = await supabase
+            .rpc("generate_card_number", { p_referee_id: referee.id });
+
+          await supabase.from("referee_cards").insert({
+            referee_id: referee.id,
+            card_number: cardNumber,
+            verification_code: generateVerificationCode(),
+            expires_at: referee.license_expiry || null,
+            status: "active",
+          });
+
+          created++;
+        } catch (e) {
+          failed++;
+        }
+      }
+
+      return { created, failed, total: refereesWithoutCards.length };
+    },
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ["referee-cards"] });
+      toast.success(
+        `Berhasil membuat ${result.created} ID Card` +
+        (result.failed > 0 ? `, ${result.failed} gagal` : "")
+      );
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Gagal membuat ID Card massal");
+    },
+  });
+}
+
+// Hook: Auto-generate card for current user if eligible
+export function useAutoGenerateCard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc(
+        "issue_my_referee_card"
+      );
+
+      if (error) throw error;
+      return data as RefereeCard;
+    },
+    onSuccess: (data) => {
+      if (data) {
+        queryClient.invalidateQueries({ queryKey: ["my-referee-card"] });
+        toast.success("ID Card Anda telah dibuat otomatis!", {
+          description: `Nomor kartu: ${data.card_number}`,
+          action: {
+            label: "Lihat",
+            onClick: () => window.location.href = "/referee/id-card",
+          },
+        });
+      }
+    },
+    onError: (error: any) => {
+      console.error("Auto-generate card failed:", error);
+    },
+  });
+}

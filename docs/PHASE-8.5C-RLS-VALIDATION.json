@@ -1,0 +1,12 @@
+{
+  "phase":"8.5C",
+  "status":"BLOCKED_NOT_EXECUTED",
+  "existing_boundary":"RLS remains authoritative; no bypass or change introduced",
+  "surfaces":["events","event_approvals","profiles","user_roles"],
+  "tests":[
+    {"id":"HIST-R-001","unauthorized event mutation","status":"NOT_EXECUTED"},
+    {"id":"HIST-R-002","unauthorized approval mutation","status":"NOT_EXECUTED"},
+    {"id":"HIST-R-003","no RLS bypass","status":"STATIC_DESIGN_ONLY"}
+  ],
+  "rls_changes":0,"schema_changes":0,"production_access":0
+}

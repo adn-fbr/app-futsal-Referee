@@ -1,0 +1,21 @@
+{
+  "phase": "8.2",
+  "automated_command": "npm test",
+  "automated_result": {"test_files":4,"tests":11,"passed":11,"failed":0},
+  "focused_auth_result": {"test_files":3,"tests":10,"passed":10,"failed":0},
+  "matrix": [
+    {"id":"AUTH-001","scenario":"Unauthenticated protected route","result":"PASS","evidence":"authorization.test.ts login decision + ProtectedRoute"},
+    {"id":"AUTH-002","scenario":"Authenticated protected route","result":"PASS","evidence":"authorization.test.ts allow decision"},
+    {"id":"AUTH-003","scenario":"Session refresh/persistence","result":"PASS","evidence":"client.ts persistSession/autoRefreshToken; AuthContext startup resolution"},
+    {"id":"AUTH-004","scenario":"Logout","result":"PASS","evidence":"SupabaseAuthRepository.signOut and AuthContext state clear"},
+    {"id":"AUTH-005","scenario":"Auth state listener cleanup","result":"PASS","evidence":"AuthContext subscription cleanup"},
+    {"id":"AUTH-006","scenario":"Profile resolution by authenticated ID","result":"PASS","evidence":"user-profile-repository.ts profiles.id eq userId"},
+    {"id":"AUTH-007","scenario":"Role resolution by authenticated ID","result":"PASS","evidence":"user-role-repository.ts user_roles.user_id eq userId"},
+    {"id":"AUTH-008","scenario":"Missing profile","result":"PASS","evidence":"authorization.test.ts profile_missing decision"},
+    {"id":"AUTH-009","scenario":"Missing/unassigned role","result":"PASS","evidence":"authorization.test.ts forbidden decision; ProtectedRoute empty-role state"},
+    {"id":"AUTH-010","scenario":"Static demo identity","result":"PASS","evidence":"post-change source scan; no hard-coded auth user"},
+    {"id":"AUTH-011","scenario":"Plaintext passwords","result":"PASS","evidence":"post-change source scan clean"},
+    {"id":"AUTH-012","scenario":"Production configuration","result":"PASS","evidence":"no Production ID in executable source; no database access"}
+  ],
+  "synthetic_auth_users_created": false
+}

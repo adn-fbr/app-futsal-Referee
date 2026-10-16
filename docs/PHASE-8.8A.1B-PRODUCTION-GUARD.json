@@ -1,0 +1,10 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "production_url_rejection": "PASS",
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_auth_mutations": 0,
+  "network_allowlist": "shorsqyycpptxcutrqrb.supabase.co"
+}

@@ -1,0 +1,30 @@
+{
+  "phase": "7.4J-D1-D",
+  "status": "BLOCKED",
+  "dependency_authority": "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+  "dependency_order": [
+    "extensions",
+    "enum types",
+    "tables",
+    "primary keys",
+    "unique constraints",
+    "checks",
+    "foreign keys",
+    "functions",
+    "views",
+    "triggers",
+    "rls",
+    "policies",
+    "indexes",
+    "grants"
+  ],
+  "special_contracts": {
+    "events_kabupaten_kota_fk": "events.kabupaten_kota_id -> kabupaten_kota.id",
+    "profiles_auth_fk": "profiles.id -> auth.users.id",
+    "user_roles_auth_fk": "user_roles.user_id -> auth.users.id",
+    "pengurus_auth_fk": "pengurus.user_id -> auth.users.id",
+    "duplicate_event_function": "public.check_duplicate_event(text,text,text) RETURNS boolean"
+  },
+  "validation": "AUTHORITATIVE GRAPH VERIFIED, BUT EXECUTION BLOCKED BEFORE DESTRUCTIVE RECONSTRUCTION",
+  "reason": "Baseline hash mismatch prevented the D1-D reconstruction from being approved."
+}

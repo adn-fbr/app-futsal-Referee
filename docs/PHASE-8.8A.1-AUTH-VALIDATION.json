@@ -1,0 +1,11 @@
+{
+  "phase": "8.8A.1",
+  "status": "BLOCKED",
+  "official_auth_admin_mechanism": "NOT_EXECUTED",
+  "admin_provinsi": "NOT_PROVISIONED",
+  "admin_kab_kota_a": "NOT_PROVISIONED",
+  "admin_kab_kota_b": "NOT_PROVISIONED",
+  "referee": "NOT_PROVISIONED",
+  "direct_auth_users_insert": false,
+  "fake_jwt": false
+}

@@ -1,0 +1,47 @@
+{
+  "phase": "7.4J-D1-B",
+  "status": "BLOCKED",
+  "execution_attempted": false,
+  "reason": "No remote non-production execution channel was available in this session; validation was limited to documentation and governance preparation.",
+  "before": {
+    "tables": 6,
+    "columns": 48,
+    "functions": 3,
+    "views": 1,
+    "triggers": 4,
+    "rls_policies": 23,
+    "indexes": 0,
+    "extensions": 0,
+    "enum_types": 0
+  },
+  "after": {
+    "tables": 0,
+    "columns": 0,
+    "functions": 0,
+    "views": 0,
+    "triggers": 0,
+    "rls_policies": 0,
+    "indexes": 0,
+    "extensions": 0,
+    "enum_types": 0,
+    "status": "NOT_EXECUTED"
+  },
+  "validation": {
+    "catalog": "NOT_RUN",
+    "constraints": "NOT_RUN",
+    "fk_validation": "NOT_RUN",
+    "events_validation": "NOT_RUN",
+    "functions_validation": "NOT_RUN",
+    "views_validation": "NOT_RUN",
+    "rls_validation": "NOT_RUN",
+    "triggers_validation": "NOT_RUN",
+    "indexes_validation": "NOT_RUN",
+    "application_contract_check": "NOT_RUN"
+  },
+  "contract": {
+    "function": "public.check_duplicate_event(text,text,text) RETURNS boolean",
+    "preserved": true,
+    "rich_duplicate_search_intro": false
+  },
+  "final_gate": "BLOCKED — NON-PRODUCTION RECONSTRUCTION NOT COMPLETED"
+}

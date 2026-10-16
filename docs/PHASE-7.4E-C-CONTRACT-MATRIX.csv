@@ -1,0 +1,31 @@
+dimension,current_canonical,application,historical,resolution
+Function identity,"public.check_duplicate_event(text,text,text)","check_duplicate_event with five named arguments","Five-argument function in migration",CONFLICT_REQUIRES_GOVERNANCE
+Schema,public,"Not specified","Unqualified historical function",NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Function name,check_duplicate_event,check_duplicate_event,check_duplicate_event,CONFLICT_REQUIRES_GOVERNANCE
+Signature,"(text,text,text)","Five named arguments","(text,date,text,text,text)",CONFLICT_REQUIRES_GOVERNANCE
+Return type,boolean,DuplicateEvent[] wrapper,TABLE six fields,CONFLICT_REQUIRES_GOVERNANCE
+Input 1,p_kota_id text,p_name event name,p_name text,CONFLICT_REQUIRES_GOVERNANCE
+Input 2,p_location text,p_date yyyy-MM-dd,p_date date,CONFLICT_REQUIRES_GOVERNANCE
+Input 3,p_name text,p_location string or null,p_location text nullable,CONFLICT_REQUIRES_GOVERNANCE
+Input 4,Not applicable,p_kabupaten_kota_id string or null,p_kabupaten_kota_id text nullable,RESOLVED_BY_HISTORICAL_EVIDENCE
+Input 5,Not applicable,p_exclude_event_id string or null,p_exclude_event_id text nullable,RESOLVED_BY_HISTORICAL_EVIDENCE
+Matching fields,"kota_id, location, name exact","Name/date/location/region/exclusion","Name/date/location/region/exclusion",CONFLICT_REQUIRES_GOVERNANCE
+Matching normalization,Text cast,"No client normalization established",LOWER comparisons,RESOLVED_BY_HISTORICAL_EVIDENCE
+Similarity algorithm,None,Consumes score only,Fixed CASE score 100/90/80/70/60/50,RESOLVED_BY_HISTORICAL_EVIDENCE
+Similarity threshold,Not applicable,"No cutoff; array length determines isDuplicate","No cutoff; LIMIT 5",NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Ordering,Not applicable,First returned duplicate name displayed,"similarity_score DESC, date DESC",RESOLVED_BY_HISTORICAL_EVIDENCE
+Limit,Not applicable,No client limit,LIMIT 5,RESOLVED_BY_HISTORICAL_EVIDENCE
+Pagination,Not applicable,Not found,Not found,NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+NULL semantics,Not specified,"Optional values become null","Optional filters disabled when null",RESOLVED_BY_HISTORICAL_EVIDENCE
+Error semantics,Database contract only,"Hook throws; EventEdit allows proceeding",No application error contract,NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Empty-result semantics,"boolean false possible","Empty/null array means no warning","No rows possible",RESOLVED_BY_EVIDENCE
+Security execution model,SECURITY DEFINER,Expects RPC result,"SECURITY DEFINER; search_path public",CONFLICT_REQUIRES_GOVERNANCE
+RLS behavior,Not proven,No explicit policy handling,"Not established by function definition",NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Cross-scope leakage,Not specified,"Optional region filter supplied by caller","Optional region filter",NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Performance,No rich search,No target,"Bounded five-row query",NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Indexes,Existing baseline only,No index requirement,"No rich-search index evidence",NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Application DTO,boolean,"DuplicateEvent[] and isDuplicate","Six row fields",RESOLVED_BY_EVIDENCE
+Repository boundary,Not applicable,Hook directly calls Supabase,Not applicable,RESOLVED_BY_EVIDENCE
+Migration,Immutable baseline,Required to reconcile rich contract,Historical migration evidence only,NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Rollback,Preserve existing function,Future rollback needed,No approved rollback,NOT_ESTABLISHED_REQUIRES_GOVERNANCE
+Baseline revision,UNCHANGED,No revision,Not a baseline authority,RESOLVED_BY_CANONICAL_BASELINE

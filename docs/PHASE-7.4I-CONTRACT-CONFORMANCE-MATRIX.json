@@ -1,0 +1,19 @@
+{
+  "contract_hash":"7ccbcced5b3ebfd74b5eb4e60c6c89c8f878a4a1162f312c51121ad6a7ed4bc6",
+  "rows":[
+    {"clause":"Five inputs","design":"Input mapping with exact five fields","evidence":"H contract; useEvents.ts","planned_target":"repository input DTO","test":"T16,T20"},
+    {"clause":"Six candidate fields plus wrapper","design":"DuplicateEventCandidate and result mapping","evidence":"H contract; DuplicateEvent type","planned_target":"repository/DTO","test":"T01,T02,T15"},
+    {"clause":"Matching semantics","design":"Exact/contains name, date proximity, optional filters, exclusion","evidence":"H contract; historical migration","planned_target":"rich-search query design TBD identity","test":"T03-T09"},
+    {"clause":"Similarity ranking","design":"Ranking only; no threshold","evidence":"D05,D06","planned_target":"query design","test":"T11,T15"},
+    {"clause":"Ordering","design":"score DESC then date DESC","evidence":"D07","planned_target":"query design","test":"T11,T12,T20"},
+    {"clause":"Limit","design":"Maximum 5; no pagination","evidence":"D08","planned_target":"query design","test":"T10"},
+    {"clause":"NULL semantics","design":"Validation/filter/database-field/score rules","evidence":"D09; H contract","planned_target":"validation and query design","test":"T13-T15"},
+    {"clause":"Error semantics","design":"Typed validation/database/auth/timeout errors","evidence":"D10; H contract","planned_target":"repository error mapping","test":"T16-T19"},
+    {"clause":"Security/RLS","design":"SECURITY INVOKER; caller context; no bypass","evidence":"D11,D12; baseline policies","planned_target":"database object TBD","test":"T18"},
+    {"clause":"Visibility","design":"Caller-authorized rows only","evidence":"D13; events policy evidence","planned_target":"RLS validation","test":"T08,T18"},
+    {"clause":"Performance/index","design":"Measure -> Explain -> Validate -> Index","evidence":"D14,D15; baseline indexes","planned_target":"non-Production query plan","test":"T20 plus benchmark"},
+    {"clause":"Migration/rollback","design":"Non-Production only; testable rollback","evidence":"D16-D19","planned_target":"future migration plan","test":"rollback suite"}
+  ],
+  "status":"PASS - DESIGN CONFORMANCE",
+  "identity_gap":"Rich physical function identity remains TBD and is not invented."
+}

@@ -1,0 +1,18 @@
+{
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_auth_mutations": 0,
+  "production_storage_mutations": 0,
+  "production_deployments": 0,
+  "schema_mutations": 0,
+  "rls_mutations": 0,
+  "migration_mutations": 0,
+  "frontend_service_role_exposure": 0,
+  "frontend_fixture_password_exposure": 0,
+  "secret_values_logged": 0,
+  "non_production_auth_fixture_mutations": 4,
+  "non_production_profile_mutations": 4,
+  "non_production_role_fixture_mutations": 4,
+  "non_production_event_fixture_mutations": 2,
+  "non_production_assignment_fixture_mutations": 2
+}

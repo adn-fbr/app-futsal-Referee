@@ -1,0 +1,19 @@
+{
+  "status": "ABSENT",
+  "interpretation": "NO_LOCAL_SUPABASE_RUNTIME",
+  "production_independent": true,
+  "inspection": "docker volume ls returned no volumes; no volume inspect targets existed",
+  "volumes": [],
+  "known_previous_protected_names": [
+    "futsal_id_postgres_data",
+    "futsal_os_futsal-postgres",
+    "futsal_os_futsal-postgres-data",
+    "supabase_db_futsal_id",
+    "supabase_storage_futsal_id",
+    "futsal_id_minio_data",
+    "futsal_id_redis_data"
+  ],
+  "deletion_in_this_phase": false,
+  "database_loss_claimed": false,
+  "database_mutation": false
+}

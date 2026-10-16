@@ -1,0 +1,65 @@
+{
+  "artifact": "CANONICAL-RUNTIME-BASELINE",
+  "version": "1.0.0",
+  "source": "production-schema.sql",
+  "dependency_source": "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+  "schema_only": true,
+  "production_execution": false,
+  "production_mutation": false,
+  "production_data": false,
+  "generator": "scripts/validate-canonical-runtime-baseline.mjs --generate",
+  "generated_at": "2026-09-07T10:35:27.518Z",
+  "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "catalog": {
+    "tables": 27,
+    "columns": 249,
+    "primary_keys": 27,
+    "unique_constraints": 7,
+    "check_constraints": 3,
+    "foreign_keys": 30,
+    "functions": 47,
+    "views": 3,
+    "materialized_views": 0,
+    "triggers": 22,
+    "rls_policies": 86,
+    "indexes": 47,
+    "extensions": 7,
+    "enum_types": 2
+  },
+  "validation": {
+    "catalog_matches_expected": true,
+    "source_fidelity": {
+      "byte_identical": true,
+      "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+      "baseline_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+      "catalog_counts_identical": true,
+      "function_identities_identical": true
+    },
+    "overloaded_functions": [
+      "public.search_referee_cards(text,text,integer,integer)",
+      "public.search_referee_cards(text,boolean,text,integer,integer)"
+    ],
+    "ambiguous_functions": 0,
+    "missing_canonical_ids": 0,
+    "numeric_oid_identities": 0,
+    "dml": {
+      "insert": 0,
+      "update": 0,
+      "delete": 0,
+      "merge": 0,
+      "copy_from": 0
+    },
+    "no_production_data": true,
+    "auth_users_not_fabricated": true,
+    "unresolved_dependencies": 47,
+    "external_managed_dependencies": 22
+  },
+  "source_fidelity": {
+    "byte_identical": true,
+    "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "baseline_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "catalog_counts_identical": true,
+    "function_identities_identical": true
+  },
+  "gate": "PASS"
+}

@@ -1,0 +1,19 @@
+{
+  "phase":"8.3E.2",
+  "status":"PASS",
+  "authorized_project":"shorsqyycpptxcutrqrb",
+  "forbidden_project":"xfscfjwapwnkiinkgbjg",
+  "checks":[
+    {"check":".env runtime URL host","observed":"shorsqyycpptxcutrqrb.supabase.co","result":"PASS"},
+    {"check":"supabase/config.toml project_id","observed":"shorsqyycpptxcutrqrb","result":"PASS"},
+    {"check":"supabase/.temp/project-ref","observed":"shorsqyycpptxcutrqrb","result":"PASS"},
+    {"check":"final dist forbidden project references","observed_count":0,"result":"PASS"},
+    {"check":"final dist authorized project references","observed_count":1,"result":"PASS"},
+    {"check":"read-only Auth settings endpoint","host":"shorsqyycpptxcutrqrb.supabase.co","http_status":200,"result":"PASS"},
+    {"check":"Production endpoint contacted","observed":false,"result":"PASS"}
+  ],
+  "production_queries":0,
+  "production_mutations":0,
+  "non_production_queries":1,
+  "runtime_identity_proven":true
+}

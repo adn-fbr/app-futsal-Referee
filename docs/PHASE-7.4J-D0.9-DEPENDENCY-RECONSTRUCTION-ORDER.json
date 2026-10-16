@@ -1,0 +1,23 @@
+{
+  "status":"DETERMINISTIC_ORDER_PROPOSED_NOT_EXECUTED",
+  "source":"PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+  "source_sha256":"b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "unresolved_dependencies":47,
+  "external_managed_dependencies":22,
+  "stages":[
+    {"stage":1,"name":"extensions","objects":7},
+    {"stage":2,"name":"enum_types","objects":2,"items":["public.app_role","public.pengurus_level"]},
+    {"stage":3,"name":"base_reference_tables","objects":["provinsi","kabupaten_kota"]},
+    {"stage":4,"name":"external_identity_boundary","objects":["auth.users"],"action":"EXTERNAL_MANAGED"},
+    {"stage":5,"name":"identity_and_primary_tables","objects":["profiles","user_roles","pengurus","events","event_assignments","honors","referee_cards","referee_reviews"]},
+    {"stage":6,"name":"remaining_application_tables","objects":19},
+    {"stage":7,"name":"foreign_keys_and_constraints","objects":30},
+    {"stage":8,"name":"indexes","objects":47},
+    {"stage":9,"name":"functions","objects":47},
+    {"stage":10,"name":"views","objects":3,"security_invoker":true},
+    {"stage":11,"name":"triggers","objects":22},
+    {"stage":12,"name":"rls_policies","objects":86},
+    {"stage":13,"name":"synthetic_nonproduction_fixtures","action":"SEPARATE_APPROVAL_REQUIRED"}
+  ],
+  "execution":"NOT AUTHORIZED"
+}

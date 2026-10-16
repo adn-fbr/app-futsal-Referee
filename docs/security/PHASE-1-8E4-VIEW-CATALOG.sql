@@ -1,0 +1,9 @@
+-- PHASE 1.8E.4A VIEW CATALOG
+-- STATUS: PARTIAL / BLOCKED
+-- Verified application views from the production schema-only catalog:
+-- active_events (security_invoker=true)
+-- active_honors (security_invoker=true)
+-- referee_review_stats (security_invoker=true)
+--
+-- Complete definitions, owners, dependencies, security_barrier, and ACLs
+-- require the repository-local raw catalog extraction before baseline generation.

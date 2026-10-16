@@ -1,0 +1,16 @@
+{
+  "phase": "8.8A.1A",
+  "status": "PARTIAL",
+  "sources": {
+    "TEST_ENVIRONMENT": "Deno.env from .env.fixture.local",
+    "SUPABASE_URL": "Deno.env from .env.fixture.local",
+    "SUPABASE_PROJECT_REF": "Deno.env from .env.fixture.local",
+    "SUPABASE_SERVICE_ROLE_KEY": "Deno.env from .env.fixture.local or process injection",
+    "FIXTURE_ADMIN_PASSWORD": "Deno.env from .env.fixture.local or process injection"
+  },
+  "vite_variables_used_by_fixture_runtime": false,
+  "deno_env_file_supported": true,
+  "windows_compatible_command": "npm run fixtures:dry-run",
+  "target_resolution_dry_run": "PASS",
+  "real_secret_readiness": "BLOCKED"
+}

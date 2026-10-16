@@ -1,0 +1,11 @@
+{
+  "phase":"8.5A",
+  "typecheck":{"exit_code":0,"result":"PASS"},
+  "tests":{"exit_code":0,"result":"PASS: 10 files, 28 tests"},
+  "build":{"exit_code":0,"result":"PASS"},
+  "lint":{"exit_code":1,"result":"PRE_EXISTING: 66 errors, 11 warnings"},
+  "source_changes_in_8_5a":0,
+  "database_changes":0,
+  "schema_or_rls_regression":false,
+  "contract_runtime_validation":"BLOCKED"
+}

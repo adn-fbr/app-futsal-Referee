@@ -1,0 +1,6 @@
+{
+  "phase":"8.10",
+  "focused_tests":{"status":"PASS","tests":2},
+  "contracts_covered":["half-open annual range","deterministic document number","canonical status aggregation","assigned/unassigned referee calculation","monthly grouping"],
+  "browser_pdf_validation":"NOT_EXECUTED"
+}

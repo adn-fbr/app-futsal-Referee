@@ -1,0 +1,9 @@
+{
+  "phase": "8.6",
+  "target": "shorsqyycpptxcutrqrb",
+  "admin_provinsi": {"future_event_edit":"existing workflow", "historical_event_access":"allowed after role check and step-up", "direct_mutation":"role and historical checks in mutation"},
+  "non_admin": {"historical_event_access":"denied", "direct_route":"denied by page authorization", "direct_mutation":"role check rejects historical authorization"},
+  "role_source": "user_roles.user_id = auth.users.id",
+  "password_is_role_authority": false,
+  "live_validation": "BLOCKED - synthetic fixture unavailable"
+}

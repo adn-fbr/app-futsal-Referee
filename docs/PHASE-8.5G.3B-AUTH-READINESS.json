@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G.3B",
+  "auth_admin_mechanism": "NOT_AVAILABLE",
+  "official_auth_admin_api_executed": false,
+  "create_user_executed": false,
+  "delete_user_executed": false,
+  "service_role_present_in_process": false,
+  "status": "BLOCKED"
+}

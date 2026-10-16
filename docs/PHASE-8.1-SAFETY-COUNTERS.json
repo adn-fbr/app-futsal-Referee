@@ -1,0 +1,17 @@
+{
+  "phase": "8.1",
+  "production_access": 0,
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_migrations": 0,
+  "production_resets": 0,
+  "production_deployments": 0,
+  "non_production_mutations": 0,
+  "auth_user_mutations": 0,
+  "storage_mutations": 0,
+  "schema_mutations": 0,
+  "application_code_modifications": 0,
+  "package_installations": 0,
+  "dependency_upgrades": 0,
+  "status": "PASS"
+}

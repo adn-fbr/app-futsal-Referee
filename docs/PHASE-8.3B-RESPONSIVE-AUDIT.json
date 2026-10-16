@@ -1,0 +1,12 @@
+{
+  "phase":"8.3B","mode":"STATIC_REVIEW_ONLY","required_viewports":[320,375,390,414,768,1024,1280,1440],"runtime_screenshots_taken":false,
+  "surfaces":[
+    {"surface":"AdminEventAssignments","location":"src/pages/AdminEventAssignments.tsx","implemented":"desktop table and md:hidden mobile cards","risk":"P2","finding":"Long event/referee/status/action labels and dialogs require viewport execution; no static guarantee for all data lengths"},
+    {"surface":"RefereeAssignment","location":"src/pages/RefereeAssignment.tsx","implemented":"responsive grids/tabs/cards","risk":"P2","finding":"Multiple controls and assignment cards need 320px keyboard/overflow verification"},
+    {"surface":"Events","location":"src/pages/Events.tsx","implemented":"horizontal ScrollArea tabs and mobile FAB","risk":"P2","finding":"FAB, bottom nav, and long labels require viewport verification"},
+    {"surface":"MobileNav","location":"src/components/layout/MobileNav.tsx","implemented":"bottom sheet and safe-area padding","risk":"P2","finding":"Sheet grid labels and bottom safe-area behavior require device viewport verification"},
+    {"surface":"RefereeEvents","location":"src/pages/RefereeEvents.tsx","implemented":"mobile cards","risk":"P2","finding":"Event/location/status text can be long; no runtime matrix evidence"}
+  ],
+  "classification_summary":{"P0":0,"P1":0,"P2":5,"P3":0},
+  "next_action":"Execute non-mutating browser viewport checks and record only confirmed overflow/clipping findings."
+}

@@ -1,0 +1,42 @@
+{
+  "phase": "PHASE 7.4J-D1-D.6",
+  "canonical_source": "production-schema.sql",
+  "canonical_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "comparison_scope": "public application schema; managed storage excluded",
+  "counts": {
+    "tables": {"expected": 27, "actual": 27, "status": "PASS"},
+    "columns": {"expected": 249, "actual": 249, "status": "PASS"},
+    "constraints": {"expected": 67, "actual": 67, "status": "PASS"},
+    "functions": {"expected": 47, "actual": 47, "status": "PASS"},
+    "views": {"expected": 3, "actual": 3, "status": "PASS"},
+    "triggers": {"expected": 22, "actual": 22, "status": "PASS"},
+    "rls_policies": {"expected": 86, "actual": 86, "status": "PASS"},
+    "indexes": {"expected": 47, "actual": 47, "status": "PASS"},
+    "enum_types": {"expected": 2, "actual": 2, "status": "PASS"}
+  },
+  "exact_identity_differences": {
+    "tables": [],
+    "columns": [],
+    "constraints": [],
+    "functions": [],
+    "views": [],
+    "triggers": [],
+    "policies": [],
+    "indexes": [],
+    "enum_types": []
+  },
+  "definition_comparisons": {
+    "functions_compared": 47,
+    "views_compared": 3,
+    "triggers_compared": 22,
+    "policies_compared": 86,
+    "indexes_compared": 47,
+    "normalized_definition_mismatches": []
+  },
+  "semantic_serialization_note": "PostgreSQL reserialized equivalent parentheses/casts in public.referee_cards.referee_cards_status_check; identity and semantics are unchanged.",
+  "events": {"deleted_at": true, "kabupaten_kota_id": true},
+  "duplicate_event": {"canonical_present": true, "identity": "public.check_duplicate_event(text,text,text)", "returns": "boolean", "rich_five_argument_present": false},
+  "auth_boundary": {"auth_users_recreated": false},
+  "data_boundary": {"data_statements": 0, "synthetic_fixtures_inserted": false},
+  "status": "PASS"
+}

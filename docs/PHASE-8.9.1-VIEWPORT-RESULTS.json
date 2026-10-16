@@ -1,0 +1,23 @@
+{
+  "phase": "8.9.1",
+  "browser": "integrated Chromium",
+  "route": "/",
+  "viewport_requirement_label": 14,
+  "concrete_viewports_listed": 13,
+  "viewports_validated": 13,
+  "results": [
+    {"width":1280,"height":800,"category":"desktop","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":1366,"height":768,"category":"desktop","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":1440,"height":900,"category":"desktop","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":1536,"height":864,"category":"desktop","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":1920,"height":1080,"category":"desktop","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":768,"height":1024,"category":"tablet","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":1024,"height":768,"category":"tablet","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":320,"height":568,"category":"mobile","status":"PARTIAL","horizontal_overflow":false,"clipping_detected":true},
+    {"width":360,"height":800,"category":"mobile","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":375,"height":812,"category":"mobile","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":390,"height":844,"category":"mobile","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":393,"height":873,"category":"mobile","status":"PASS","horizontal_overflow":false,"clipping_detected":false},
+    {"width":412,"height":915,"category":"mobile","status":"PASS","horizontal_overflow":false,"clipping_detected":false}
+  ]
+}

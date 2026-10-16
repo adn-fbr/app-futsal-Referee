@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.1",
+  "status":"PASS",
+  "role_source":"user_roles",
+  "admin_provinsi_role_verified":true,
+  "password_role_authority":false,
+  "canonical_referee_role":"wasit"
+}

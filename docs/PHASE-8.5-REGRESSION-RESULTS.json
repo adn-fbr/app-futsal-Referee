@@ -1,0 +1,13 @@
+{
+  "phase":"8.5",
+  "checks":[
+    {"command":"npm run typecheck","exit_code":0,"result":"PASS"},
+    {"command":"npm test -- --run","exit_code":0,"result":"PASS: 10 files, 28 tests"},
+    {"command":"npm run build","exit_code":0,"result":"PASS"},
+    {"command":"npm run lint","exit_code":1,"result":"PRE_EXISTING: 66 errors, 11 warnings"}
+  ],
+  "critical_regression":false,
+  "production_access":0,
+  "schema_or_rls_changes":0,
+  "remaining":"browser/RLS/mutation/audit validation blocked"
+}

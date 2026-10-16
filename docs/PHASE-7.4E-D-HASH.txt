@@ -1,0 +1,8 @@
+PHASE-7.4E-D-FORMAL-CONTRACT-APPROVAL v1.0.0
+NORMALIZED DECISION PACKAGE SHA-256
+
+RUN 1: 963609104135df057e99e9b20beae3e8e49aaa19a8d1a87ad20f35353fa7e48e
+RUN 2: 963609104135df057e99e9b20beae3e8e49aaa19a8d1a87ad20f35353fa7e48e
+IDENTICAL: YES
+
+The hash covers the seven required Phase 7.4E-D artifacts in deterministic path order. This hash file is excluded to avoid self-reference.

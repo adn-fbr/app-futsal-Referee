@@ -1,0 +1,14 @@
+{
+  "phase": "8.5G.2",
+  "status": "PASS FOR LOCAL INVARIANT; REMOTE NOT VERIFIED",
+  "schema_changes": 0,
+  "migration_created": 0,
+  "migration_applied": 0,
+  "rls_changes": 0,
+  "functions_changed": 0,
+  "triggers_changed": 0,
+  "indexes_changed": 0,
+  "extensions_changed": 0,
+  "canonical_baseline_changed": 0,
+  "remote_schema_read_back": "NOT EXECUTED"
+}

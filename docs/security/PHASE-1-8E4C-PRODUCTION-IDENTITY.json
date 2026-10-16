@@ -1,0 +1,15 @@
+{
+  "status": "BLOCKED",
+  "projectRef": "xfscfjwapwnkiinkgbjg",
+  "projectName": "AFP SULSEL",
+  "access": "READ-ONLY",
+  "sqlIdentity": {
+    "current_database": null,
+    "current_user": null,
+    "current_schema": null,
+    "version": null,
+    "server_version": null
+  },
+  "metadataVersion": "17.6.1.063",
+  "missing": "Authorized live SQL identity result"
+}

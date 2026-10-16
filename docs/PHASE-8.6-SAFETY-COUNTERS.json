@@ -1,0 +1,15 @@
+{
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_auth_mutations": 0,
+  "non_production_schema_mutations": 0,
+  "non_production_rls_mutations": 0,
+  "non_production_auth_mutations": 0,
+  "non_production_event_mutations": 0,
+  "non_production_audit_mutations": 0,
+  "secrets_exposed": 0,
+  "passwords_logged": 0,
+  "service_role_keys_exposed": 0,
+  "schema_changes": 0,
+  "migration_created": 0
+}

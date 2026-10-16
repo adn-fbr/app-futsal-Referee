@@ -1,0 +1,4 @@
+conflict_id,migration_file_a,migration_file_b,affected_object,conflict_type,classification,recommended_disposition,governance_required,execution_authorization
+C-01,20260103052354_5c53bda3-9ac3-419b-a632-62393465a94a.sql,20260103165842_remix_migration_from_pg_dump.sql,public.app_role and broad schema/events,DUPLICATE_HISTORICAL_REPLAY,HISTORICAL,ARCHIVE_AS_HISTORICAL,true,NOT_GRANTED
+C-02,20260110162455_98e87d41-5e63-4dba-9290-9fb5f39f3a12.sql,production-schema.sql,events.deleted_at and events.kabupaten_kota_id,REMOTE_NONPRODUCTION_DRIFT,COMPATIBLE,SUPERSEDE,true,NOT_GRANTED
+C-03,20260121161308_170f4f14-a4bb-494b-ac16-77f99251a8c4.sql,production-schema.sql,public.check_duplicate_event,CANONICAL_FUNCTION_CONTRACT_CONFLICT,CONFLICTING,REJECT,true,NOT_GRANTED

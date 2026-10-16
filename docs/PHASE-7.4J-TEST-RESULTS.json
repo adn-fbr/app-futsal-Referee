@@ -1,0 +1,14 @@
+{
+  "phase":"7.4J",
+  "status":"BLOCKED",
+  "matrix_total":20,
+  "passed":0,
+  "failed":0,
+  "not_executed":20,
+  "focused_unit_tests_before_cleanup":{"passed":6,"failed":0},
+  "critical_invariant":"DATABASE FAILURE != NO DUPLICATE",
+  "critical_invariant_verified":false,
+  "reason":"No compatible deployed rich-search function and target schema lacks required columns.",
+  "integration_tests":"NOT EXECUTED",
+  "database_tests":"NOT EXECUTED"
+}

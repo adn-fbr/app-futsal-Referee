@@ -1,0 +1,12 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "auth_accessible":false,
+  "auth_user_count":"UNKNOWN",
+  "auth_state":"UNKNOWN",
+  "auth_enumeration_method":"schema boundary observed; safe publishable-key/PostgREST row enumeration unavailable",
+  "auth_enumeration_blocker":"managed auth.users is not exposed through the safe application read channel; no approved read-only database credential",
+  "auth_provenance":"UNKNOWN",
+  "auth_boundary":"EXTERNAL_MANAGED",
+  "pii_retrieved":false,
+  "mutation":0
+}

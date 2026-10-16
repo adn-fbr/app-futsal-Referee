@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "capturedCount": 0,
+  "missing": ["owners","access methods","columns","expressions","predicates","valid/ready state","exact pg_get_indexdef output"]
+}

@@ -1,0 +1,12 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "profiles_to_auth_users": true,
+  "user_roles_to_auth_users": true,
+  "events_to_regions": true,
+  "assignments_to_events": true,
+  "assignments_to_referee_profile": true,
+  "event_region_relationships": true,
+  "assignment_graph": true,
+  "orphan_fixture_rows": false
+}

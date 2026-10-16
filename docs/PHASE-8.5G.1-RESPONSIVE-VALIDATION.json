@@ -1,0 +1,13 @@
+{
+  "phase":"8.5G.1",
+  "status":"PARTIAL",
+  "route":"/administration/event-assignments",
+  "authenticated_synthetic_browser_session":"NOT_VERIFIED",
+  "desktop_matrix":"NOT_VALIDATED_AUTHENTICATED",
+  "tablet_matrix":"NOT_VALIDATED_AUTHENTICATED",
+  "mobile_matrix":"NOT_VALIDATED_AUTHENTICATED",
+  "mobile_overflow_after_minimal_fix": {"320x568":false,"360x800":false,"375x812":false,"390x844":false,"393x873":false,"412x915":false},
+  "desktop_overflow_static_session":false,
+  "assignment_cards_rendered_static_session":2,
+  "step_up_dialog":"NOT_VALIDATED_BROWSER"
+}

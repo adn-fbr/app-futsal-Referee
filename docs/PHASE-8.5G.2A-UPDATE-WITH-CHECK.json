@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2A",
+  "status":"NOT_EXECUTED",
+  "approved_with_check_migration_present":true,
+  "event_region_escape_test":"NOT_EXECUTED",
+  "reason":"migration was not applied"
+}

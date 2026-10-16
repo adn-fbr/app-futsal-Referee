@@ -1,0 +1,38 @@
+{
+  "phase": "1.8E.4A",
+  "status": "BLOCKED",
+  "source": "Phase 1.8B production schema-only runtime dump",
+  "productionRef": "xfscfjwapwnkiinkgbjg",
+  "testRef": "shorsqyycpptxcutrqrb",
+  "dataIncluded": false,
+  "counts": {
+    "publicApplicationTables": 27,
+    "publicApplicationViews": 3,
+    "publicApplicationFunctions": 47,
+    "securityDefinerFunctions": 41,
+    "rlsPolicies": 86
+  },
+  "tables": [
+    "events", "honors", "activity_logs", "audit_logs", "auth_attempts", "auth_event_logs", "card_verification_logs", "discussion_replies", "discussion_topics", "evaluation_criteria", "evaluation_scores", "evaluations", "event_approvals", "event_assignments", "event_logs", "kabupaten_kota", "learning_materials", "learning_progress", "notification_preferences", "notifications", "pengurus", "profiles", "provinsi", "referee_cards", "referee_reviews", "system_settings", "user_roles"
+  ],
+  "verifiedRelationships": [
+    "profiles.id -> auth.users.id ON DELETE CASCADE",
+    "user_roles.user_id -> auth.users.id ON DELETE CASCADE",
+    "profiles.kabupaten_kota_id -> kabupaten_kota.id",
+    "kabupaten_kota.provinsi_id -> provinsi.id",
+    "events.kabupaten_kota_id -> kabupaten_kota.id",
+    "event_assignments.event_id -> events.id ON DELETE CASCADE",
+    "event_assignments.referee_id -> profiles.id ON DELETE CASCADE",
+    "honors.event_id -> events.id",
+    "honors.referee_id -> profiles.id ON DELETE CASCADE",
+    "evaluations.event_id -> events.id",
+    "evaluations.referee_id -> profiles.id ON DELETE CASCADE"
+  ],
+  "missingEvidence": [
+    "Complete per-column catalog in a repository-local artifact",
+    "Exact owner and ACL metadata for every function/table/sequence",
+    "Complete pg_get_functiondef output in a repository-local artifact",
+    "RLS forced flag from pg_class",
+    "Complete dependency graph and extension ownership classification"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2C",
+  "status":"PASS_PREFLIGHT_BLOCKED_EXECUTION",
+  "linked_project_ref":"shorsqyycpptxcutrqrb",
+  "production_project_ref":"xfscfjwapwnkiinkgbjg",
+  "production_access":false,
+  "target_identity_query":"NOT_EXECUTED_NO_CHANNEL",
+  "cli_version":"2.67.1"
+}

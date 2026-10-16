@@ -1,0 +1,9 @@
+{
+  "phase": "8.8",
+  "rls_changes": 0,
+  "service_role_frontend": false,
+  "scoped_query": true,
+  "admin_kab_kota_query_scope": "kabupaten_kota_id",
+  "cross_region_leakage": "NOT VERIFIED live",
+  "rls_status": "NOT VALIDATED"
+}

@@ -1,0 +1,8 @@
+PHASE-7.4E-C-CONTRACT-DELTA-RESOLUTION v1.0.0
+NORMALIZED RESOLUTION PACKAGE SHA-256
+
+RUN 1: 76f8ba6ef595c3ba7524266973552bb90a5b3e96f7ac409fc867adf52d73fe62
+RUN 2: 76f8ba6ef595c3ba7524266973552bb90a5b3e96f7ac409fc867adf52d73fe62
+DETERMINISTIC: YES
+
+The hash covers the eight required Phase 7.4E-C artifacts in deterministic path order. This hash file is excluded to avoid self-reference.

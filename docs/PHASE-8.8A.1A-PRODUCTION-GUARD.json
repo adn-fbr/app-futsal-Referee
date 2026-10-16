@@ -1,0 +1,9 @@
+{
+  "phase": "8.8A.1A",
+  "status": "PASS",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "production_url_rejection_test": "PASS",
+  "rejected_before_client_creation": true,
+  "production_network_requests": 0,
+  "production_mutations": 0
+}

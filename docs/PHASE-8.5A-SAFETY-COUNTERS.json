@@ -1,0 +1,8 @@
+{
+  "phase":"8.5A",
+  "production_queries":0,"production_mutations":0,"production_auth_mutations":0,"production_storage_mutations":0,"production_migrations":0,"production_deployments":0,
+  "non_production_queries":0,"non_production_mutations":0,"non_production_auth_mutations":0,"non_production_storage_mutations":0,
+  "schema_mutations":0,"rls_changes":0,"rpc_created":0,"edge_functions_deployed":0,"fixtures_created":0,
+  "source_files_modified":0,"config_files_modified":0,"secrets_recorded":0,
+  "status":"BLOCKED — canonical type source and transaction boundary unavailable"
+}

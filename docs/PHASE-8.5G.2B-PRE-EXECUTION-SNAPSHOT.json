@@ -1,0 +1,12 @@
+{
+  "phase":"8.5G.2B",
+  "target_project":"shorsqyycpptxcutrqrb",
+  "target_url":"NON_PRODUCTION",
+  "migration_sha256":"E486E50AED37526124FFD502ECFB154C5D5910EB9F9828B1E96AA76E39015F54",
+  "pre_rls_state":"CANONICAL_BASELINE_ENABLED",
+  "pre_policies":"documented in PHASE-8.5G.2-PRE-RLS-INVENTORY.json",
+  "pre_functions":"is_admin and get_user_kabupaten_kota documented",
+  "remote_migration_history":"remote-only 20260908085000; drift unresolved",
+  "fixture_presence":"VERIFIED_IN_PHASE_8.8A.1B",
+  "production_safety_state":"TARGET_SAFE"
+}

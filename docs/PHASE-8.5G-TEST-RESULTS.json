@@ -1,0 +1,6 @@
+{
+  "phase": "8.5G",
+  "focused_tests": {"status": "PASS", "files": ["phase-8-5g-event-assignment-region-status.test.ts", "phase-8-3d-assignment-contract.test.ts"], "tests": 8},
+  "full_suite": {"status":"PASS", "test_files":11, "tests":33},
+  "live_auth_rls": "BLOCKED - fixtures and harness unavailable"
+}

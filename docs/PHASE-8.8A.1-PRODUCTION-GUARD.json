@@ -1,0 +1,10 @@
+{
+  "phase": "8.8A.1",
+  "status": "PASS",
+  "accepted_project_ref": "shorsqyycpptxcutrqrb",
+  "accepted_url": "https://shorsqyycpptxcutrqrb.supabase.co",
+  "rejected_project_ref": "xfscfjwapwnkiinkgbjg",
+  "rejected_url_tested": true,
+  "rejected_before_client_creation": true,
+  "network_request_on_rejection": false
+}

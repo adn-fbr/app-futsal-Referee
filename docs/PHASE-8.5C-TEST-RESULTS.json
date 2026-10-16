@@ -1,0 +1,11 @@
+{
+  "phase":"8.5C",
+  "type_generation":{"command":"supabase gen types --linked --lang=typescript --schema public","exit_code":0,"result":"PASS temporary Non-Production output; application types not replaced"},
+  "typecheck":{"result":"baseline PASS from Phase 8.5"},
+  "tests":{"result":"baseline PASS: 10 files/28 tests"},
+  "build":{"result":"baseline PASS"},
+  "contract_tests_added":0,
+  "transaction_tests_added":0,
+  "live_tests":"NOT_EXECUTED",
+  "lint":"baseline 66 errors/11 warnings"
+}

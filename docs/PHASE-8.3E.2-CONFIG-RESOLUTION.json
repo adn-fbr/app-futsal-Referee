@@ -1,0 +1,23 @@
+{
+  "phase":"8.3E.2",
+  "mode":"CONTROLLED CONFIGURATION REMEDIATION",
+  "authorized_target":"shorsqyycpptxcutrqrb",
+  "forbidden_target":"xfscfjwapwnkiinkgbjg",
+  "final_resolution":{
+    "effective_vite_url_host":"shorsqyycpptxcutrqrb.supabase.co",
+    "effective_project_ref":"shorsqyycpptxcutrqrb",
+    "config_toml_project_id":"shorsqyycpptxcutrqrb",
+    "temp_project_ref":"shorsqyycpptxcutrqrb",
+    "production_runtime_ref":"absent_from_final_bundle",
+    "public_key_present":"yes_redacted",
+    "service_role_key_in_browser":"false_by_client_and_build_guards"
+  },
+  "precedence":{
+    "vite_runtime":"process.env override if present, then loadEnv mode from .env files; final normal process had no override and resolved .env Non-Production",
+    "supabase_client":"import.meta.env.VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY",
+    "cli_binding":"supabase/config.toml and .temp/project-ref; separate from Vite runtime"
+  },
+  "phase_changes":{"env_files_modified":false,"supabase_config_modified":false,"source_guard_modified":true,"source_guard":"vite.config.ts development-only project allowlist"},
+  "production_reference_scan":{"active_runtime_references":0,"commented_historical_references_in_env":2,"classification":"non-active comments; not loaded as runtime variables"},
+  "secret_policy":"No credential value recorded."
+}

@@ -1,0 +1,19 @@
+{
+  "phase":"8.3B","scope":"Forms discovered by <form> and useForm occurrences; static review only",
+  "forms_audited":15,
+  "classification_legend":["COMPLETE","PARTIAL","BROKEN","MOCK_SUBMIT","NO_VALIDATION","NO_ERROR_HANDLING","NO_SUCCESS_FEEDBACK"],
+  "findings":[
+    {"location":"src/pages/Login.tsx","workflow":"Login","classification":"PARTIAL","evidence":"Auth flow exists; session/role resolution is handled by AuthContext. Full field/error/keyboard verification not evidenced."},
+    {"location":"src/pages/Signup.tsx","workflow":"Signup","classification":"PARTIAL","evidence":"Registration is reachable; complete validation, duplicate submission, and server error UX require focused test."},
+    {"location":"src/pages/ForgotPassword.tsx; src/pages/ResetPassword.tsx","workflow":"Password recovery","classification":"PARTIAL","evidence":"Routes exist; recovery edge states and success/error feedback require focused test."},
+    {"location":"src/pages/EventSubmission.tsx","workflow":"Create event","classification":"PARTIAL","evidence":"Protected form exists; persistence/error/unsaved-change matrix not fully evidenced."},
+    {"location":"src/pages/EventEdit.tsx","workflow":"Update event","classification":"PARTIAL","evidence":"Protected form exists; persistence/error/unsaved-change matrix not fully evidenced."},
+    {"location":"src/pages/EvaluationForm.tsx; src/pages/EvaluationNew.tsx","workflow":"Evaluation CRUD","classification":"PARTIAL","evidence":"Forms exist; server failure, duplicate submission, and success-state coverage requires focused test."},
+    {"location":"src/pages/Settings.tsx; src/pages/ProfileComplete.tsx; src/pages/RefereeProfile.tsx","workflow":"Profile/settings","classification":"PARTIAL","evidence":"Forms exist; consistent error, retry, and unsaved-change behavior not evidenced."},
+    {"location":"src/pages/DiscussionNew.tsx","workflow":"Create discussion","classification":"PARTIAL","evidence":"Create form exists; server error and duplicate submit coverage not evidenced."},
+    {"location":"src/pages/PublicReviewSubmit.tsx","workflow":"Public review","classification":"PARTIAL","evidence":"Public form exists; validation and failure recovery need focused review."},
+    {"location":"src/pages/AdminEventAssignments.tsx","workflow":"Status step-up mutation","classification":"PARTIAL","evidence":"Masked password, disabled submit while pending, clearing password, and toast error are present; cancellation reason and transition contract are absent."}
+  ],
+  "positive_evidence":["AdminEventAssignments password uses type=password and is not persisted in localStorage or state beyond open dialog","React Hook Form and Zod dependencies are installed"],
+  "unverified_required_checks":["keyboard submit/cancel across every form","mobile usability at 320px","server error message quality","unsaved changes handling"]
+}

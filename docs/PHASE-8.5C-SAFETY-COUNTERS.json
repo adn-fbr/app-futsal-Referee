@@ -1,0 +1,8 @@
+{
+  "phase":"8.5C",
+  "production_queries":0,"production_mutations":0,"production_auth_mutations":0,"production_storage_mutations":0,"production_deployments":0,
+  "non_production_queries":1,"non_production_mutations":0,"non_production_auth_mutations":0,"non_production_storage_mutations":0,
+  "type_generation_reads":1,"schema_changes":0,"rls_changes":0,"rpc_created":0,"migrations_created":0,"migrations_applied":0,"fixtures_created":0,
+  "source_files_modified":0,"config_files_modified":0,"secrets_recorded":0,
+  "status":"BLOCKED — type source verified, semantic/event transaction compatibility unresolved"
+}

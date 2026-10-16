@@ -1,0 +1,11 @@
+{
+  "phase": "8.8",
+  "today_source": "getToday() from Phase 8.7 Asia/Makassar utility",
+  "request_date_source": "events.created_at (canonical submission/creation timestamp; no separate request_date field found)",
+  "event_start_source": "events.start_date",
+  "event_end_source": "events.end_date with start_date fallback",
+  "approval_date_source": "event_approvals.created_at",
+  "calendar_range": "event_start <= visible_end AND event_end >= visible_start",
+  "status_values": ["DIAJUKAN", "DISETUJUI", "DITOLAK", "SELESAI"],
+  "status_added": false
+}

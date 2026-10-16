@@ -1,0 +1,11 @@
+{
+  "phase": "8.8A",
+  "role": "ADMIN_KAB_KOTA",
+  "status": "PARTIAL",
+  "can_read_own_region": "NOT_LIVE_VALIDATED",
+  "cannot_read_other_region": "NOT_LIVE_VALIDATED",
+  "calendar_scope_respected": "NOT_LIVE_VALIDATED",
+  "dashboard_scope_respected": "LOCAL_KPI_IMPLEMENTED",
+  "regional_filter_cannot_expose_other_region": "LOCAL_UI_FILTER_RESTRICTED_BY_AUTH_SCOPE",
+  "notes": "The app still relies on the existing Auth + role + RLS boundary; live credential validation has not been executed in this environment."
+}

@@ -1,0 +1,14 @@
+{
+  "phase":"8.5C",
+  "status":"BLOCKED_LIVE_VALIDATION",
+  "design":"auth.uid -> user_roles -> admin_provinsi -> existing province scope -> transaction function",
+  "tests":[
+    {"id":"HIST-S-001","admin_provinsi","status":"NOT_EXECUTED"},
+    {"id":"HIST-S-002","non_admin","status":"NOT_EXECUTED"},
+    {"id":"HIST-S-003","anonymous","status":"NOT_EXECUTED"},
+    {"id":"HIST-S-004","wrong province scope","status":"NOT_EXECUTED"}
+  ],
+  "password_role_authority":false,
+  "production_access":0,
+  "reason":"No function was created and no synthetic identities/fixtures were available."
+}

@@ -1,0 +1,13 @@
+{
+  "canonical":{"profiles_id":"auth.users.id","user_roles_user_id":"auth.users.id","pengurus_user_id":"auth.users.id"},
+  "remote":{
+    "profiles":{"table_exists":"YES","row_count":0,"auth_relationship":"NO_ROWS_OBSERVED","orphaned":"NONE_OBSERVED"},
+    "user_roles":{"table_exists":"YES","row_count":0,"auth_relationship":"NO_ROWS_OBSERVED","orphaned":"NONE_OBSERVED"},
+    "pengurus":{"table_exists":"NO","row_count":"UNKNOWN","auth_relationship":"UNKNOWN","orphaned":"UNKNOWN"},
+    "auth.users":{"table_exists":"UNKNOWN_ROW_STATE","row_count":"UNKNOWN","enumeration":"UNAVAILABLE"}
+  },
+  "duplicate_identity_relationships":"UNKNOWN",
+  "inconsistent_role_relationships":"NONE_OBSERVED_FOR_ZERO_ROWS",
+  "inconsistent_pengurus_relationships":"UNKNOWN",
+  "status":"GOVERNANCE_REQUIRED"
+}

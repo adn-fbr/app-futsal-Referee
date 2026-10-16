@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "indexes",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "all public indexes",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No `pg_index` / `pg_get_indexdef()` extraction occurred."
+}

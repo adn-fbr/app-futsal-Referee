@@ -1,0 +1,9 @@
+{
+  "phase": "8.9.1",
+  "status": "BLOCKED",
+  "event_table": "NOT_VALIDATED",
+  "assignment_table": "NOT_VALIDATED",
+  "user_table": "NOT_VALIDATED",
+  "report_tables": "NOT_VALIDATED",
+  "reason": "AUTH_FIXTURE_UNAVAILABLE"
+}

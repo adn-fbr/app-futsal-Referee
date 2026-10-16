@@ -1,0 +1,10 @@
+{
+  "phase": "8.9.1",
+  "status": "BLOCKED",
+  "desktop_navigation": "BLOCKED_AUTH_REQUIRED",
+  "tablet_navigation": "BLOCKED_AUTH_REQUIRED",
+  "mobile_navigation": "BLOCKED_AUTH_REQUIRED",
+  "public_login_navigation": "PARTIAL",
+  "authorized_menu_visibility": "NOT_VALIDATED",
+  "production_target_detected": false
+}

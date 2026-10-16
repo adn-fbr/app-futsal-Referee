@@ -1,0 +1,6 @@
+{
+  "status":"BLOCKED",
+  "hashesGenerated":false,
+  "artifactsHashed":[],
+  "reason":"Complete runtime definition artifacts were not captured; hashing partial placeholders would create false baseline integrity evidence."
+}

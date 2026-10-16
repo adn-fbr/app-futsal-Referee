@@ -1,0 +1,15 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "read_only":true,
+  "current_state":"EMPTY_FOR_OBSERVABLE_APPLICATION_TABLES",
+  "provenance":"UNKNOWN_FOR_COMPLETE_TARGET",
+  "classification_rule":"EMPTY current state does not establish historical provenance",
+  "observed_empty_tables":["events","profiles","user_roles","event_assignments","referee_reviews","honors"],
+  "absent_unknown_tables":["pengurus","event_approvals","evaluations","evaluation_scores","referee_cards","notifications","learning_progress","discussion_topics","discussion_replies"],
+  "repository_intent":"SYNTHETIC_OR_TEST_FIXTURES_INTENDED_FUTURE_ONLY",
+  "production_derived_evidence":"NONE_OBSERVED; not proof of absence",
+  "disposition":"GOVERNANCE_REQUIRED",
+  "future_requirement":"DATA_REBUILD_REQUIRED",
+  "rows_retrieved":0,
+  "mutation":0
+}

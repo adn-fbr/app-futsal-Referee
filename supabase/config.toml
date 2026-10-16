@@ -1,0 +1,61 @@
+project_id = "xfscfjwapwnkiinkgbjg"
+
+[functions.delete-user]
+verify_jwt = true
+
+[functions.create-user]
+verify_jwt = true
+
+[functions.reset-user-password]
+verify_jwt = true
+
+[functions.admin-reports]
+verify_jwt = true
+
+[functions.seed-database]
+verify_jwt = true
+
+[functions.export-database]
+verify_jwt = true
+
+[functions.import-database]
+verify_jwt = true
+
+[functions.send-event-notification]
+verify_jwt = true
+
+[functions.update-user-email]
+verify_jwt = true
+
+[functions.test-email-config]
+verify_jwt = true
+
+[functions.auto-complete-events]
+verify_jwt = true
+
+[functions.send-assignment-notification]
+verify_jwt = true
+
+[functions.upsert-whatsapp-config]
+verify_jwt = true
+
+[functions.test-whatsapp-config]
+verify_jwt = true
+
+[functions.send-whatsapp]
+verify_jwt = true
+
+[functions.notification-orchestrator]
+verify_jwt = true
+
+[functions.send-profile-reminder]
+ verify_jwt = true
+ 
+ [functions.generate-report-pdf]
+ verify_jwt = true
+ 
+ [functions.send-license-reminder]
+ verify_jwt = true
+ 
+[functions.meta-whatsapp-webhook]
+verify_jwt = false

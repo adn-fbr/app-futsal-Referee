@@ -1,0 +1,32 @@
+{
+  "phase":"7.4J-D0.9A",
+  "algorithm":"SHA-256",
+  "scope":"18 D0.9A evidence artifacts, excluding both hash manifest artifacts",
+  "canonicalization":"UTF-8 records of workspace-relative path, tab, lowercase file SHA-256, newline; sorted by path; trailing newline included",
+  "files":[
+    {"path":"docs/PHASE-7.4J-D0.9A-AUTH-DISPOSITION.md","sha256":"524bd4057a51fa4117f42aa761a29c816d0c4a69bfe2915b5866ab7423627aa3"},
+    {"path":"docs/PHASE-7.4J-D0.9A-D1-READINESS-MATRIX.md","sha256":"bfa74ca13cb788b5489627a4ca1cdca21263237da6462cee18e25e390f6f4937"},
+    {"path":"docs/PHASE-7.4J-D0.9A-DATA-DISPOSITION.md","sha256":"39494abefd837260aba929cc8b27aa41cebed31847f75ad5c7f3a89c03777c8d"},
+    {"path":"docs/PHASE-7.4J-D0.9A-DATA-EVIDENCE.json","sha256":"375398d88cac7aa8e960449e63029d77e58b7ddcd1edbaa1c45122a97c905af3"},
+    {"path":"docs/PHASE-7.4J-D0.9A-DEPENDENCY-ORDER.md","sha256":"ea89fe5599f83902258048c1111e4c2d26a75318b99f8473f7274ce79250dc6b"},
+    {"path":"docs/PHASE-7.4J-D0.9A-EVENTS-CANONICAL-VALIDATION.md","sha256":"bc139204f6a0396155bf0731706535c6a35a701efff4df957d64b17d4766fe87"},
+    {"path":"docs/PHASE-7.4J-D0.9A-FINAL-REPORT.md","sha256":"89539b4925b5856e85bafd7656847497411a4c4db2c83c132a2fd0c2e8a4fc28"},
+    {"path":"docs/PHASE-7.4J-D0.9A-MIGRATION-CONFLICT-REGISTER.csv","sha256":"6dedb3a33d9ddbab471d52c4f1bd95523b82fa16772aa349f080392a7787de5c"},
+    {"path":"docs/PHASE-7.4J-D0.9A-MIGRATION-CONFLICT-REGISTER.json","sha256":"f4be30731679cdd1f55ba717db8ed1407eceb847ac8942f46ffb744b09d523a4"},
+    {"path":"docs/PHASE-7.4J-D0.9A-MIGRATION-CONFLICT-REGISTER.md","sha256":"8371c1ab3fb873a8ada45e44638651e370cb759722219fd9954ef7b16c82453d"},
+    {"path":"docs/PHASE-7.4J-D0.9A-OPTION-EVALUATION.md","sha256":"57f2649fc28b9e86bc4352d6837d645d3405307c997d8dc1506c35e2efabc5cd"},
+    {"path":"docs/PHASE-7.4J-D0.9A-PRODUCTION-SAFETY.md","sha256":"5cf69cc01a1ca7911289bc881eff3128ab62f10ffffdf3c18acb50d286ed6f4f"},
+    {"path":"docs/PHASE-7.4J-D0.9A-RECONSTRUCTION-INPUT-MANIFEST.csv","sha256":"58fd01108ac43ef6f1769c8a32b44e1ea35c18acd54757c0c54d25cbd27f8324"},
+    {"path":"docs/PHASE-7.4J-D0.9A-RECONSTRUCTION-INPUT-MANIFEST.json","sha256":"55f4c1bb29e66714be4537d116b52c5fa4aab0a558df9e4a193231bf78127b92"},
+    {"path":"docs/PHASE-7.4J-D0.9A-RLS-DISPOSITION.md","sha256":"1237b4013be12cc81f4268ef13fda92ff4f21022155617bce6e6ec36b605aaf4"},
+    {"path":"docs/PHASE-7.4J-D0.9A-ROLLBACK-DESIGN.md","sha256":"7f0a7b384cb2893c7ed52d6db1ea54b4bae3bd839c5444c45e58444b4f2b745e"},
+    {"path":"docs/PHASE-7.4J-D0.9A-STORAGE-DISPOSITION.md","sha256":"d1ffccc9ea1324423946db39620eaf3c26814d6ef1430c2ac8f8bbc5677f7ebd"},
+    {"path":"docs/PHASE-7.4J-D0.9A-THREE-WAY-CANONICAL-COMPARISON.md","sha256":"984ebf170bf8b9d6c15e1e71cc1a97c1ce2a3a2c7e897d19d2ce5c95aba80834"}
+  ],
+  "manifest_sha256":"d6a63114147f90cc04e60aa5ec1c65e88396d5c2d353331eb2bf9acf11a9a966",
+  "run1_hash":"d6a63114147f90cc04e60aa5ec1c65e88396d5c2d353331eb2bf9acf11a9a966",
+  "run2_hash":"d6a63114147f90cc04e60aa5ec1c65e88396d5c2d353331eb2bf9acf11a9a966",
+  "match":true,
+  "determinism":"PASS",
+  "gate":"BLOCKED"
+}

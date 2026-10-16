@@ -1,0 +1,7 @@
+{
+  "phase": "PHASE 7.4J-D1-D.6",
+  "validation_1": {"path": "tmp/d1d6-schema-after-1.sql", "bytes": 165218, "sha256": "77d9d8e4fe1f439a1118edc5f0ac5454cf9a2a38cfc72f0253f9653c300c9260"},
+  "validation_2": {"path": "tmp/d1d6-schema-after-2.sql", "bytes": 165218, "sha256": "77d9d8e4fe1f439a1118edc5f0ac5454cf9a2a38cfc72f0253f9653c300c9260"},
+  "byte_identical_after_deterministic_serialization": true,
+  "status": "PASS"
+}

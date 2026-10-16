@@ -1,0 +1,25 @@
+{
+  "phase":"7.4J-D0.9D",
+  "algorithm":"SHA-256",
+  "scope":"11 D0.9D evidence artifacts, excluding both hash manifest artifacts",
+  "canonicalization":"UTF-8 records of workspace-relative path, tab, lowercase file SHA-256, newline; sorted by path; trailing newline included",
+  "files":[
+    {"path":"docs/PHASE-7.4J-D0.9D-AUTH-ACCESS-EVIDENCE.json","sha256":"f4671230e433faf8eb863de4472807ff36d802da0bb019e2ef5730f4eb89a458"},
+    {"path":"docs/PHASE-7.4J-D0.9D-AUTH-ACCESS-EVIDENCE.md","sha256":"19ff14a0cf98a8a9e3cd80e0828e52ad3d31600c484ffb3fa1518cef0a6f78ef"},
+    {"path":"docs/PHASE-7.4J-D0.9D-AUTH-BOUNDARY-ANALYSIS.json","sha256":"09ac40a2be5aa89d20a3fb9e9e4cd28b847520da1cd4ba971357307b6f7ea6a7"},
+    {"path":"docs/PHASE-7.4J-D0.9D-AUTH-BOUNDARY-ANALYSIS.md","sha256":"645daba0b260132d46205faa7e28d54df9d13d4bc5455ecfe130339cc00b92dc"},
+    {"path":"docs/PHASE-7.4J-D0.9D-AUTH-PROVENANCE-FINAL.md","sha256":"9dc3c688236a5c5bd18916e8a9531ddf0c94bc005840f2fa1e360f8b5821a817"},
+    {"path":"docs/PHASE-7.4J-D0.9D-D1-READINESS.md","sha256":"4bf7275170da223f55665f2b98672ca5682e87f1b4bcca4c1a2c9a0ea9f75df2"},
+    {"path":"docs/PHASE-7.4J-D0.9D-FINAL-REPORT.md","sha256":"10cc37290b01c1e7dc75b86353e6802f3a659a8f73bec245015e72273743ef69"},
+    {"path":"docs/PHASE-7.4J-D0.9D-IDENTITY-IMPACT.md","sha256":"01b87fb862aade3aa155407315f46b0fac881e5ec582ee00e8e69b90f7c6928a"},
+    {"path":"docs/PHASE-7.4J-D0.9D-PRODUCTION-SAFETY.md","sha256":"428ae702fc9409f2a4d4dcdcfe1d631ba5ea3755d4417f20e4bc5967429c62fb"},
+    {"path":"docs/PHASE-7.4J-D0.9D-RECONSTRUCTION-AUTH-DISPOSITION.md","sha256":"e72e777081881b317035a95b0440af630d565d03ff71bfe6cf5460ac974f8f50"},
+    {"path":"docs/PHASE-7.4J-D0.9D-RLS-SECURITY-IMPACT.md","sha256":"9759bc7729481d8b115ee568425bc28b2882d01053db7040e03021af0498a8a8"}
+  ],
+  "manifest_sha256":"b85617ab36f27c2ee5d9079e6eb6cb7dab576e281f5d915b3aa9e45b4441b837",
+  "run1_hash":"b85617ab36f27c2ee5d9079e6eb6cb7dab576e281f5d915b3aa9e45b4441b837",
+  "run2_hash":"b85617ab36f27c2ee5d9079e6eb6cb7dab576e281f5d915b3aa9e45b4441b837",
+  "match":true,
+  "determinism":"PASS",
+  "gate":"BLOCKED"
+}

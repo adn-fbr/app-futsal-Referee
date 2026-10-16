@@ -1,0 +1,14 @@
+{
+  "phase":"8.5A",
+  "status":"BLOCKED_LIVE_VALIDATION",
+  "static_authorization":[
+    {"role":"admin_provinsi","event_creation":"UI capability present; RLS not executed","validation/assignment":"existing protected approval/assignment paths; live not executed"},
+    {"role":"non_admin","mutation":"expected denied; live not executed"},
+    {"role":"anonymous","mutation":"ProtectedRoute denies; live not executed"}
+  ],
+  "password_role_authority":false,
+  "authorization_source":"AuthContext + user_roles + ProtectedRoute + existing RLS boundary",
+  "production_access":0,
+  "non_production_auth_mutations":0,
+  "blockers":["synthetic identities unavailable","fixture unavailable","browser/RLS execution unavailable"]
+}

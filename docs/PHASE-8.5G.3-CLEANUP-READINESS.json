@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G.3",
+  "fixture_identification": "NOT READY",
+  "assignment_before_event_cleanup_order": "DOCUMENTED IN PHASE-8.5G.2",
+  "scoped_cleanup_tool": "NOT AVAILABLE",
+  "broad_delete": false,
+  "production_cleanup": false,
+  "status": "BLOCKED"
+}

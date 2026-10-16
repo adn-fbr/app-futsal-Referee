@@ -1,0 +1,44 @@
+{
+  "phase": "7.4J-D1-D",
+  "status": "BLOCKED",
+  "baseline": {
+    "expected_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88bbf1c6a816f1f1c9ed98db1",
+    "observed_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "match": false,
+    "state": "IMMUTABILITY_VIOLATION_DETECTED"
+  },
+  "canonical_target": {
+    "tables": 27,
+    "columns": 249,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "rls_policies": 86,
+    "indexes": 47,
+    "extensions": 7,
+    "enum_types": 2,
+    "pk": 27,
+    "unique": 7,
+    "check": 3,
+    "fk": 30
+  },
+  "observed_current_non_production": {
+    "tables": 6,
+    "columns": 48,
+    "functions": 3,
+    "views": 1,
+    "triggers": 4,
+    "rls_policies": 23,
+    "indexes": 0,
+    "extensions": 0,
+    "enum_types": 0,
+    "storage_buckets": 0,
+    "status": "DRIFTED"
+  },
+  "comparison_status": "BLOCKED",
+  "notes": [
+    "Observed baseline hash did not match the required canonical baseline value; execution was stopped before destructive reconstruction.",
+    "Current Non-Production schema was treated as drifted and disposable only, not as the authoritative target.",
+    "No migration or schema mutation was executed in this phase."
+  ]
+}

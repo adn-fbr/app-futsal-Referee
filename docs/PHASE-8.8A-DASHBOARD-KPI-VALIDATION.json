@@ -1,0 +1,21 @@
+{
+  "phase": "8.8A",
+  "status": "PASS_FOR_LOCAL_CONTRACT",
+  "scope": "Dashboard KPI aggregation and event list linkage",
+  "metrics": {
+    "total_event": true,
+    "approved": true,
+    "completed": true,
+    "pending": true,
+    "today": true,
+    "upcoming": true,
+    "this_month": true,
+    "regional_aggregation": true
+  },
+  "implementation": [
+    "src/lib/dashboardKpis.ts",
+    "src/pages/Dashboard.tsx",
+    "src/test/phase-8-8a-dashboard-kpi.test.ts"
+  ],
+  "live_rls_status": "BLOCKED"
+}

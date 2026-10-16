@@ -1,0 +1,10 @@
+{
+  "phase":"8.5G.2",
+  "status":"CONFIRMED_PRE_REMEDIATION",
+  "role_source":"public.user_roles.role",
+  "admin_provinsi":"provincial-wide assignment scope in existing canonical policy",
+  "admin_kab_kota":"profile-scoped assignment ownership required",
+  "wasit":"existing referee policies preserved",
+  "password_step_up":"not an authorization source",
+  "user_metadata_authorization":false
+}

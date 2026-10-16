@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2B",
+  "status":"BLOCKED_NOT_APPLIED",
+  "rls_enabled_post":"NOT_EXECUTED",
+  "admin_kab_kota_regional_predicate":"PREPARED_NOT_APPLIED",
+  "update_using":"PREPARED_NOT_APPLIED",
+  "update_with_check":"PREPARED_NOT_APPLIED",
+  "admin_provinsi_preservation":"NOT_EXECUTED"
+}

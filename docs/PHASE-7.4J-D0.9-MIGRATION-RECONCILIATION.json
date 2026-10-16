@@ -1,0 +1,16 @@
+{
+  "local_migration_count":55,
+  "remote_applied_count":4,
+  "status":"BLOCKED",
+  "classification_summary":{"CANONICAL":0,"COMPATIBLE":1,"SUPERSEDED":0,"CONFLICTING":3,"HISTORICAL":1,"TEST_ONLY":0,"UNKNOWN":50},
+  "method":"The complete per-file D0.6 inventory remains authoritative; files not promoted by reviewed baseline comparison remain UNKNOWN/REVIEW_REQUIRED.",
+  "material_conflicts":[
+    {"migration_a":"20260103165842_remix_migration_from_pg_dump.sql","migration_b":"20260103052354_5c53bda3-9ac3-419b-a632-62393465a94a.sql","object":"public.app_role and broad schema/events","conflict_type":"duplicate/historical broad replay","canonical_state":"canonical enum and target objects already defined by baseline","disposition":"ISOLATE"},
+    {"migration_a":"20260110162455_98e87d41-5e63-4dba-9290-9fb5f39f3a12.sql","migration_b":"canonical baseline","object":"events.deleted_at and events.kabupaten_kota_id","conflict_type":"remote schema drift and unknown target history","canonical_state":"both columns required; kabupaten_kota_id references kabupaten_kota.id","disposition":"GOVERNANCE_REVIEW"},
+    {"migration_a":"20260121161308_170f4f14-a4bb-494b-ac16-77f99251a8c4.sql","migration_b":"canonical check_duplicate_event","object":"public.check_duplicate_event","conflict_type":"function contract replacement/conflict","canonical_state":"three-argument boolean function preserved; rich search separate/TBD","disposition":"REJECT"}
+  ],
+  "execution": "NOT AUTHORIZED",
+  "files_modified":false,
+  "files_deleted":false,
+  "history_repaired":false
+}

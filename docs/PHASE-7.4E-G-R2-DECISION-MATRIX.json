@@ -1,0 +1,26 @@
+{
+  "decision_universe":"D01-D19",
+  "rows":[
+    {"decision_id":"D01","title":"Function identity","critical_group":"C01","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Canonical function unchanged; separate rich identity."},
+    {"decision_id":"D02","title":"Input contract","critical_group":"C01","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Five inputs accounted for; exact signature recorded."},
+    {"decision_id":"D03","title":"Return contract","critical_group":"C02","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Canonical boolean unchanged; rich schema versioned."},
+    {"decision_id":"D04","title":"Matching semantics","critical_group":"C03","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Evidence-established behavior only."},
+    {"decision_id":"D05","title":"Similarity model","critical_group":"C04","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Ranking only; no arbitrary threshold."},
+    {"decision_id":"D06","title":"Threshold","critical_group":"C04","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"No fixed numeric threshold."},
+    {"decision_id":"D07","title":"Ordering","critical_group":null,"authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","approved_contract":"similarity_score DESC, date DESC","conditions":"Default/public deterministic ordering; changes require approval."},
+    {"decision_id":"D08","title":"Limit","critical_group":null,"authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","approved_contract":"default maximum result count = 5","conditions":"No implicit pagination; limit changes require approval."},
+    {"decision_id":"D09","title":"NULL semantics","critical_group":null,"authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","approved_contract":"Required NULL/blank validation error; optional NULL filter not applied; NULL database field does not match; NULL similarity is not duplicate evidence.","conditions":"Deterministic NULL behavior; no silent success for invalid input."},
+    {"decision_id":"D10","title":"Error semantics","critical_group":"C05","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","approved_contract":"Validation, success-empty, database error, authorization error, timeout/error semantics as supplied.","conditions":"Database failure is not no duplicate."},
+    {"decision_id":"D11","title":"Security model","critical_group":"C05","authority_decision":"APPROVE","status":"APPROVED","approved_contract":"SECURITY INVOKER","conditions":"SECURITY DEFINER requires separate approval."},
+    {"decision_id":"D12","title":"RLS","critical_group":"C06","authority_decision":"APPROVE","status":"APPROVED","conditions":"RLS enforced; no bypass."},
+    {"decision_id":"D13","title":"Data visibility scope","critical_group":"C07","authority_decision":"APPROVE","status":"APPROVED","conditions":"Caller-authorized records only; no invented tenancy."},
+    {"decision_id":"D14","title":"Performance target","critical_group":"C08","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Measure, explain, validate, then index."},
+    {"decision_id":"D15","title":"Index strategy","critical_group":"C08","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"No speculative index; query-plan evidence required."},
+    {"decision_id":"D16","title":"Migration strategy","critical_group":"C09","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Non-Production only after consistency validation; Production unauthorized."},
+    {"decision_id":"D17","title":"Rollback","critical_group":"C09","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Rollback defined and testable; canonical preserved."},
+    {"decision_id":"D18","title":"Baseline impact","critical_group":"C09","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Production baseline immutable."},
+    {"decision_id":"D19","title":"Deployment boundary","critical_group":"C09","authority_decision":"APPROVE WITH CONDITIONS","status":"CONDITIONALLY_APPROVED","conditions":"Production migration/deployment separately authorized."}
+  ],
+  "nc_ids_created":[],
+  "non_critical_classification":"UNRESOLVED"
+}

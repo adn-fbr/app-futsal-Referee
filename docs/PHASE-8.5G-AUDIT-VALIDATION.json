@@ -1,0 +1,8 @@
+{
+  "phase": "8.5G",
+  "existing_mechanism": ["audit_logs", "assignment cancellation audit path"],
+  "new_audit_table": false,
+  "status_change_live_validation": "NOT_EXECUTED - fixture and authorized live mutation unavailable",
+  "password_logged": false,
+  "gap": "Audit trigger coverage for this status mutation requires live verification."
+}

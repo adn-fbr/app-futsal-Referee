@@ -1,0 +1,8 @@
+{
+  "phase": "8.8A.1",
+  "focused_guard_tests": { "status": "PASS", "tests": 9 },
+  "typecheck": "PASS",
+  "full_tests": { "status": "PASS", "test_files": 16, "tests": 54 },
+  "build": "PASS",
+  "lint": { "status": "BASELINE_FAIL", "errors": 68, "warnings": 12 }
+}

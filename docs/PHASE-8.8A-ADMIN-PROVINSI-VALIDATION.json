@@ -1,0 +1,11 @@
+{
+  "phase": "8.8A",
+  "role": "ADMIN_PROVINSI",
+  "status": "PARTIAL",
+  "can_read_authorized_region_a": "NOT_LIVE_VALIDATED",
+  "can_read_authorized_region_b": "NOT_LIVE_VALIDATED",
+  "can_see_provincial_calendar": "NOT_LIVE_VALIDATED",
+  "can_see_regional_kpi": "LOCAL_KPI_IMPLEMENTED",
+  "can_filter_by_kabupaten_kota": "LOCAL_UI_FILTER_SUPPORTED",
+  "notes": "Dashboard KPI logic is implemented and unit-tested, but live RLS proof remains blocked pending official Non-Production fixture access."
+}

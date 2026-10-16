@@ -1,0 +1,13 @@
+{
+  "phase": "8.5G.1",
+  "relationship": "event_assignments.event_id -> events.id -> events.kabupaten_kota_id -> kabupaten_kota.id/name",
+  "status": "PARTIAL",
+  "display": "API GRAPH PASS; BROWSER NOT VERIFIED",
+  "uuid_filter": "API GRAPH PASS; BROWSER NOT VERIFIED",
+  "null_fallback": "STATIC PASS; LIVE NOT VERIFIED",
+  "fallback_text": "Belum ditentukan",
+  "free_text_location_inference": false,
+  "event_a_region": "be019cc8-1e5e-4ea6-a82f-d15b96e3aff0",
+  "event_b_region": "e2c10dfe-4744-46c0-b1ba-e2e0c197ef8f",
+  "cross_region_leakage": "CONFIRMED"
+}

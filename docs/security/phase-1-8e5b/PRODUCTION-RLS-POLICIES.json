@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "rls_policies",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": 86,
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No `pg_policy` / `using_expression` / `with_check_expression` extraction occurred."
+}

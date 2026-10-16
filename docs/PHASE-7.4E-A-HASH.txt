@@ -1,0 +1,8 @@
+PHASE-7.4E-A-GOVERNANCE-CONTRACT-DECISION v1.0.0
+NORMALIZED DECISION PACKAGE SHA-256
+
+RUN 1: ef789e58109f4b3dc9f7c5ae6997272ab409d994b9f312d7a0d64431cc7a417b
+RUN 2: ef789e58109f4b3dc9f7c5ae6997272ab409d994b9f312d7a0d64431cc7a417b
+IDENTICAL: YES
+
+The hash covers the four required Phase 7.4E-A artifacts in deterministic path order. This hash file is excluded to avoid self-reference.

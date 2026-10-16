@@ -1,0 +1,26 @@
+{
+  "phase": "8.5G.1",
+  "target": "shorsqyycpptxcutrqrb",
+  "mode": "validation-only",
+  "status": "BLOCKED",
+  "tests": [
+    {"id":"ST-001","case":"pending -> confirmed","result":"NOT VERIFIED","reason":"approved synthetic Auth and assignment fixture unavailable"},
+    {"id":"ST-002","case":"pending -> declined","result":"NOT VERIFIED","reason":"existing Admin Provinsi flow does not authorize this transition"},
+    {"id":"ST-003","case":"pending -> cancelled","result":"NOT VERIFIED","reason":"existing Admin Provinsi flow does not authorize this transition"},
+    {"id":"REGION-001","case":"region display","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"REGION-002","case":"NULL region fallback","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"REGION-003","case":"UUID region filter","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"AUTH-001","case":"Admin Provinsi authorization","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"AUTH-002","case":"non-admin rejection","result":"NOT VERIFIED"},
+    {"id":"STEPUP-001","case":"correct password","result":"NOT VERIFIED"},
+    {"id":"STEPUP-002","case":"wrong password","result":"NOT VERIFIED"},
+    {"id":"STEPUP-003","case":"empty password","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"RLS-001","case":"authorized read/update","result":"NOT VERIFIED"},
+    {"id":"RLS-002","case":"non-authorized update rejected","result":"NOT VERIFIED"},
+    {"id":"RLS-003","case":"anonymous update rejected","result":"NOT VERIFIED"},
+    {"id":"UI-001","case":"loading/error/refresh state","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"DUP-001","case":"duplicate mutation prevention","result":"STATIC PASS; LIVE NOT VERIFIED"},
+    {"id":"AUDIT-001","case":"status audit","result":"NOT VERIFIED"},
+    {"id":"NOTIFY-001","case":"status notification","result":"NOT VERIFIED"}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2B",
+  "status":"PRESERVED",
+  "remote_history_modified":false,
+  "migration_repair":false,
+  "include_all":false,
+  "historical_remote_migration_replayed":false,
+  "approved_sql_execution":"NOT_EXECUTED"
+}

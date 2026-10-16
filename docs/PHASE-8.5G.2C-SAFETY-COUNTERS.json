@@ -1,0 +1,13 @@
+{
+  "production_queries":0,
+  "production_mutations":0,
+  "production_auth_operations":0,
+  "production_storage_operations":0,
+  "production_migrations":0,
+  "production_deployments":0,
+  "non_production_queries":0,
+  "non_production_mutations":0,
+  "non_production_rls_mutations":0,
+  "secret_values_logged":0,
+  "service_role_frontend_exposure":0
+}

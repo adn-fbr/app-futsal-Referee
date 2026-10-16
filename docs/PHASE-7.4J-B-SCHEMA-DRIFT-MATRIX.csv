@@ -1,0 +1,8 @@
+Area,Local Expectation,Test DB,Production Baseline,Classification
+"events.deleted_at","Required by app/types/baseline","MISSING; runtime dump unavailable","PRESENT","SCHEMA_DRIFT"
+"events.kabupaten_kota_id","Required by app/types/baseline","MISSING; runtime dump unavailable","PRESENT","SCHEMA_DRIFT"
+"events PK","events.id primary key","UNKNOWN; local first migration defines PK","PRESENT","UNKNOWN"
+"events FK","created_by/kabupaten_kota_id relationships","UNKNOWN; partial target suspected","PRESENT","UNKNOWN"
+"events RLS","RLS enforced","UNKNOWN runtime policies","ENABLED with policies","EVIDENCE_REQUIRED"
+"migration history","Ordered local set","Only four remote versions","N/A","MIGRATION_HISTORY_DRIFT"
+"generated types","Both fields present","Target lacks fields per evidence","Both fields present","TYPE_SCHEMA_DRIFT"

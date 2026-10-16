@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "knownCandidate":"pg_trgm",
+  "missing":["pg_extension rows","version","schema","relocatable","application/system classification"]
+}

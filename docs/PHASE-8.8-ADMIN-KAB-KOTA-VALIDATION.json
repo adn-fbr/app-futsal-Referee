@@ -1,0 +1,8 @@
+{
+  "phase": "8.8",
+  "query_scope": "useEvents({ kabupatenKotaId: kabupatenKotaId })",
+  "frontend_filter_is_security_boundary": false,
+  "own_region_calendar": "PASS static",
+  "other_region_not_returned": "NOT VERIFIED live RLS",
+  "direct_url_scope": "existing ProtectedRoute/RLS; NOT VERIFIED live"
+}

@@ -1,0 +1,15 @@
+category,count,source,status
+extensions,7,production-schema.sql,PLANNED_ONLY
+enum_types,2,production-schema.sql,PLANNED_ONLY
+tables,27,production-schema.sql,PLANNED_ONLY
+columns,249,production-schema.sql,PLANNED_ONLY
+primary_keys,27,canonical constraints,PLANNED_ONLY
+unique_constraints,7,canonical constraints,PLANNED_ONLY
+check_constraints,3,canonical table definitions,PLANNED_ONLY
+foreign_keys,30,canonical constraints and dependency graph,PLANNED_ONLY
+indexes,47,production-schema.sql,PLANNED_ONLY
+functions,47,canonical function identities,PLANNED_ONLY
+views,3,canonical security-invoker views,PLANNED_ONLY
+triggers,22,production-schema.sql,PLANNED_ONLY
+rls_policies,86,canonical policy declarations,PLANNED_ONLY
+dependencies,351,PRODUCTION-FULL-DEPENDENCY-GRAPH.json,PLANNED_ONLY

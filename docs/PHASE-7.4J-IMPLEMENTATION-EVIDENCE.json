@@ -1,0 +1,20 @@
+{
+  "phase":"7.4J",
+  "status":"BLOCKED",
+  "environment":"shorsqyycpptxcutrqrb",
+  "production_project":"xfscfjwapwnkiinkgbjg",
+  "contract_hash":"7ccbcced5b3ebfd74b5eb4e60c6c89c8f878a4a1162f312c51121ad6a7ed4bc6",
+  "application_changes":"REMOVED_AFTER_BLOCKER",
+  "migration":"REMOVED_AFTER_FAILED_DRAFT",
+  "migration_attempted_non_production":true,
+  "migration_success":false,
+  "schema_blockers":["public.events lacks deleted_at","public.events lacks kabupaten_kota_id","migration history/schema drift"],
+  "canonical_function":"public.check_duplicate_event(text,text,text) RETURNS boolean",
+  "canonical_function_changed":false,
+  "production_access":false,
+  "production_mutation":false,
+  "production_migration":false,
+  "production_deployment":false,
+  "baseline":"UNCHANGED",
+  "execution_readiness":"BLOCKED"
+}

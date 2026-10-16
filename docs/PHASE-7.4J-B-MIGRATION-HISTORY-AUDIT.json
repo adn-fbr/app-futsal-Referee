@@ -1,0 +1,18 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "production_project":"xfscfjwapwnkiinkgbjg",
+  "local_migration_count":55,
+  "remote_recorded_versions":["20260103052354","20260103052405","20260103055754","20260103055804"],
+  "local_versions_absent_from_remote":"many; includes 20260103165842 through 20260906063833",
+  "new_7_4j_migration":"absent from local after cleanup and never applied",
+  "duplicate_versions":"none detected by filename inventory",
+  "out_of_order_history":true,
+  "partially_applied":true,
+  "malformed_or_conflicting_evidence":["Historical remix migration conflicts with objects already present when replay attempted"],
+  "destructive_operations_in_local_set":"present in historical migrations; not executed in this phase",
+  "canonical_function_references":"present in historical rich-search migration; Production canonical remains protected",
+  "read_only_dump":"failed before output due local Docker overlayfs error",
+  "repair_executed":false,
+  "migration_executed":false,
+  "classification":"MULTIPLE_CAUSES / REBUILD_RECOMMENDED"
+}

@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G",
+  "table": "public.event_assignments",
+  "column": "status",
+  "canonical_values": ["pending", "confirmed", "declined", "cancelled"],
+  "requested_values": ["PENDING", "CONFIRMED", "DECLINED", "CANCELED"],
+  "mapping": {"PENDING":"pending", "CONFIRMED":"confirmed", "DECLINED":"declined", "CANCELED":"cancelled"},
+  "database_note": "Canonical contract uses cancelled with two l; no migration was created."
+}

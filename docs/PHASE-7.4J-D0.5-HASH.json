@@ -1,0 +1,35 @@
+{
+  "phase": "7.4J-D0.5",
+  "scope": "six D0.5 Markdown evidence artifacts in deterministic path order",
+  "algorithm": "SHA-256",
+  "canonicalization": "UTF-8 records of workspace-relative path, tab, lowercase file SHA-256, newline; sorted by path; trailing newline included",
+  "files": [
+    {
+      "path": "docs/PHASE-7.4J-D0.5-CAPACITY-REVALIDATION.md",
+      "sha256": "a30a937724de252a0f0509d34ef0269b85b2ce20e326e0a71ec02ff2534a4377"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D0.5-FINAL-REPORT.md",
+      "sha256": "30abfe6ca51bcfaa0735d8fbb178b52dbe2735a56f18b30d4686ab29a347880b"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D0.5-OVERLAYFS-REVALIDATION.md",
+      "sha256": "bd3eb1b18a090ddbd5fd1bdc15dd06fdc2bfc74a565407a8c921b66215e0fa1a"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D0.5-PRODUCTION-SAFETY.md",
+      "sha256": "a993bd843135fb2dca171d2157c8c08ab1c8a6cf1e9c0d8f61e6b1b0b099195f"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D0.5-STORAGE-REVALIDATION.md",
+      "sha256": "87761969198078c1c3342b5f851f51d525a0c1c0782c7c62a8265df216bbcf1e"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D0.5-VOLUME-PROTECTION.md",
+      "sha256": "30d8dfe4c59dce61010036b146cdb062b1e8da985a7a6a7e0a2b09498f79707a"
+    }
+  ],
+  "manifest_sha256": "ef380f0e8e0a20808d75cb1cd3c455c1c48219d5f9322443b071e085ba0ba3be",
+  "determinism": "PASS",
+  "gate": "BLOCKED"
+}

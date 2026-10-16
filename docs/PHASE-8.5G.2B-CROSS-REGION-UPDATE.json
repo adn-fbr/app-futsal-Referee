@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "admin_a_region_a":"NOT_EXECUTED",
+  "admin_a_region_b":"NOT_EXECUTED",
+  "admin_b_region_b":"NOT_EXECUTED",
+  "admin_b_region_a":"NOT_EXECUTED",
+  "production_updates":0
+}

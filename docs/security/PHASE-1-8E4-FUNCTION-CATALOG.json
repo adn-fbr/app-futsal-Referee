@@ -1,0 +1,17 @@
+{
+  "phase": "1.8E.4A",
+  "status": "BLOCKED",
+  "source": "Phase 1.8B production schema-only runtime dump",
+  "publicFunctionCount": 47,
+  "securityDefinerCount": 41,
+  "knownSearchPath": "public for inspected SECURITY DEFINER definitions",
+  "functions": [
+    "auto_mark_expired_cards", "can_access_region", "can_approve_registration", "check_duplicate_event", "count_referee_cards", "count_referees", "generate_card_number", "get_accessible_regions", "get_admin_dashboard_summary", "get_audit_logs", "get_honor_statistics", "get_my_referee_event_count", "get_pending_registrations", "get_public_referee", "get_public_referees", "get_referee_event_count", "get_referee_income_summary", "get_referees", "get_registration_history", "get_user_kabupaten_kota", "get_user_kabupaten_kota_id", "handle_honor_verification", "handle_new_user", "has_role", "has_schedule_conflict", "is_admin", "is_admin_kab_kota", "is_admin_provinsi", "is_event_approved", "is_referee_active", "is_same_region", "log_event_approval", "log_honor_verification", "log_referee_assignment", "log_registration_approval", "prevent_hard_delete", "search_referee_cards", "set_updated_at", "soft_delete_record", "sync_card_expiry", "update_topic_reply_count", "update_updated_at_column", "validate_honor_submission", "validate_referee_assignment", "validate_regional_access", "verify_referee_card"
+  ],
+  "missingEvidence": [
+    "Complete pg_get_functiondef text per function",
+    "Function owner and exact ACL per signature",
+    "Caller-role expansion and RPC exposure",
+    "Complete referenced-table/function dependency graph"
+  ]
+}

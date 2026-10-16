@@ -1,0 +1,12 @@
+{
+  "phase": "8.5G.3A",
+  "active_project": "shorsqyycpptxcutrqrb",
+  "active_project_result": "PASS",
+  "active_url_result": "PASS",
+  "test_environment": "ABSENT",
+  "environment_guard_before_client": "PASS",
+  "project_allowlist_guard_before_client": "PASS",
+  "production_url_in_fixture_script": false,
+  "production_fallback": "FAIL CLOSED",
+  "status": "BLOCKED - missing runtime environment prerequisite"
+}

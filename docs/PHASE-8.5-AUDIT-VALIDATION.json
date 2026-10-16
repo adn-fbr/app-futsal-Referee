@@ -1,0 +1,13 @@
+{
+  "phase":"8.5",
+  "audit_mechanisms_found":["audit_logs writes in event/assignment hooks","existing cancellation audit path","auth audit helpers","notifications for assignment cancellation"],
+  "audit_tests":[
+    {"id":"EV-HIST-025","event_creation":"NOT_EXECUTED"},
+    {"id":"EV-HIST-026","event_validation":"NOT_EXECUTED"},
+    {"id":"EV-HIST-027","referee_assignment":"NOT_EXECUTED"},
+    {"id":"EV-HIST-028","assignment_status":"NOT_EXECUTED"}
+  ],
+  "password_in_audit":false,
+  "audit_schema_changed":false,
+  "status":"BLOCKED — live mutation/audit execution unavailable"
+}

@@ -1,0 +1,14 @@
+{
+  "phase":"8.3E.2",
+  "guard_location":"vite.config.ts",
+  "guard_scope":"development mode only",
+  "authorized_project":"shorsqyycpptxcutrqrb",
+  "checks":[
+    {"test_id":"GUARD-001","input":"current Non-Production .env","expected":"development build proceeds","actual":"npm run build:dev exit 0","result":"PASS"},
+    {"test_id":"GUARD-002","input":"temporary process URL xfscfjwapwnkiinkgbjg.supabase.co","expected":"development config fails closed before bundling","actual":"build failed with Development runtime must target authorized Non-Production project","result":"PASS"},
+    {"test_id":"GUARD-003","input":"final normal build environment","expected":"no Production runtime reference in bundle","actual":"prod_refs_in_dist=0; nonprod_refs_in_dist=1","result":"PASS"},
+    {"test_id":"GUARD-004","input":"browser key","expected":"service-role rejected","actual":"existing client and Vite build guards remain active; key value not recorded","result":"PASS"}
+  ],
+  "production_guard_bypass_added":false,
+  "production_runtime_allowed_in_development":false
+}

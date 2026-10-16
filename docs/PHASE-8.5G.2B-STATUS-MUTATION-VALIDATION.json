@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "authorized_status_mutation":"NOT_TESTED",
+  "unauthorized_status_mutation":"NOT_TESTED",
+  "fixture_final_state":"PENDING_FROM_PREVIOUS_PHASE"
+}

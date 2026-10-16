@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2",
+  "status":"BLOCKED",
+  "admin_a_to_region_b":"LEAKAGE_REMAINS_PRE_REMEDIATION",
+  "admin_b_to_region_a":"NOT_EXECUTED",
+  "authenticated_user_path":"AVAILABLE",
+  "security_boundary":"RLS_NOT_REMEDIATED"
+}

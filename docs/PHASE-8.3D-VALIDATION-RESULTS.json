@@ -1,0 +1,16 @@
+{
+  "phase":"8.3D",
+  "commands":[
+    {"command":"npx tsc --noEmit","exit_code":0,"result":"PASS","scope":"after each implementation slice and final"},
+    {"command":"npm run typecheck","exit_code":0,"result":"PASS","scope":"F-011 reproducible gate"},
+    {"command":"npx vitest run src/test/phase-8-3d-seed-exposure.test.ts","exit_code":0,"result":"PASS: 5 tests","scope":"F-007"},
+    {"command":"npx vitest run src/test/phase-8-3d-route-capabilities.test.ts src/test/phase-8-3d-navigation.test.ts","exit_code":0,"result":"PASS: 4 tests","scope":"F-001/F-002/F-003"},
+    {"command":"npx vitest run src/test/phase-8-3d-async-states.test.ts","exit_code":0,"result":"PASS: 3 tests","scope":"F-004/F-008"},
+    {"command":"npx vitest run src/test/phase-8-3d-assignment-contract.test.ts","exit_code":0,"result":"PASS: 3 tests","scope":"F-005/F-006"},
+    {"command":"npm test -- --run","exit_code":0,"result":"PASS: 9 files, 26 tests","scope":"full automated suite"},
+    {"command":"npm run lint","exit_code":1,"result":"FAIL baseline: 66 errors, 11 warnings, 77 problems; 41 affected files; no modified remediation file reported","scope":"F-011"},
+    {"command":"npm run build","exit_code":0,"result":"PASS: Vite production bundle built locally; warnings for stale Browserslist data and large chunk","scope":"build gate"},
+    {"command":"dist static scan for seed-database/Generate Seed Data/SEED_DATA_SUMMARY/useSeedDatabase/database-export","exit_code":0,"result":"PASS: all absent","scope":"F-007 build inclusion"}
+  ],
+  "not_executed":["Production database queries/mutations","Production SQL/migrations","Supabase deployment","Non-Production Supabase mutation/RLS test","browser manual workflow","viewport screenshots","axe/screen-reader validation"]
+}

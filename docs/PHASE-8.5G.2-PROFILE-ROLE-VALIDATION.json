@@ -1,0 +1,11 @@
+{
+  "phase": "8.5G.2",
+  "status": "BLOCKED",
+  "canonical_roles": ["admin_provinsi", "admin_kab_kota", "panitia", "wasit", "evaluator"],
+  "admin_role_value": "admin_provinsi",
+  "admin_profile_mapping": "NOT CREATED",
+  "non_admin_profile_mapping": "NOT CREATED",
+  "referee_profile": "NOT CREATED",
+  "role_read_back": "NOT VERIFIED",
+  "source": "src/repositories/auth/auth-types.ts"
+}

@@ -1,0 +1,17 @@
+{
+  "phase": "8.8A.1",
+  "status": "PARTIAL",
+  "automatic_cleanup_after_success": false,
+  "dry_run": "NOT_EXECUTED_NO_FIXTURES",
+  "scope": {
+    "emails": [
+      "fixture-admin-provinsi@nonprod.invalid",
+      "fixture-admin-kabkota-a@nonprod.invalid",
+      "fixture-admin-kabkota-b@nonprod.invalid",
+      "fixture-referee@nonprod.invalid"
+    ],
+    "event_names": ["PHASE_8_8A_1_EVENT_A", "PHASE_8_8A_1_EVENT_B"]
+  },
+  "deletion_order": ["event_assignments", "events", "application_identity_records", "auth_users"],
+  "shared_reference_regions_deleted": false
+}

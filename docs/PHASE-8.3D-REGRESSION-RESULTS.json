@@ -1,0 +1,20 @@
+{
+  "phase":"8.3D",
+  "regression_status":"NO_NEW_CRITICAL_REGRESSION_DETECTED",
+  "checks":[
+    {"area":"legitimate export","result":"PASS_STATIC","evidence":"useExportDatabase and export tab remain in DatabaseExport"},
+    {"area":"legitimate import","result":"PASS_STATIC","evidence":"useImportDatabase and import tab remain in DatabaseExport"},
+    {"area":"seed production bundle","result":"PASS","evidence":"No seed strings/references in dist"},
+    {"area":"assignment route guard","result":"PASS_STATIC","evidence":"requireAdmin remains in App.tsx; CTA now checks isAdmin"},
+    {"area":"mobile navigation","result":"PASS_STATIC","evidence":"/export target and admin-provinsi-only approvals test pass"},
+    {"area":"assignment query errors","result":"PASS_STATIC","evidence":"RefereeAssignment/EventDetail error and retry branches present"},
+    {"area":"referee event errors","result":"PASS_STATIC","evidence":"RefereeEvents combined error and retry branch present"},
+    {"area":"status mutation identity","result":"PASS_STATIC","evidence":"update remains by assignment id and adds pending status predicate; no event_id/referee_id update"},
+    {"area":"password step-up","result":"PASS_EXISTING_CONTRACT","evidence":"No change to password handling; existing masked/non-persistent/re-auth role checks retained"},
+    {"area":"typecheck","result":"PASS","evidence":"npm run typecheck exit 0"},
+    {"area":"automated tests","result":"PASS","evidence":"9 files, 26 tests"},
+    {"area":"lint","result":"PRE_EXISTING_FAIL","evidence":"66 errors/11 warnings across same baseline set; no modified remediation files reported"},
+    {"area":"build","result":"PASS","evidence":"npm run build exit 0"}
+  ],
+  "manual_validation_remaining":["direct URL role tests","browser assignment mutation flow","double-click behavior","responsive widths 320-1280","keyboard/focus/axe/screen-reader","Non-Production RLS and audit/notification assertions"]
+}

@@ -1,0 +1,8 @@
+PHASE-7.4E-FORMAL-DUPLICATE-SEARCH-CONTRACT-APPROVAL v1.0.0
+NORMALIZED APPROVAL PACKAGE SHA-256
+
+RUN 1: 74d8aeb05dc87e80f5843d378f2f6be210872658198da97ee797cd555f320883
+RUN 2: 74d8aeb05dc87e80f5843d378f2f6be210872658198da97ee797cd555f320883
+IDENTICAL: YES
+
+The hash covers the four required Phase 7.4E approval artifacts in deterministic path order. This hash file is excluded to avoid self-reference.

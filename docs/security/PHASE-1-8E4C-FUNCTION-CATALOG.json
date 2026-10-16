@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "expected": 47,
+  "capturedCount": 47,
+  "completeCount": 0,
+  "securityDefinerExpected": 41,
+  "securityDefinerComplete": 0,
+  "missing": ["pg_get_functiondef for every function","owners","identity arguments","return types","proconfig","ACL","expanded privileges","dependencies"]
+}

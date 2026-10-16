@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.1",
+  "status":"PARTIAL",
+  "authenticated_sessions": {"admin_provinsi":true,"admin_kab_kota_a":true,"admin_kab_kota_b":true,"wasit":true},
+  "browser_synthetic_session":"NOT_VERIFIED",
+  "production_auth_operations":0
+}

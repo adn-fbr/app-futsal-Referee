@@ -1,0 +1,11 @@
+{
+  "phase": "8.5G.1",
+  "existing_audit_mechanisms": ["audit_logs", "assignment cancellation audit path"],
+  "actor_tracking": "OBSERVED",
+  "assignment_tracking": "OBSERVED",
+  "status_change_tracking": "OBSERVED",
+  "password_logged": false,
+  "new_audit_table": false,
+  "observed_assignment_audit_records": 6,
+  "result": "PASS_FOR_EXECUTED_API_MUTATIONS"
+}

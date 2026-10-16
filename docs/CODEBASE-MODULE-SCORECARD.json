@@ -1,0 +1,29 @@
+{
+  "phase":"CODEBASE-WIDE-MODULE-GAP-ANALYSIS",
+  "inventory_counts":{"routes_concrete":52,"pages":56,"hooks":33,"components":88,"repositories_non_test":6,"edge_function_directories":18,"test_files":9,"direct_from_occurrences":233,"rpc_occurrences":25,"function_invocations":16,"supabase_dot_occurrences":84},
+  "overall_maturity_score":61,
+  "score_method":"Business 15, UI 10, backend 15, contract 10, auth/RBAC 10, RLS/security 10, UX/accessibility 10, error/loading 5, testing 10, production 5; evidence-based static score, not runtime certification.",
+  "modules":[
+    {"id":"M-01","name":"Authentication and Identity","status":"COMPLETE","score":82,"p0":0,"p1":0,"p2":2,"p3":1,"backend":"Supabase Auth + profiles + user_roles repositories","auth":"core","rbac":"canonical roles","rls":"ALIGNED_STATIC","tests":"auth repository tests; no browser integration"},
+    {"id":"M-02","name":"Profile and Profile Completion","status":"PARTIAL","score":72,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"profiles via repository/hooks","auth":"required","rbac":"role/profile dependent","rls":"UNCERTAIN_RUNTIME","tests":"static/unit only"},
+    {"id":"M-03","name":"Events and Approvals","status":"PARTIAL","score":68,"p0":0,"p1":2,"p2":2,"p3":0,"backend":"events/event_approvals/RPC","auth":"admin/panitia","rbac":"route and action checks","rls":"ALIGNED_STATIC","tests":"no browser CRUD/RLS"},
+    {"id":"M-04","name":"Event Assignments","status":"BLOCKED","score":58,"p0":0,"p1":5,"p2":2,"p3":0,"backend":"event_assignments + profiles/events + direct hooks","auth":"Admin Provinsi step-up","rbac":"route/UI/direct user_roles","rls":"UNCERTAIN_RUNTIME","tests":"static contracts only; live mutation/RLS unavailable"},
+    {"id":"M-05","name":"Referees and Availability","status":"PARTIAL","score":65,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"get_referees RPC + profiles","auth":"admin","rbac":"admin route","rls":"UNCERTAIN_RUNTIME","tests":"no browser"},
+    {"id":"M-06","name":"Referee Cards and Verification","status":"PARTIAL","score":63,"p0":0,"p1":1,"p2":1,"p3":0,"backend":"referee_cards and canonical RPCs/storage","auth":"admin/public verification","rbac":"mixed","rls":"UNCERTAIN_RUNTIME","tests":"no integration"},
+    {"id":"M-07","name":"Public Reviews","status":"PARTIAL","score":67,"p0":0,"p1":0,"p2":2,"p3":0,"backend":"public review RPC/table","auth":"public submit + protected admin views","rbac":"partial public boundary","rls":"UNCERTAIN_RUNTIME","tests":"no browser/public abuse tests"},
+    {"id":"M-08","name":"Evaluations","status":"PARTIAL","score":64,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"evaluations/evaluation_scores direct hooks","auth":"evaluator/admin","rbac":"route roles","rls":"UNCERTAIN_RUNTIME","tests":"form/unit only"},
+    {"id":"M-09","name":"Honors and Payments","status":"PARTIAL","score":60,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"honors/active_honors direct hooks","auth":"wasit/admin","rbac":"route roles","rls":"UNCERTAIN_RUNTIME","tests":"no mutation integration"},
+    {"id":"M-10","name":"Learning Materials","status":"PARTIAL","score":62,"p0":0,"p1":0,"p2":2,"p3":0,"backend":"learning_materials/progress + admin hooks","auth":"wasit/admin","rbac":"route roles","rls":"UNCERTAIN_RUNTIME","tests":"no browser"},
+    {"id":"M-11","name":"Discussions","status":"BLOCKED","score":48,"p0":0,"p1":1,"p2":3,"p3":0,"backend":"discussion_topics/replies + increment_view_count","auth":"wasit/admin","rbac":"partial","rls":"SCHEMA_GAP","tests":"no integration"},
+    {"id":"M-12","name":"Organization and Pengurus","status":"PARTIAL","score":48,"p0":0,"p1":0,"p2":3,"p3":1,"backend":"pengurus/regional hooks plus static header data","auth":"admin","rbac":"route roles","rls":"UNCERTAIN","tests":"no integration"},
+    {"id":"M-13","name":"Notifications and Reminders","status":"PARTIAL","score":60,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"notifications/preferences + Edge Functions","auth":"authenticated","rbac":"mixed","rls":"UNCERTAIN_RUNTIME","tests":"no end-to-end delivery"},
+    {"id":"M-14","name":"Analytics and Reports","status":"PARTIAL","score":57,"p0":0,"p1":0,"p2":3,"p3":0,"backend":"RPC/direct aggregate hooks","auth":"admin","rbac":"admin","rls":"UNCERTAIN_RUNTIME","tests":"no data-shape/browser tests"},
+    {"id":"M-15","name":"User Management and Approvals","status":"PARTIAL","score":58,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"profiles/user_roles + privileged Edge Functions","auth":"admin","rbac":"admin-provinsi/admin","rls":"UNCERTAIN_RUNTIME","tests":"no privileged integration"},
+    {"id":"M-16","name":"Audit and Auth Logs","status":"PARTIAL","score":61,"p0":0,"p1":0,"p2":2,"p3":0,"backend":"audit_logs/auth_event_logs/RPC","auth":"admin","rbac":"admin","rls":"UNCERTAIN_RUNTIME","tests":"no audit completeness test"},
+    {"id":"M-17","name":"Database Export and Import","status":"PARTIAL","score":55,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"export/import Edge Functions","auth":"admin-provinsi","rbac":"protected","rls":"FUNCTION_BOUNDARY_UNVERIFIED","tests":"seed UI resolved; export/import not browser-tested"},
+    {"id":"M-18","name":"Settings","status":"BLOCKED","score":45,"p0":0,"p1":1,"p2":2,"p3":0,"backend":"system_settings + historical public_system_settings","auth":"admin","rbac":"admin","rls":"SCHEMA_GAP","tests":"no integration"},
+    {"id":"M-19","name":"Public Verification","status":"PARTIAL","score":65,"p0":0,"p1":0,"p2":1,"p3":0,"backend":"verification RPC/logs","auth":"public","rbac":"public contract","rls":"UNCERTAIN_RUNTIME","tests":"no abuse/expiry tests"},
+    {"id":"M-20","name":"Orphan Pages: Bookings/Courts/Teams/Index","status":"MISSING","score":18,"p0":0,"p1":1,"p2":1,"p3":0,"backend":"no registered route evidence","auth":"unknown","rbac":"unknown","rls":"unknown","tests":"none"}
+  ],
+  "status_counts":{"COMPLETE":1,"PARTIAL":15,"DEMO":0,"UI_ONLY":0,"BLOCKED":2,"BROKEN":0,"MISSING":1,"DEPRECATED":0}
+}

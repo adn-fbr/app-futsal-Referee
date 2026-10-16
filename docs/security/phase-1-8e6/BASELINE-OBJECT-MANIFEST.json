@@ -1,0 +1,40 @@
+{
+  "status": "BLOCKED",
+  "phase": "1.8E.6",
+  "reason": "The user reports verified production catalog evidence, but complete catalog artifacts are not available in this workspace; canonical baseline generation cannot proceed without exact runtime definitions.",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "test_project_ref": "shorsqyycpptxcutrqrb",
+  "baseline_generated": false,
+  "baseline_deployed": false,
+  "expected_artifacts": [
+    "PRODUCTION-CATALOG-IDENTITY.json",
+    "PRODUCTION-TABLES.json",
+    "PRODUCTION-COLUMNS.json",
+    "PRODUCTION-TYPES.json",
+    "PRODUCTION-CONSTRAINTS.json",
+    "PRODUCTION-INDEXES.json",
+    "PRODUCTION-SEQUENCES.json",
+    "PRODUCTION-FUNCTIONS.json",
+    "PRODUCTION-FUNCTION-ACL.json",
+    "PRODUCTION-SECURITY-DEFINER.json",
+    "PRODUCTION-VIEWS.json",
+    "PRODUCTION-RLS-POLICIES.json",
+    "PRODUCTION-TRIGGERS.json",
+    "PRODUCTION-EXTENSIONS.json",
+    "PRODUCTION-GRANTS.json",
+    "PRODUCTION-DEPENDENCIES.json",
+    "PRODUCTION-OBJECT-CLASSIFICATION.json",
+    "PRODUCTION-CATALOG-MANIFEST.json",
+    "PRODUCTION-CATALOG-SHA256.json"
+  ],
+  "artifacts_present": true,
+  "artifacts_verified": false,
+  "catalog_complete": false,
+  "canonical_baseline_allowed": false,
+  "read_only_catalog_access": false,
+  "production_identity_verified": false,
+  "notes": [
+    "The available Phase 1.8E.5B artifacts are blocker records and partial inventories, not complete verified live production catalog data.",
+    "No SQL should be generated from placeholder, inferred, or historical migration content."
+  ]
+}

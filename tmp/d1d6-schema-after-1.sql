@@ -1,0 +1,4686 @@
+
+
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+
+CREATE SCHEMA IF NOT EXISTS "public";
+
+
+ALTER SCHEMA "public" OWNER TO "pg_database_owner";
+
+
+COMMENT ON SCHEMA "public" IS 'standard public schema';
+
+
+
+CREATE SCHEMA IF NOT EXISTS "storage";
+
+
+ALTER SCHEMA "storage" OWNER TO "supabase_admin";
+
+
+CREATE TYPE "public"."app_role" AS ENUM (
+    'admin_provinsi',
+    'admin_kab_kota',
+    'panitia',
+    'wasit',
+    'evaluator'
+);
+
+
+ALTER TYPE "public"."app_role" OWNER TO "postgres";
+
+
+CREATE TYPE "public"."pengurus_level" AS ENUM (
+    'PROVINSI',
+    'KAB_KOTA'
+);
+
+
+ALTER TYPE "public"."pengurus_level" OWNER TO "postgres";
+
+
+CREATE TYPE "storage"."buckettype" AS ENUM (
+    'STANDARD',
+    'ANALYTICS',
+    'VECTOR'
+);
+
+
+ALTER TYPE "storage"."buckettype" OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "public"."auto_mark_expired_cards"() RETURNS json
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+DECLARE
+  updated_count integer;
+BEGIN
+  -- Update cards that are active but past expiry
+  UPDATE referee_cards
+  SET status = 'expired',
+      updated_at = now()
+  WHERE status = 'active'
+    AND expires_at < now()
+    AND expires_at IS NOT NULL;
+  
+  GET DIAGNOSTICS updated_count = ROW_COUNT;
+  
+  RETURN json_build_object(
+    'success', true,
+    'cards_marked_expired', updated_count,
+    'executed_at', now()
+  );
+END;
+$$;
+
+
+ALTER FUNCTION "public"."auto_mark_expired_cards"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."can_access_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    is_admin_provinsi(_user_id)
+    OR (has_role(_user_id, 'admin_kab_kota') AND get_user_kabupaten_kota(_user_id) = _kabupaten_kota_id)
+    OR (get_user_kabupaten_kota(_user_id) = _kabupaten_kota_id)
+$$;
+
+
+ALTER FUNCTION "public"."can_access_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."can_approve_registration"("_admin_id" "uuid", "_user_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    is_admin_provinsi(_admin_id)
+    OR (
+      has_role(_admin_id, 'admin_kab_kota') 
+      AND (
+        SELECT kabupaten_kota_id FROM public.profiles WHERE id = _user_id
+      ) = get_user_kabupaten_kota(_admin_id)
+    )
+$$;
+
+
+ALTER FUNCTION "public"."can_approve_registration"("_admin_id" "uuid", "_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."check_duplicate_event"("p_kota_id" "text", "p_location" "text", "p_name" "text") RETURNS boolean
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1
+    FROM events
+    WHERE
+      kota_id::TEXT = p_kota_id
+      AND location = p_location
+      AND name = p_name
+  );
+END;
+$$;
+
+
+ALTER FUNCTION "public"."check_duplicate_event"("p_kota_id" "text", "p_location" "text", "p_name" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."count_referee_cards"("p_search" "text" DEFAULT NULL::"text", "p_status" "text" DEFAULT NULL::"text") RETURNS bigint
+    LANGUAGE "sql" STABLE
+    AS $$
+  select count(*)
+  from referee_cards rc
+  join profiles p on p.id = rc.referee_id
+  where
+    (p_search is null
+      or rc.card_number ilike '%' || p_search || '%'
+      or p.full_name ilike '%' || p_search || '%'
+    )
+    and (p_status is null or rc.status = p_status);
+$$;
+
+
+ALTER FUNCTION "public"."count_referee_cards"("p_search" "text", "p_status" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."count_referees"("_license_level" "text" DEFAULT NULL::"text", "_is_active" boolean DEFAULT NULL::boolean, "_kabupaten_kota_id" "uuid" DEFAULT NULL::"uuid", "_search" "text" DEFAULT NULL::"text") RETURNS bigint
+    LANGUAGE "sql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  select count(*)
+  from profiles p
+  join user_roles ur
+    on ur.user_id = p.id
+   and ur.role = 'wasit'
+  where
+    (
+      auth.role() = 'authenticated'
+      or p.is_active = true
+    )
+    and (_license_level is null or p.license_level = _license_level)
+    and (_is_active is null or p.is_active = _is_active)
+    and (_kabupaten_kota_id is null or p.kabupaten_kota_id = _kabupaten_kota_id)
+    and (
+      _search is null
+      or p.full_name ilike '%' || _search || '%'
+      or p.license_level ilike '%' || _search || '%'
+      or p.afk_origin ilike '%' || _search || '%'
+    );
+$$;
+
+
+ALTER FUNCTION "public"."count_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."generate_card_number"("p_referee_id" "uuid") RETURNS character varying
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $_$
+DECLARE
+  v_year INTEGER;
+  v_region_code VARCHAR(10);
+  v_sequence INTEGER;
+  v_card_number VARCHAR(30);
+BEGIN
+  v_year := EXTRACT(YEAR FROM now());
+  
+  -- Get region code from kabupaten_kota
+  SELECT COALESCE(UPPER(SUBSTRING(kk.code FROM 1 FOR 3)), 'XXX')
+  INTO v_region_code
+  FROM public.profiles p
+  LEFT JOIN public.kabupaten_kota kk ON p.kabupaten_kota_id = kk.id
+  WHERE p.id = p_referee_id;
+  
+  IF v_region_code IS NULL THEN
+    v_region_code := 'XXX';
+  END IF;
+  
+  -- Get next sequence number
+  SELECT COALESCE(MAX(CAST(SUBSTRING(card_number FROM '[0-9]+$') AS INTEGER)), 0) + 1
+  INTO v_sequence
+  FROM public.referee_cards
+  WHERE card_number LIKE 'AFP SULSEL-' || v_year || '-' || v_region_code || '-%';
+  
+  v_card_number := 'AFP SULSEL-' || v_year || '-' || v_region_code || '-' || LPAD(v_sequence::TEXT, 4, '0');
+  
+  RETURN v_card_number;
+END;
+$_$;
+
+
+ALTER FUNCTION "public"."generate_card_number"("p_referee_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_accessible_regions"("_user_id" "uuid") RETURNS SETOF "uuid"
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT CASE 
+    WHEN is_admin_provinsi(_user_id) THEN 
+      (SELECT id FROM public.kabupaten_kota)
+    ELSE 
+      (SELECT get_user_kabupaten_kota(_user_id))
+  END
+$$;
+
+
+ALTER FUNCTION "public"."get_accessible_regions"("_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_admin_dashboard_summary"("_kabupaten_kota_id" "uuid" DEFAULT NULL::"uuid", "_start_date" "date" DEFAULT NULL::"date", "_end_date" "date" DEFAULT NULL::"date") RETURNS TABLE("total_referees" bigint, "active_referees" bigint, "total_events" bigint, "completed_events" bigint, "total_verified_income" bigint, "total_pending_income" bigint, "avg_income_per_referee" numeric)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  WITH referee_stats AS (
+    SELECT 
+      COUNT(DISTINCT p.id) as total_referees,
+      COUNT(DISTINCT p.id) FILTER (WHERE p.is_active = true) as active_referees
+    FROM public.profiles p
+    INNER JOIN public.user_roles ur ON ur.user_id = p.id AND ur.role = 'wasit'
+    WHERE (_kabupaten_kota_id IS NULL OR p.kabupaten_kota_id = _kabupaten_kota_id)
+  ),
+  event_stats AS (
+    SELECT 
+      COUNT(DISTINCT e.id) as total_events,
+      COUNT(DISTINCT e.id) FILTER (WHERE e.status = 'SELESAI') as completed_events
+    FROM public.events e
+    WHERE (_kabupaten_kota_id IS NULL OR e.kabupaten_kota_id = _kabupaten_kota_id)
+      AND (_start_date IS NULL OR e.date >= _start_date)
+      AND (_end_date IS NULL OR e.date <= _end_date)
+  ),
+  income_stats AS (
+    SELECT 
+      COALESCE(SUM(h.amount) FILTER (WHERE h.status = 'verified'), 0) as total_verified_income,
+      COALESCE(SUM(h.amount) FILTER (WHERE h.status = 'submitted'), 0) as total_pending_income
+    FROM public.honors h
+    LEFT JOIN public.events e ON e.id = h.event_id
+    LEFT JOIN public.profiles p ON p.id = h.referee_id
+    WHERE (_kabupaten_kota_id IS NULL OR p.kabupaten_kota_id = _kabupaten_kota_id)
+      AND (_start_date IS NULL OR e.date >= _start_date OR h.event_id IS NULL)
+      AND (_end_date IS NULL OR e.date <= _end_date OR h.event_id IS NULL)
+  )
+  SELECT 
+    rs.total_referees,
+    rs.active_referees,
+    es.total_events,
+    es.completed_events,
+    ins.total_verified_income::bigint,
+    ins.total_pending_income::bigint,
+    CASE WHEN rs.total_referees > 0 
+      THEN ROUND(ins.total_verified_income::numeric / rs.total_referees, 2)
+      ELSE 0 
+    END as avg_income_per_referee
+  FROM referee_stats rs, event_stats es, income_stats ins;
+$$;
+
+
+ALTER FUNCTION "public"."get_admin_dashboard_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_audit_logs"("_entity_type" "text" DEFAULT NULL::"text", "_entity_id" "uuid" DEFAULT NULL::"uuid", "_action" "text" DEFAULT NULL::"text", "_actor_id" "uuid" DEFAULT NULL::"uuid", "_start_date" timestamp with time zone DEFAULT NULL::timestamp with time zone, "_end_date" timestamp with time zone DEFAULT NULL::timestamp with time zone, "_limit" integer DEFAULT 100, "_offset" integer DEFAULT 0) RETURNS TABLE("id" "uuid", "action" "text", "entity_type" "text", "entity_id" "uuid", "actor_id" "uuid", "actor_name" "text", "old_data" "jsonb", "new_data" "jsonb", "metadata" "jsonb", "created_at" timestamp with time zone)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    al.id,
+    al.action,
+    al.entity_type,
+    al.entity_id,
+    al.actor_id,
+    p.full_name as actor_name,
+    al.old_data,
+    al.new_data,
+    al.metadata,
+    al.created_at
+  FROM public.audit_logs al
+  LEFT JOIN public.profiles p ON p.id = al.actor_id
+  WHERE (_entity_type IS NULL OR al.entity_type = _entity_type)
+    AND (_entity_id IS NULL OR al.entity_id = _entity_id)
+    AND (_action IS NULL OR al.action = _action)
+    AND (_actor_id IS NULL OR al.actor_id = _actor_id)
+    AND (_start_date IS NULL OR al.created_at >= _start_date)
+    AND (_end_date IS NULL OR al.created_at <= _end_date)
+  ORDER BY al.created_at DESC
+  LIMIT _limit
+  OFFSET _offset;
+$$;
+
+
+ALTER FUNCTION "public"."get_audit_logs"("_entity_type" "text", "_entity_id" "uuid", "_action" "text", "_actor_id" "uuid", "_start_date" timestamp with time zone, "_end_date" timestamp with time zone, "_limit" integer, "_offset" integer) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_honor_statistics"("_referee_id" "uuid" DEFAULT NULL::"uuid") RETURNS TABLE("referee_id" "uuid", "total_verified" bigint, "total_pending" bigint, "total_rejected" bigint, "total_earned" bigint, "pending_amount" bigint)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    h.referee_id,
+    COUNT(*) FILTER (WHERE h.status = 'verified') as total_verified,
+    COUNT(*) FILTER (WHERE h.status = 'submitted') as total_pending,
+    COUNT(*) FILTER (WHERE h.status = 'rejected') as total_rejected,
+    COALESCE(SUM(h.amount) FILTER (WHERE h.status = 'verified'), 0) as total_earned,
+    COALESCE(SUM(h.amount) FILTER (WHERE h.status = 'submitted'), 0) as pending_amount
+  FROM public.honors h
+  WHERE (_referee_id IS NULL OR h.referee_id = _referee_id)
+  GROUP BY h.referee_id
+$$;
+
+
+ALTER FUNCTION "public"."get_honor_statistics"("_referee_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_my_referee_event_count"("_start_date" "date" DEFAULT NULL::"date", "_end_date" "date" DEFAULT NULL::"date") RETURNS TABLE("referee_id" "uuid", "referee_name" "text", "total_events" bigint, "completed_events" bigint, "pending_events" bigint, "cancelled_events" bigint)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT
+    p.id AS referee_id,
+    p.full_name AS referee_name,
+
+    COUNT(DISTINCT e.id) AS total_events,
+
+    COUNT(DISTINCT e.id)
+      FILTER (WHERE ea.status = 'completed') AS completed_events,
+
+    COUNT(DISTINCT e.id)
+      FILTER (WHERE ea.status IN ('pending', 'confirmed')) AS pending_events,
+
+    COUNT(DISTINCT e.id)
+      FILTER (WHERE ea.status = 'cancelled') AS cancelled_events
+
+  FROM profiles p
+  JOIN user_roles ur
+    ON ur.user_id = p.id
+   AND ur.role = 'wasit'
+
+  LEFT JOIN event_assignments ea
+    ON ea.referee_id = p.id
+
+  LEFT JOIN events e
+    ON e.id = ea.event_id
+   AND (_start_date IS NULL OR e.start_date >= _start_date)
+   AND (_end_date IS NULL OR e.start_date <= _end_date)
+
+  WHERE p.id = auth.uid()
+
+  GROUP BY
+    p.id,
+    p.full_name;
+$$;
+
+
+ALTER FUNCTION "public"."get_my_referee_event_count"("_start_date" "date", "_end_date" "date") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_pending_registrations"() RETURNS TABLE("id" "uuid", "full_name" "text", "kabupaten_kota_id" "uuid", "kabupaten_kota_name" "text", "requested_role" "text", "registration_status" "text", "created_at" timestamp with time zone)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    p.id,
+    p.full_name,
+    p.kabupaten_kota_id,
+    kk.name as kabupaten_kota_name,
+    p.requested_role,
+    p.registration_status,
+    p.created_at
+  FROM public.profiles p
+  LEFT JOIN public.kabupaten_kota kk ON kk.id = p.kabupaten_kota_id
+  WHERE p.registration_status = 'pending'
+    AND (
+      is_admin_provinsi(auth.uid())
+      OR (
+        has_role(auth.uid(), 'admin_kab_kota') 
+        AND p.kabupaten_kota_id = get_user_kabupaten_kota(auth.uid())
+      )
+    )
+  ORDER BY p.created_at ASC;
+$$;
+
+
+ALTER FUNCTION "public"."get_pending_registrations"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_public_referee"("_referee_id" "uuid") RETURNS TABLE("id" "uuid", "full_name" "text", "profile_photo_url" "text", "license_level" "text", "afk_origin" "text", "kabupaten_kota_name" "text", "is_active" boolean)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  select
+    p.id,
+    p.full_name,
+    p.profile_photo_url,
+    p.license_level,
+    p.afk_origin,
+    kk.name as kabupaten_kota_name,
+    coalesce(p.is_active, true) as is_active
+  from public.profiles p
+  left join public.kabupaten_kota kk on p.kabupaten_kota_id = kk.id
+  inner join public.user_roles ur on p.id = ur.user_id and ur.role = 'wasit'
+  where
+    p.id = _referee_id
+    and p.deleted_at is null
+    and p.registration_status = 'approved'
+    and coalesce(p.is_profile_complete, false) = true
+  limit 1;
+$$;
+
+
+ALTER FUNCTION "public"."get_public_referee"("_referee_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_public_referees"("_search" "text" DEFAULT NULL::"text", "_is_active" boolean DEFAULT true) RETURNS TABLE("id" "uuid", "full_name" "text", "profile_photo_url" "text", "license_level" "text", "afk_origin" "text", "kabupaten_kota_name" "text", "is_active" boolean)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  select
+    p.id,
+    p.full_name,
+    p.profile_photo_url,
+    p.license_level,
+    p.afk_origin,
+    kk.name as kabupaten_kota_name,
+    coalesce(p.is_active, true) as is_active
+  from public.profiles p
+  left join public.kabupaten_kota kk on p.kabupaten_kota_id = kk.id
+  inner join public.user_roles ur on p.id = ur.user_id and ur.role = 'wasit'
+  where
+    p.deleted_at is null
+    and p.registration_status = 'approved'
+    and coalesce(p.is_profile_complete, false) = true
+    and (_is_active is null or coalesce(p.is_active, true) = _is_active)
+    and (_search is null or p.full_name ilike '%' || _search || '%')
+  order by p.full_name;
+$$;
+
+
+ALTER FUNCTION "public"."get_public_referees"("_search" "text", "_is_active" boolean) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_referee_event_count"("_kabupaten_kota_id" "uuid" DEFAULT NULL::"uuid", "_start_date" "date" DEFAULT NULL::"date", "_end_date" "date" DEFAULT NULL::"date") RETURNS TABLE("referee_id" "uuid", "referee_name" "text", "kabupaten_kota_id" "uuid", "kabupaten_kota_name" "text", "total_events" bigint, "completed_events" bigint, "pending_events" bigint, "cancelled_events" bigint)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    p.id as referee_id,
+    p.full_name as referee_name,
+    p.kabupaten_kota_id,
+    kk.name as kabupaten_kota_name,
+    COUNT(DISTINCT ea.event_id) as total_events,
+    COUNT(DISTINCT ea.event_id) FILTER (WHERE ea.status = 'completed') as completed_events,
+    COUNT(DISTINCT ea.event_id) FILTER (WHERE ea.status = 'pending' OR ea.status = 'confirmed') as pending_events,
+    COUNT(DISTINCT ea.event_id) FILTER (WHERE ea.status = 'cancelled') as cancelled_events
+  FROM public.profiles p
+  INNER JOIN public.user_roles ur ON ur.user_id = p.id AND ur.role = 'wasit'
+  LEFT JOIN public.event_assignments ea ON ea.referee_id = p.id
+  LEFT JOIN public.events e ON e.id = ea.event_id
+  LEFT JOIN public.kabupaten_kota kk ON kk.id = p.kabupaten_kota_id
+  WHERE (_kabupaten_kota_id IS NULL OR p.kabupaten_kota_id = _kabupaten_kota_id)
+    AND (_start_date IS NULL OR e.date >= _start_date OR ea.event_id IS NULL)
+    AND (_end_date IS NULL OR e.date <= _end_date OR ea.event_id IS NULL)
+  GROUP BY p.id, p.full_name, p.kabupaten_kota_id, kk.name
+  ORDER BY total_events DESC;
+$$;
+
+
+ALTER FUNCTION "public"."get_referee_event_count"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_referee_income_summary"("_kabupaten_kota_id" "uuid" DEFAULT NULL::"uuid", "_start_date" "date" DEFAULT NULL::"date", "_end_date" "date" DEFAULT NULL::"date") RETURNS TABLE("referee_id" "uuid", "referee_name" "text", "kabupaten_kota_id" "uuid", "kabupaten_kota_name" "text", "total_verified_income" bigint, "total_pending_income" bigint, "verified_count" bigint, "pending_count" bigint, "rejected_count" bigint)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    p.id as referee_id,
+    p.full_name as referee_name,
+    p.kabupaten_kota_id,
+    kk.name as kabupaten_kota_name,
+    COALESCE(SUM(h.amount) FILTER (WHERE h.status = 'verified'), 0)::bigint as total_verified_income,
+    COALESCE(SUM(h.amount) FILTER (WHERE h.status = 'submitted'), 0)::bigint as total_pending_income,
+    COUNT(*) FILTER (WHERE h.status = 'verified') as verified_count,
+    COUNT(*) FILTER (WHERE h.status = 'submitted') as pending_count,
+    COUNT(*) FILTER (WHERE h.status = 'rejected') as rejected_count
+  FROM public.profiles p
+  INNER JOIN public.user_roles ur ON ur.user_id = p.id AND ur.role = 'wasit'
+  LEFT JOIN public.honors h ON h.referee_id = p.id
+  LEFT JOIN public.events e ON e.id = h.event_id
+  LEFT JOIN public.kabupaten_kota kk ON kk.id = p.kabupaten_kota_id
+  WHERE (_kabupaten_kota_id IS NULL OR p.kabupaten_kota_id = _kabupaten_kota_id)
+    AND (_start_date IS NULL OR e.date >= _start_date OR h.event_id IS NULL)
+    AND (_end_date IS NULL OR e.date <= _end_date OR h.event_id IS NULL)
+  GROUP BY p.id, p.full_name, p.kabupaten_kota_id, kk.name
+  ORDER BY total_verified_income DESC;
+$$;
+
+
+ALTER FUNCTION "public"."get_referee_income_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_referees"("_license_level" "text" DEFAULT NULL::"text", "_is_active" boolean DEFAULT NULL::boolean, "_kabupaten_kota_id" "uuid" DEFAULT NULL::"uuid", "_search" "text" DEFAULT NULL::"text", "_limit" integer DEFAULT NULL::integer, "_offset" integer DEFAULT 0) RETURNS TABLE("id" "uuid", "full_name" "text", "birth_date" "date", "kabupaten_kota_id" "uuid", "license_level" "text", "license_expiry" "date", "profile_photo_url" "text", "is_active" boolean, "is_profile_complete" boolean, "afk_origin" "text", "created_at" timestamp with time zone)
+    LANGUAGE "sql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  select
+    p.id,
+    p.full_name,
+    p.birth_date,
+    p.kabupaten_kota_id,
+    p.license_level,
+    p.license_expiry,
+    p.profile_photo_url,
+    p.is_active,
+    p.is_profile_complete,
+    p.afk_origin,
+    p.created_at
+  from profiles p
+  join user_roles ur
+    on ur.user_id = p.id
+   and ur.role = 'wasit'
+  where
+    -- 🔐 public vs authenticated
+    (
+      auth.role() = 'authenticated'
+      or p.is_active = true
+    )
+    -- filters
+    and (_license_level is null or p.license_level = _license_level)
+    and (_is_active is null or p.is_active = _is_active)
+    and (_kabupaten_kota_id is null or p.kabupaten_kota_id = _kabupaten_kota_id)
+    and (
+      _search is null
+      or p.full_name ilike '%' || _search || '%'
+      or p.license_level ilike '%' || _search || '%'
+      or p.afk_origin ilike '%' || _search || '%'
+    )
+  order by p.created_at desc
+  limit _limit
+  offset _offset;
+$$;
+
+
+ALTER FUNCTION "public"."get_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text", "_limit" integer, "_offset" integer) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_registration_history"() RETURNS TABLE("id" "uuid", "full_name" "text", "kabupaten_kota_id" "uuid", "kabupaten_kota_name" "text", "requested_role" "text", "registration_status" "text", "rejected_reason" "text", "approved_at" timestamp with time zone, "approved_by" "uuid", "approver_name" "text", "created_at" timestamp with time zone)
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT 
+    p.id,
+    p.full_name,
+    p.kabupaten_kota_id,
+    kk.name as kabupaten_kota_name,
+    p.requested_role,
+    p.registration_status,
+    p.rejected_reason,
+    p.approved_at,
+    p.approved_by,
+    approver.full_name as approver_name,
+    p.created_at
+  FROM public.profiles p
+  LEFT JOIN public.kabupaten_kota kk ON kk.id = p.kabupaten_kota_id
+  LEFT JOIN public.profiles approver ON approver.id = p.approved_by
+  WHERE p.registration_status IN ('approved', 'rejected')
+    AND p.approved_at IS NOT NULL
+    AND (
+      is_admin_provinsi(auth.uid())
+      OR (
+        has_role(auth.uid(), 'admin_kab_kota') 
+        AND p.kabupaten_kota_id = get_user_kabupaten_kota(auth.uid())
+      )
+    )
+  ORDER BY p.approved_at DESC;
+$$;
+
+
+ALTER FUNCTION "public"."get_registration_history"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_user_kabupaten_kota"("_user_id" "uuid") RETURNS "uuid"
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT kabupaten_kota_id
+  FROM public.profiles
+  WHERE id = _user_id
+$$;
+
+
+ALTER FUNCTION "public"."get_user_kabupaten_kota"("_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."get_user_kabupaten_kota_id"("_user_id" "uuid") RETURNS "uuid"
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT kabupaten_kota_id
+  FROM public.profiles
+  WHERE id = _user_id
+$$;
+
+
+ALTER FUNCTION "public"."get_user_kabupaten_kota_id"("_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."handle_honor_verification"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF NEW.status IN ('verified', 'rejected') AND OLD.status != NEW.status THEN
+    NEW.verified_at = now();
+  END IF;
+  
+  IF NEW.status = 'draft' AND OLD.status != 'draft' THEN
+    NEW.verified_at = NULL;
+    NEW.verified_by = NULL;
+  END IF;
+  
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."handle_honor_verification"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."handle_new_user"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  INSERT INTO public.profiles (
+    id, 
+    full_name, 
+    kabupaten_kota_id,
+    requested_role,
+    registration_status,
+    is_profile_complete,
+    is_active
+  )
+  VALUES (
+    new.id, 
+    COALESCE(new.raw_user_meta_data->>'full_name', new.email),
+    (new.raw_user_meta_data->>'kabupaten_kota_id')::uuid,
+    new.raw_user_meta_data->>'requested_role',
+    'pending',
+    false,
+    true
+  );
+  RETURN new;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."handle_new_user"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."has_role"("_user_id" "uuid", "_role" "public"."app_role") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles
+    WHERE user_id = _user_id
+      AND role = _role
+  )
+$$;
+
+
+ALTER FUNCTION "public"."has_role"("_user_id" "uuid", "_role" "public"."app_role") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."has_schedule_conflict"("_referee_id" "uuid", "_event_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.event_assignments ea
+    INNER JOIN public.events e ON e.id = ea.event_id
+    WHERE ea.referee_id = _referee_id
+      AND ea.event_id != _event_id
+      AND e.date = (SELECT date FROM public.events WHERE id = _event_id)
+      AND ea.status != 'cancelled'
+  )
+$$;
+
+
+ALTER FUNCTION "public"."has_schedule_conflict"("_referee_id" "uuid", "_event_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_admin"("_user_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles
+    WHERE user_id = _user_id
+      AND role IN ('admin_provinsi'::app_role, 'admin_kab_kota'::app_role)
+  )
+$$;
+
+
+ALTER FUNCTION "public"."is_admin"("_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_admin_kab_kota"("_user_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles
+    WHERE user_id = _user_id
+      AND role = 'admin_kab_kota'
+  )
+$$;
+
+
+ALTER FUNCTION "public"."is_admin_kab_kota"("_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_admin_provinsi"("_user_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.user_roles
+    WHERE user_id = _user_id
+      AND role = 'admin_provinsi'::app_role
+  )
+$$;
+
+
+ALTER FUNCTION "public"."is_admin_provinsi"("_user_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_event_approved"("_event_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.events
+    WHERE id = _event_id AND status = 'DISETUJUI'
+  )
+$$;
+
+
+ALTER FUNCTION "public"."is_event_approved"("_event_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_referee_active"("_referee_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1
+    FROM public.profiles p
+    INNER JOIN public.user_roles ur ON ur.user_id = p.id
+    WHERE p.id = _referee_id
+      AND ur.role = 'wasit'
+      AND p.is_active = true
+  )
+$$;
+
+
+ALTER FUNCTION "public"."is_referee_active"("_referee_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."is_same_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") RETURNS boolean
+    LANGUAGE "sql" STABLE SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = _user_id 
+    AND kabupaten_kota_id = _kabupaten_kota_id
+  )
+$$;
+
+
+ALTER FUNCTION "public"."is_same_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."log_event_approval"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+declare
+  v_action text;
+begin
+  -- Fallback action jika NULL
+  v_action := coalesce(new.action, new.status, 'approval');
+
+  insert into public.activity_logs (
+    actor_id,
+    entity,
+    entity_id,
+    action,
+    metadata,
+    created_at
+  )
+  values (
+    new.approved_by,
+    'event',
+    new.event_id,
+    v_action,
+    jsonb_build_object(
+      'status', new.status,
+      'notes', new.notes
+    ),
+    now()
+  );
+
+  return new;
+end;
+$$;
+
+
+ALTER FUNCTION "public"."log_event_approval"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."log_honor_verification"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF OLD.status IS DISTINCT FROM NEW.status THEN
+    INSERT INTO public.audit_logs (action, entity_type, entity_id, actor_id, old_data, new_data, metadata)
+    VALUES (
+      CASE 
+        WHEN NEW.status = 'submitted' THEN 'HONOR_SUBMITTED'
+        WHEN NEW.status = 'verified' THEN 'HONOR_VERIFIED'
+        WHEN NEW.status = 'rejected' THEN 'HONOR_REJECTED'
+        ELSE 'HONOR_STATUS_CHANGED'
+      END,
+      'honors',
+      NEW.id,
+      COALESCE(NEW.verified_by, auth.uid()),
+      jsonb_build_object('status', OLD.status, 'amount', OLD.amount),
+      jsonb_build_object('status', NEW.status, 'amount', NEW.amount),
+      jsonb_build_object('referee_id', NEW.referee_id, 'event_id', NEW.event_id, 'notes', NEW.notes)
+    );
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."log_honor_verification"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."log_referee_assignment"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    INSERT INTO public.audit_logs (action, entity_type, entity_id, actor_id, new_data, metadata)
+    VALUES (
+      'REFEREE_ASSIGNED',
+      'event_assignments',
+      NEW.id,
+      auth.uid(),
+      jsonb_build_object('referee_id', NEW.referee_id, 'event_id', NEW.event_id, 'role', NEW.role, 'status', NEW.status),
+      jsonb_build_object('event_id', NEW.event_id)
+    );
+  ELSIF TG_OP = 'UPDATE' THEN
+    IF OLD.status IS DISTINCT FROM NEW.status THEN
+      INSERT INTO public.audit_logs (action, entity_type, entity_id, actor_id, old_data, new_data, metadata)
+      VALUES (
+        'REFEREE_ASSIGNMENT_UPDATED',
+        'event_assignments',
+        NEW.id,
+        auth.uid(),
+        jsonb_build_object('status', OLD.status, 'role', OLD.role),
+        jsonb_build_object('status', NEW.status, 'role', NEW.role),
+        jsonb_build_object('referee_id', NEW.referee_id, 'event_id', NEW.event_id)
+      );
+    END IF;
+  ELSIF TG_OP = 'DELETE' THEN
+    INSERT INTO public.audit_logs (action, entity_type, entity_id, actor_id, old_data, metadata)
+    VALUES (
+      'REFEREE_UNASSIGNED',
+      'event_assignments',
+      OLD.id,
+      auth.uid(),
+      jsonb_build_object('referee_id', OLD.referee_id, 'event_id', OLD.event_id, 'role', OLD.role, 'status', OLD.status),
+      jsonb_build_object('event_id', OLD.event_id)
+    );
+  END IF;
+  RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+
+ALTER FUNCTION "public"."log_referee_assignment"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."log_registration_approval"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF OLD.registration_status IS DISTINCT FROM NEW.registration_status 
+     AND NEW.registration_status IN ('approved', 'rejected') THEN
+    INSERT INTO public.audit_logs (
+      action, 
+      entity_type, 
+      entity_id, 
+      actor_id, 
+      old_data, 
+      new_data, 
+      metadata
+    )
+    VALUES (
+      CASE 
+        WHEN NEW.registration_status = 'approved' THEN 'REGISTRATION_APPROVED'
+        WHEN NEW.registration_status = 'rejected' THEN 'REGISTRATION_REJECTED'
+        ELSE 'REGISTRATION_STATUS_CHANGED'
+      END,
+      'profiles',
+      NEW.id,
+      COALESCE(NEW.approved_by, auth.uid()),
+      jsonb_build_object('status', OLD.registration_status),
+      jsonb_build_object(
+        'status', NEW.registration_status, 
+        'rejected_reason', NEW.rejected_reason
+      ),
+      jsonb_build_object(
+        'full_name', NEW.full_name, 
+        'requested_role', NEW.requested_role,
+        'kabupaten_kota_id', NEW.kabupaten_kota_id
+      )
+    );
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."log_registration_approval"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."prevent_hard_delete"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $_$
+BEGIN
+  EXECUTE format('UPDATE %I.%I SET deleted_at = now() WHERE id = $1', TG_TABLE_SCHEMA, TG_TABLE_NAME)
+  USING OLD.id;
+  
+  INSERT INTO public.audit_logs (action, entity_type, entity_id, actor_id, old_data)
+  VALUES (
+    'SOFT_DELETE',
+    TG_TABLE_NAME,
+    OLD.id,
+    auth.uid(),
+    to_jsonb(OLD)
+  );
+  
+  RETURN NULL;
+END;
+$_$;
+
+
+ALTER FUNCTION "public"."prevent_hard_delete"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."search_referee_cards"("p_search" "text" DEFAULT NULL::"text", "p_status" "text" DEFAULT NULL::"text", "p_limit" integer DEFAULT 50, "p_offset" integer DEFAULT 0) RETURNS TABLE("id" "uuid", "referee_id" "uuid", "card_number" "text", "issued_at" timestamp with time zone, "expires_at" timestamp with time zone, "status" "text", "last_verified_at" timestamp with time zone, "verification_count" integer, "created_at" timestamp with time zone, "updated_at" timestamp with time zone, "full_name" "text", "profile_photo_url" "text", "license_level" "text", "license_expiry" "date", "afk_origin" "text", "is_active" boolean, "kabupaten_kota_name" "text")
+    LANGUAGE "sql" STABLE
+    AS $$
+  select
+    rc.id,
+    rc.referee_id,
+    rc.card_number,
+    rc.issued_at,
+    rc.expires_at,
+    rc.status,
+    rc.last_verified_at,
+    rc.verification_count,
+    rc.created_at,
+    rc.updated_at,
+
+    p.full_name,
+    p.profile_photo_url,
+    p.license_level,
+    p.license_expiry,
+    p.afk_origin,
+    p.is_active,
+    kk.name as kabupaten_kota_name
+  from referee_cards rc
+  join profiles p on p.id = rc.referee_id
+  left join kabupaten_kota kk on kk.id = p.kabupaten_kota_id
+  where
+    (p_search is null
+      or rc.card_number ilike '%' || p_search || '%'
+      or p.full_name ilike '%' || p_search || '%'
+    )
+    and (p_status is null or rc.status = p_status)
+  order by rc.created_at desc
+  limit p_limit
+  offset p_offset;
+$$;
+
+
+ALTER FUNCTION "public"."search_referee_cards"("p_search" "text", "p_status" "text", "p_limit" integer, "p_offset" integer) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."search_referee_cards"("search" "text" DEFAULT NULL::"text", "is_active" boolean DEFAULT NULL::boolean, "license_level" "text" DEFAULT NULL::"text", "page" integer DEFAULT 1, "page_size" integer DEFAULT 20) RETURNS TABLE("id" "uuid", "full_name" "text", "license_level" "text", "is_active" boolean, "created_at" timestamp with time zone, "total_count" bigint)
+    LANGUAGE "sql" STABLE
+    AS $$
+  with base as (
+    select
+      p.id,
+      p.full_name,
+      p.license_level,
+      p.is_active,
+      p.created_at
+    from profiles p
+    join user_roles ur on ur.user_id = p.id
+    where ur.role = 'wasit'
+      and (search is null or p.full_name ilike '%' || search || '%')
+      and (is_active is null or p.is_active = is_active)
+      and (license_level is null or p.license_level = license_level)
+  )
+  select
+    *,
+    count(*) over() as total_count
+  from base
+  order by created_at desc
+  limit page_size
+  offset (page - 1) * page_size;
+$$;
+
+
+ALTER FUNCTION "public"."search_referee_cards"("search" "text", "is_active" boolean, "license_level" "text", "page" integer, "page_size" integer) OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."set_updated_at"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."set_updated_at"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."soft_delete_record"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  NEW.deleted_at = now();
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."soft_delete_record"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."sync_card_expiry"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  -- Only update if license_expiry actually changed
+  IF OLD.license_expiry IS DISTINCT FROM NEW.license_expiry THEN
+    UPDATE referee_cards
+    SET expires_at = NEW.license_expiry,
+        updated_at = now()
+    WHERE referee_id = NEW.id
+      AND status != 'revoked'; -- Don't update revoked cards
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."sync_card_expiry"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."update_topic_reply_count"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    UPDATE public.discussion_topics 
+    SET reply_count = reply_count + 1,
+        last_reply_at = NEW.created_at
+    WHERE id = NEW.topic_id;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE public.discussion_topics 
+    SET reply_count = GREATEST(0, reply_count - 1)
+    WHERE id = OLD.topic_id;
+  END IF;
+  RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+
+ALTER FUNCTION "public"."update_topic_reply_count"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."update_updated_at_column"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."update_updated_at_column"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."validate_honor_submission"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    IF NEW.event_id IS NOT NULL THEN
+      IF NOT EXISTS (
+        SELECT 1 FROM public.event_assignments
+        WHERE event_id = NEW.event_id
+          AND referee_id = NEW.referee_id
+          AND status != 'cancelled'
+      ) THEN
+        RAISE EXCEPTION 'Wasit tidak ditugaskan ke event ini';
+      END IF;
+    END IF;
+  END IF;
+  
+  IF TG_OP = 'UPDATE' THEN
+    IF OLD.status != 'draft' AND NEW.amount != OLD.amount THEN
+      RAISE EXCEPTION 'Tidak dapat mengubah jumlah honor setelah disubmit';
+    END IF;
+  END IF;
+  
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."validate_honor_submission"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."validate_referee_assignment"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+BEGIN
+  IF NOT is_event_approved(NEW.event_id) THEN
+    RAISE EXCEPTION 'Cannot assign referee to unapproved event';
+  END IF;
+  
+  IF NOT is_referee_active(NEW.referee_id) THEN
+    RAISE EXCEPTION 'Cannot assign inactive referee';
+  END IF;
+  
+  IF has_schedule_conflict(NEW.referee_id, NEW.event_id) THEN
+    RAISE EXCEPTION 'Referee has schedule conflict on this date';
+  END IF;
+  
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."validate_referee_assignment"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."validate_regional_access"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+DECLARE
+  _user_id uuid := auth.uid();
+  _target_region uuid;
+BEGIN
+  _target_region := COALESCE(NEW.kabupaten_kota_id, OLD.kabupaten_kota_id);
+  
+  IF is_admin_provinsi(_user_id) THEN
+    RETURN NEW;
+  END IF;
+  
+  IF has_role(_user_id, 'admin_kab_kota') THEN
+    IF _target_region IS NOT NULL AND _target_region != get_user_kabupaten_kota(_user_id) THEN
+      RAISE EXCEPTION 'Tidak dapat mengakses data wilayah lain';
+    END IF;
+  END IF;
+  
+  RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION "public"."validate_regional_access"() OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "public"."verify_referee_card"("p_code" "text") RETURNS "jsonb"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO 'public'
+    AS $$
+declare
+  v_card record;
+  v_is_expired boolean := false;
+  v_message text := null;
+  v_valid boolean := true;
+  v_payload jsonb;
+begin
+  if p_code is null or length(trim(p_code)) = 0 then
+    return jsonb_build_object('valid', false, 'message', 'Kode verifikasi kosong');
+  end if;
+
+  select
+    rc.id,
+    rc.referee_id,
+    rc.card_number,
+    rc.issued_at,
+    rc.expires_at,
+    rc.status,
+    rc.last_verified_at,
+    rc.verification_count,
+    rc.created_at,
+    rc.updated_at,
+    p.full_name,
+    p.profile_photo_url,
+    p.license_level,
+    p.license_expiry,
+    p.afk_origin,
+    coalesce(p.is_active, true) as referee_is_active,
+    kk.name as kabupaten_kota_name
+  into v_card
+  from public.referee_cards rc
+  join public.profiles p on p.id = rc.referee_id
+  left join public.kabupaten_kota kk on kk.id = p.kabupaten_kota_id
+  where rc.verification_code = p_code
+  limit 1;
+
+  if not found then
+    return jsonb_build_object('valid', false, 'message', 'Kartu tidak ditemukan');
+  end if;
+
+  -- status checks
+  if v_card.status = 'revoked' then
+    v_valid := false;
+    v_message := 'Kartu ini telah dicabut';
+  elsif v_card.status = 'suspended' then
+    v_valid := false;
+    v_message := 'Kartu ini sedang disuspend';
+  elsif v_card.status = 'expired' then
+    v_valid := false;
+    v_message := 'Kartu ini sudah kadaluarsa';
+  end if;
+
+  -- expiry check
+  if v_valid and v_card.expires_at is not null and v_card.expires_at < now() then
+    v_valid := false;
+    v_message := 'Kartu ini sudah kadaluarsa';
+  end if;
+
+  -- Always log the verification attempt (even if invalid)
+  insert into public.card_verification_logs (card_id)
+  values (v_card.id);
+
+  -- Update counters regardless (still useful for monitoring), but keep it simple
+  update public.referee_cards
+  set
+    verification_count = coalesce(v_card.verification_count, 0) + 1,
+    last_verified_at = now(),
+    updated_at = now()
+  where id = v_card.id;
+
+  v_payload := jsonb_build_object(
+    'id', v_card.id,
+    'referee_id', v_card.referee_id,
+    'card_number', v_card.card_number,
+    'issued_at', v_card.issued_at,
+    'expires_at', v_card.expires_at,
+    'status', v_card.status,
+    'last_verified_at', v_card.last_verified_at,
+    'verification_count', coalesce(v_card.verification_count, 0) + 1,
+    'created_at', v_card.created_at,
+    'updated_at', v_card.updated_at,
+    'referee', jsonb_build_object(
+      'id', v_card.referee_id,
+      'full_name', v_card.full_name,
+      'profile_photo_url', v_card.profile_photo_url,
+      'license_level', v_card.license_level,
+      'license_expiry', v_card.license_expiry,
+      'afk_origin', v_card.afk_origin,
+      'is_active', v_card.referee_is_active,
+      'kabupaten_kota', jsonb_build_object('name', v_card.kabupaten_kota_name)
+    )
+  );
+
+  return jsonb_build_object(
+    'valid', v_valid,
+    'message', v_message,
+    'card', v_payload
+  );
+end;
+$$;
+
+
+ALTER FUNCTION "public"."verify_referee_card"("p_code" "text") OWNER TO "postgres";
+
+
+CREATE OR REPLACE FUNCTION "storage"."allow_any_operation"("expected_operations" "text"[]) RETURNS boolean
+    LANGUAGE "sql" STABLE
+    AS $$
+  WITH current_operation AS (
+    SELECT storage.operation() AS raw_operation
+  ),
+  normalized AS (
+    SELECT CASE
+      WHEN raw_operation LIKE 'storage.%' THEN substr(raw_operation, 9)
+      ELSE raw_operation
+    END AS current_operation
+    FROM current_operation
+  )
+  SELECT EXISTS (
+    SELECT 1
+    FROM normalized n
+    CROSS JOIN LATERAL unnest(expected_operations) AS expected_operation
+    WHERE expected_operation IS NOT NULL
+      AND expected_operation <> ''
+      AND n.current_operation = CASE
+        WHEN expected_operation LIKE 'storage.%' THEN substr(expected_operation, 9)
+        ELSE expected_operation
+      END
+  );
+$$;
+
+
+ALTER FUNCTION "storage"."allow_any_operation"("expected_operations" "text"[]) OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."allow_only_operation"("expected_operation" "text") RETURNS boolean
+    LANGUAGE "sql" STABLE
+    AS $$
+  WITH current_operation AS (
+    SELECT storage.operation() AS raw_operation
+  ),
+  normalized AS (
+    SELECT
+      CASE
+        WHEN raw_operation LIKE 'storage.%' THEN substr(raw_operation, 9)
+        ELSE raw_operation
+      END AS current_operation,
+      CASE
+        WHEN expected_operation LIKE 'storage.%' THEN substr(expected_operation, 9)
+        ELSE expected_operation
+      END AS requested_operation
+    FROM current_operation
+  )
+  SELECT CASE
+    WHEN requested_operation IS NULL OR requested_operation = '' THEN FALSE
+    ELSE COALESCE(current_operation = requested_operation, FALSE)
+  END
+  FROM normalized;
+$$;
+
+
+ALTER FUNCTION "storage"."allow_only_operation"("expected_operation" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."can_insert_object"("bucketid" "text", "name" "text", "owner" "uuid", "metadata" "jsonb") RETURNS "void"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+  INSERT INTO "storage"."objects" ("bucket_id", "name", "owner", "metadata") VALUES (bucketid, name, owner, metadata);
+  -- hack to rollback the successful insert
+  RAISE sqlstate 'PT200' using
+  message = 'ROLLBACK',
+  detail = 'rollback successful insert';
+END
+$$;
+
+
+ALTER FUNCTION "storage"."can_insert_object"("bucketid" "text", "name" "text", "owner" "uuid", "metadata" "jsonb") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."enforce_bucket_name_length"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+begin
+    if length(new.name) > 100 then
+        raise exception 'bucket name "%" is too long (% characters). Max is 100.', new.name, length(new.name);
+    end if;
+    return new;
+end;
+$$;
+
+
+ALTER FUNCTION "storage"."enforce_bucket_name_length"() OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."extension"("name" "text") RETURNS "text"
+    LANGUAGE "plpgsql" IMMUTABLE
+    AS $$
+DECLARE
+    _parts text[];
+    _filename text;
+BEGIN
+    -- Split on "/" to get path segments
+    SELECT string_to_array(name, '/') INTO _parts;
+    -- Get the last path segment (the actual filename)
+    SELECT _parts[array_length(_parts, 1)] INTO _filename;
+    -- Extract extension: reverse, split on '.', then reverse again
+    RETURN reverse(split_part(reverse(_filename), '.', 1));
+END
+$$;
+
+
+ALTER FUNCTION "storage"."extension"("name" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."filename"("name" "text") RETURNS "text"
+    LANGUAGE "plpgsql" IMMUTABLE
+    AS $$
+DECLARE
+    _parts text[];
+BEGIN
+    SELECT string_to_array(name, '/') INTO _parts;
+    RETURN _parts[array_length(_parts, 1)];
+END
+$$;
+
+
+ALTER FUNCTION "storage"."filename"("name" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."foldername"("name" "text") RETURNS "text"[]
+    LANGUAGE "plpgsql" IMMUTABLE
+    AS $$
+DECLARE
+    _parts text[];
+BEGIN
+    -- Split on "/" to get path segments
+    SELECT string_to_array(name, '/') INTO _parts;
+    -- Return everything except the last segment
+    RETURN _parts[1 : array_length(_parts,1) - 1];
+END
+$$;
+
+
+ALTER FUNCTION "storage"."foldername"("name" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."get_common_prefix"("p_key" "text", "p_prefix" "text", "p_delimiter" "text") RETURNS "text"
+    LANGUAGE "sql" IMMUTABLE
+    AS $$
+SELECT CASE
+    WHEN position(p_delimiter IN substring(p_key FROM length(p_prefix) + 1)) > 0
+    THEN left(p_key, length(p_prefix) + position(p_delimiter IN substring(p_key FROM length(p_prefix) + 1)))
+    ELSE NULL
+END;
+$$;
+
+
+ALTER FUNCTION "storage"."get_common_prefix"("p_key" "text", "p_prefix" "text", "p_delimiter" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."get_size_by_bucket"() RETURNS TABLE("size" bigint, "bucket_id" "text")
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+BEGIN
+    return query
+        select sum((metadata->>'size')::bigint)::bigint as size, obj.bucket_id
+        from "storage".objects as obj
+        group by obj.bucket_id;
+END
+$$;
+
+
+ALTER FUNCTION "storage"."get_size_by_bucket"() OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."list_multipart_uploads_with_delimiter"("bucket_id" "text", "prefix_param" "text", "delimiter_param" "text", "max_keys" integer DEFAULT 100, "next_key_token" "text" DEFAULT ''::"text", "next_upload_token" "text" DEFAULT ''::"text") RETURNS TABLE("key" "text", "id" "text", "created_at" timestamp with time zone)
+    LANGUAGE "plpgsql"
+    AS $_$
+BEGIN
+    RETURN QUERY EXECUTE
+        'SELECT DISTINCT ON(key COLLATE "C") * from (
+            SELECT
+                CASE
+                    WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
+                        substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1)))
+                    ELSE
+                        key
+                END AS key, id, created_at
+            FROM
+                storage.s3_multipart_uploads
+            WHERE
+                bucket_id = $5 AND
+                key ILIKE $1 || ''%'' AND
+                CASE
+                    WHEN $4 != '''' AND $6 = '''' THEN
+                        CASE
+                            WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
+                                substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1))) COLLATE "C" > $4
+                            ELSE
+                                key COLLATE "C" > $4
+                            END
+                    ELSE
+                        true
+                END AND
+                CASE
+                    WHEN $6 != '''' THEN
+                        id COLLATE "C" > $6
+                    ELSE
+                        true
+                    END
+            ORDER BY
+                key COLLATE "C" ASC, created_at ASC) as e order by key COLLATE "C" LIMIT $3'
+        USING prefix_param, delimiter_param, max_keys, next_key_token, bucket_id, next_upload_token;
+END;
+$_$;
+
+
+ALTER FUNCTION "storage"."list_multipart_uploads_with_delimiter"("bucket_id" "text", "prefix_param" "text", "delimiter_param" "text", "max_keys" integer, "next_key_token" "text", "next_upload_token" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."list_objects_with_delimiter"("_bucket_id" "text", "prefix_param" "text", "delimiter_param" "text", "max_keys" integer DEFAULT 100, "start_after" "text" DEFAULT ''::"text", "next_token" "text" DEFAULT ''::"text", "sort_order" "text" DEFAULT 'asc'::"text") RETURNS TABLE("name" "text", "id" "uuid", "metadata" "jsonb", "updated_at" timestamp with time zone, "created_at" timestamp with time zone, "last_accessed_at" timestamp with time zone)
+    LANGUAGE "plpgsql" STABLE
+    AS $_$
+DECLARE
+    v_peek_name TEXT;
+    v_current RECORD;
+    v_common_prefix TEXT;
+
+    -- Configuration
+    v_is_asc BOOLEAN;
+    v_prefix TEXT;
+    v_start TEXT;
+    v_upper_bound TEXT;
+    v_file_batch_size INT;
+
+    -- Seek state
+    v_next_seek TEXT;
+    v_count INT := 0;
+
+    -- Dynamic SQL for batch query only
+    v_batch_query TEXT;
+
+BEGIN
+    -- ========================================================================
+    -- INITIALIZATION
+    -- ========================================================================
+    v_is_asc := lower(coalesce(sort_order, 'asc')) = 'asc';
+    v_prefix := coalesce(prefix_param, '');
+    v_start := CASE WHEN coalesce(next_token, '') <> '' THEN next_token ELSE coalesce(start_after, '') END;
+    v_file_batch_size := LEAST(GREATEST(max_keys * 2, 100), 1000);
+
+    -- Calculate upper bound for prefix filtering (bytewise, using COLLATE "C")
+    IF v_prefix = '' THEN
+        v_upper_bound := NULL;
+    ELSIF right(v_prefix, 1) = delimiter_param THEN
+        v_upper_bound := left(v_prefix, -1) || chr(ascii(delimiter_param) + 1);
+    ELSE
+        v_upper_bound := left(v_prefix, -1) || chr(ascii(right(v_prefix, 1)) + 1);
+    END IF;
+
+    -- Build batch query (dynamic SQL - called infrequently, amortized over many rows)
+    IF v_is_asc THEN
+        IF v_upper_bound IS NOT NULL THEN
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND o.name COLLATE "C" >= $2 ' ||
+                'AND o.name COLLATE "C" < $3 ORDER BY o.name COLLATE "C" ASC LIMIT $4';
+        ELSE
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND o.name COLLATE "C" >= $2 ' ||
+                'ORDER BY o.name COLLATE "C" ASC LIMIT $4';
+        END IF;
+    ELSE
+        IF v_upper_bound IS NOT NULL THEN
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND o.name COLLATE "C" < $2 ' ||
+                'AND o.name COLLATE "C" >= $3 ORDER BY o.name COLLATE "C" DESC LIMIT $4';
+        ELSE
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND o.name COLLATE "C" < $2 ' ||
+                'ORDER BY o.name COLLATE "C" DESC LIMIT $4';
+        END IF;
+    END IF;
+
+    -- ========================================================================
+    -- SEEK INITIALIZATION: Determine starting position
+    -- ========================================================================
+    IF v_start = '' THEN
+        IF v_is_asc THEN
+            v_next_seek := v_prefix;
+        ELSE
+            -- DESC without cursor: find the last item in range
+            IF v_upper_bound IS NOT NULL THEN
+                SELECT o.name INTO v_next_seek FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" >= v_prefix AND o.name COLLATE "C" < v_upper_bound
+                ORDER BY o.name COLLATE "C" DESC LIMIT 1;
+            ELSIF v_prefix <> '' THEN
+                SELECT o.name INTO v_next_seek FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" >= v_prefix
+                ORDER BY o.name COLLATE "C" DESC LIMIT 1;
+            ELSE
+                SELECT o.name INTO v_next_seek FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id
+                ORDER BY o.name COLLATE "C" DESC LIMIT 1;
+            END IF;
+
+            IF v_next_seek IS NOT NULL THEN
+                v_next_seek := v_next_seek || delimiter_param;
+            ELSE
+                RETURN;
+            END IF;
+        END IF;
+    ELSE
+        -- Cursor provided: determine if it refers to a folder or leaf
+        IF EXISTS (
+            SELECT 1 FROM storage.objects o
+            WHERE o.bucket_id = _bucket_id
+              AND o.name COLLATE "C" LIKE v_start || delimiter_param || '%'
+            LIMIT 1
+        ) THEN
+            -- Cursor refers to a folder
+            IF v_is_asc THEN
+                v_next_seek := v_start || chr(ascii(delimiter_param) + 1);
+            ELSE
+                v_next_seek := v_start || delimiter_param;
+            END IF;
+        ELSE
+            -- Cursor refers to a leaf object
+            IF v_is_asc THEN
+                v_next_seek := v_start || delimiter_param;
+            ELSE
+                v_next_seek := v_start;
+            END IF;
+        END IF;
+    END IF;
+
+    -- ========================================================================
+    -- MAIN LOOP: Hybrid peek-then-batch algorithm
+    -- Uses STATIC SQL for peek (hot path) and DYNAMIC SQL for batch
+    -- ========================================================================
+    LOOP
+        EXIT WHEN v_count >= max_keys;
+
+        -- STEP 1: PEEK using STATIC SQL (plan cached, very fast)
+        IF v_is_asc THEN
+            IF v_upper_bound IS NOT NULL THEN
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" >= v_next_seek AND o.name COLLATE "C" < v_upper_bound
+                ORDER BY o.name COLLATE "C" ASC LIMIT 1;
+            ELSE
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" >= v_next_seek
+                ORDER BY o.name COLLATE "C" ASC LIMIT 1;
+            END IF;
+        ELSE
+            IF v_upper_bound IS NOT NULL THEN
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" < v_next_seek AND o.name COLLATE "C" >= v_prefix
+                ORDER BY o.name COLLATE "C" DESC LIMIT 1;
+            ELSIF v_prefix <> '' THEN
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" < v_next_seek AND o.name COLLATE "C" >= v_prefix
+                ORDER BY o.name COLLATE "C" DESC LIMIT 1;
+            ELSE
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = _bucket_id AND o.name COLLATE "C" < v_next_seek
+                ORDER BY o.name COLLATE "C" DESC LIMIT 1;
+            END IF;
+        END IF;
+
+        EXIT WHEN v_peek_name IS NULL;
+
+        -- STEP 2: Check if this is a FOLDER or FILE
+        v_common_prefix := storage.get_common_prefix(v_peek_name, v_prefix, delimiter_param);
+
+        IF v_common_prefix IS NOT NULL THEN
+            -- FOLDER: Emit and skip to next folder (no heap access needed)
+            name := rtrim(v_common_prefix, delimiter_param);
+            id := NULL;
+            updated_at := NULL;
+            created_at := NULL;
+            last_accessed_at := NULL;
+            metadata := NULL;
+            RETURN NEXT;
+            v_count := v_count + 1;
+
+            -- Advance seek past the folder range
+            IF v_is_asc THEN
+                v_next_seek := left(v_common_prefix, -1) || chr(ascii(delimiter_param) + 1);
+            ELSE
+                v_next_seek := v_common_prefix;
+            END IF;
+        ELSE
+            -- FILE: Batch fetch using DYNAMIC SQL (overhead amortized over many rows)
+            -- For ASC: upper_bound is the exclusive upper limit (< condition)
+            -- For DESC: prefix is the inclusive lower limit (>= condition)
+            FOR v_current IN EXECUTE v_batch_query USING _bucket_id, v_next_seek,
+                CASE WHEN v_is_asc THEN COALESCE(v_upper_bound, v_prefix) ELSE v_prefix END, v_file_batch_size
+            LOOP
+                v_common_prefix := storage.get_common_prefix(v_current.name, v_prefix, delimiter_param);
+
+                IF v_common_prefix IS NOT NULL THEN
+                    -- Hit a folder: exit batch, let peek handle it
+                    v_next_seek := v_current.name;
+                    EXIT;
+                END IF;
+
+                -- Emit file
+                name := v_current.name;
+                id := v_current.id;
+                updated_at := v_current.updated_at;
+                created_at := v_current.created_at;
+                last_accessed_at := v_current.last_accessed_at;
+                metadata := v_current.metadata;
+                RETURN NEXT;
+                v_count := v_count + 1;
+
+                -- Advance seek past this file
+                IF v_is_asc THEN
+                    v_next_seek := v_current.name || delimiter_param;
+                ELSE
+                    v_next_seek := v_current.name;
+                END IF;
+
+                EXIT WHEN v_count >= max_keys;
+            END LOOP;
+        END IF;
+    END LOOP;
+END;
+$_$;
+
+
+ALTER FUNCTION "storage"."list_objects_with_delimiter"("_bucket_id" "text", "prefix_param" "text", "delimiter_param" "text", "max_keys" integer, "start_after" "text", "next_token" "text", "sort_order" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."operation"() RETURNS "text"
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+BEGIN
+    RETURN current_setting('storage.operation', true);
+END;
+$$;
+
+
+ALTER FUNCTION "storage"."operation"() OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."protect_delete"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    -- Check if storage.allow_delete_query is set to 'true'
+    IF COALESCE(current_setting('storage.allow_delete_query', true), 'false') != 'true' THEN
+        RAISE EXCEPTION 'Direct deletion from storage tables is not allowed. Use the Storage API instead.'
+            USING HINT = 'This prevents accidental data loss from orphaned objects.',
+                  ERRCODE = '42501';
+    END IF;
+    RETURN NULL;
+END;
+$$;
+
+
+ALTER FUNCTION "storage"."protect_delete"() OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."search"("prefix" "text", "bucketname" "text", "limits" integer DEFAULT 100, "levels" integer DEFAULT 1, "offsets" integer DEFAULT 0, "search" "text" DEFAULT ''::"text", "sortcolumn" "text" DEFAULT 'name'::"text", "sortorder" "text" DEFAULT 'asc'::"text") RETURNS TABLE("name" "text", "id" "uuid", "updated_at" timestamp with time zone, "created_at" timestamp with time zone, "last_accessed_at" timestamp with time zone, "metadata" "jsonb")
+    LANGUAGE "plpgsql" STABLE
+    AS $_$
+DECLARE
+    v_peek_name TEXT;
+    v_current RECORD;
+    v_common_prefix TEXT;
+    v_delimiter CONSTANT TEXT := '/';
+
+    -- Configuration
+    v_limit INT;
+    v_prefix TEXT;
+    v_prefix_lower TEXT;
+    v_prefix_len INT;
+    v_prefix_start INT;
+    v_combined_levels INT;
+    v_is_asc BOOLEAN;
+    v_order_by TEXT;
+    v_sort_order TEXT;
+    v_upper_bound TEXT;
+    v_file_batch_size INT;
+
+    -- Dynamic SQL for batch query only
+    v_batch_query TEXT;
+
+    -- Seek state
+    v_next_seek TEXT;
+    v_count INT := 0;
+    v_skipped INT := 0;
+BEGIN
+    -- ========================================================================
+    -- INITIALIZATION
+    -- ========================================================================
+    v_limit := LEAST(coalesce(limits, 100), 1500);
+    v_prefix := coalesce(prefix, '') || coalesce(search, '');
+    v_prefix_lower := lower(v_prefix);
+    v_prefix_len := length(coalesce(prefix, ''));
+    v_prefix_start := coalesce(array_length(string_to_array(coalesce(prefix, ''), v_delimiter), 1), 1);
+    v_combined_levels := coalesce(array_length(string_to_array(v_prefix, v_delimiter), 1), 1);
+    v_is_asc := lower(coalesce(sortorder, 'asc')) = 'asc';
+    v_file_batch_size := LEAST(GREATEST(v_limit * 2, 100), 1000);
+
+    -- Validate sort column
+    CASE lower(coalesce(sortcolumn, 'name'))
+        WHEN 'name' THEN v_order_by := 'name';
+        WHEN 'updated_at' THEN v_order_by := 'updated_at';
+        WHEN 'created_at' THEN v_order_by := 'created_at';
+        WHEN 'last_accessed_at' THEN v_order_by := 'last_accessed_at';
+        ELSE v_order_by := 'name';
+    END CASE;
+
+    v_sort_order := CASE WHEN v_is_asc THEN 'asc' ELSE 'desc' END;
+
+    -- ========================================================================
+    -- NON-NAME SORTING: Use path_tokens approach
+    -- ========================================================================
+    IF v_order_by != 'name' THEN
+        RETURN QUERY EXECUTE format(
+            $sql$
+            WITH folders AS (
+                SELECT array_to_string(path_tokens[$1:$2], '/') AS folder
+                FROM storage.objects
+                WHERE objects.name ILIKE $3 || '%%'
+                  AND bucket_id = $4
+                  AND array_length(objects.path_tokens, 1) <> $2
+                GROUP BY folder
+                ORDER BY folder %s
+            )
+            (SELECT folder AS "name",
+                   NULL::uuid AS id,
+                   NULL::timestamptz AS updated_at,
+                   NULL::timestamptz AS created_at,
+                   NULL::timestamptz AS last_accessed_at,
+                   NULL::jsonb AS metadata FROM folders)
+            UNION ALL
+            (SELECT array_to_string(path_tokens[$1:$2], '/') AS "name",
+                   id, updated_at, created_at, last_accessed_at, metadata
+             FROM storage.objects
+             WHERE objects.name ILIKE $3 || '%%'
+               AND bucket_id = $4
+               AND array_length(objects.path_tokens, 1) = $2
+             ORDER BY %I %s)
+            LIMIT $5 OFFSET $6
+            $sql$, v_sort_order, v_order_by, v_sort_order
+        ) USING v_prefix_start, v_combined_levels, v_prefix, bucketname, v_limit, offsets;
+        RETURN;
+    END IF;
+
+    -- ========================================================================
+    -- NAME SORTING: Hybrid skip-scan with batch optimization
+    -- ========================================================================
+
+    -- Calculate upper bound for prefix filtering
+    IF v_prefix_lower = '' THEN
+        v_upper_bound := NULL;
+    ELSIF right(v_prefix_lower, 1) = v_delimiter THEN
+        v_upper_bound := left(v_prefix_lower, -1) || chr(ascii(v_delimiter) + 1);
+    ELSE
+        v_upper_bound := left(v_prefix_lower, -1) || chr(ascii(right(v_prefix_lower, 1)) + 1);
+    END IF;
+
+    -- Build batch query (dynamic SQL - called infrequently, amortized over many rows)
+    IF v_is_asc THEN
+        IF v_upper_bound IS NOT NULL THEN
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND lower(o.name) COLLATE "C" >= $2 ' ||
+                'AND lower(o.name) COLLATE "C" < $3 ORDER BY lower(o.name) COLLATE "C" ASC LIMIT $4';
+        ELSE
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND lower(o.name) COLLATE "C" >= $2 ' ||
+                'ORDER BY lower(o.name) COLLATE "C" ASC LIMIT $4';
+        END IF;
+    ELSE
+        IF v_upper_bound IS NOT NULL THEN
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND lower(o.name) COLLATE "C" < $2 ' ||
+                'AND lower(o.name) COLLATE "C" >= $3 ORDER BY lower(o.name) COLLATE "C" DESC LIMIT $4';
+        ELSE
+            v_batch_query := 'SELECT o.name, o.id, o.updated_at, o.created_at, o.last_accessed_at, o.metadata ' ||
+                'FROM storage.objects o WHERE o.bucket_id = $1 AND lower(o.name) COLLATE "C" < $2 ' ||
+                'ORDER BY lower(o.name) COLLATE "C" DESC LIMIT $4';
+        END IF;
+    END IF;
+
+    -- Initialize seek position
+    IF v_is_asc THEN
+        v_next_seek := v_prefix_lower;
+    ELSE
+        -- DESC: find the last item in range first (static SQL)
+        IF v_upper_bound IS NOT NULL THEN
+            SELECT o.name INTO v_peek_name FROM storage.objects o
+            WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" >= v_prefix_lower AND lower(o.name) COLLATE "C" < v_upper_bound
+            ORDER BY lower(o.name) COLLATE "C" DESC LIMIT 1;
+        ELSIF v_prefix_lower <> '' THEN
+            SELECT o.name INTO v_peek_name FROM storage.objects o
+            WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" >= v_prefix_lower
+            ORDER BY lower(o.name) COLLATE "C" DESC LIMIT 1;
+        ELSE
+            SELECT o.name INTO v_peek_name FROM storage.objects o
+            WHERE o.bucket_id = bucketname
+            ORDER BY lower(o.name) COLLATE "C" DESC LIMIT 1;
+        END IF;
+
+        IF v_peek_name IS NOT NULL THEN
+            v_next_seek := lower(v_peek_name) || v_delimiter;
+        ELSE
+            RETURN;
+        END IF;
+    END IF;
+
+    -- ========================================================================
+    -- MAIN LOOP: Hybrid peek-then-batch algorithm
+    -- Uses STATIC SQL for peek (hot path) and DYNAMIC SQL for batch
+    -- ========================================================================
+    LOOP
+        EXIT WHEN v_count >= v_limit;
+
+        -- STEP 1: PEEK using STATIC SQL (plan cached, very fast)
+        IF v_is_asc THEN
+            IF v_upper_bound IS NOT NULL THEN
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" >= v_next_seek AND lower(o.name) COLLATE "C" < v_upper_bound
+                ORDER BY lower(o.name) COLLATE "C" ASC LIMIT 1;
+            ELSE
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" >= v_next_seek
+                ORDER BY lower(o.name) COLLATE "C" ASC LIMIT 1;
+            END IF;
+        ELSE
+            IF v_upper_bound IS NOT NULL THEN
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" < v_next_seek AND lower(o.name) COLLATE "C" >= v_prefix_lower
+                ORDER BY lower(o.name) COLLATE "C" DESC LIMIT 1;
+            ELSIF v_prefix_lower <> '' THEN
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" < v_next_seek AND lower(o.name) COLLATE "C" >= v_prefix_lower
+                ORDER BY lower(o.name) COLLATE "C" DESC LIMIT 1;
+            ELSE
+                SELECT o.name INTO v_peek_name FROM storage.objects o
+                WHERE o.bucket_id = bucketname AND lower(o.name) COLLATE "C" < v_next_seek
+                ORDER BY lower(o.name) COLLATE "C" DESC LIMIT 1;
+            END IF;
+        END IF;
+
+        EXIT WHEN v_peek_name IS NULL;
+
+        -- STEP 2: Check if this is a FOLDER or FILE
+        v_common_prefix := storage.get_common_prefix(lower(v_peek_name), v_prefix_lower, v_delimiter);
+
+        IF v_common_prefix IS NOT NULL THEN
+            -- FOLDER: Handle offset, emit if needed, skip to next folder
+            IF v_skipped < offsets THEN
+                v_skipped := v_skipped + 1;
+            ELSE
+                name := substring(rtrim(storage.get_common_prefix(v_peek_name, v_prefix, v_delimiter), v_delimiter) from v_prefix_len + 1);
+                id := NULL;
+                updated_at := NULL;
+                created_at := NULL;
+                last_accessed_at := NULL;
+                metadata := NULL;
+                RETURN NEXT;
+                v_count := v_count + 1;
+            END IF;
+
+            -- Advance seek past the folder range
+            IF v_is_asc THEN
+                v_next_seek := lower(left(v_common_prefix, -1)) || chr(ascii(v_delimiter) + 1);
+            ELSE
+                v_next_seek := lower(v_common_prefix);
+            END IF;
+        ELSE
+            -- FILE: Batch fetch using DYNAMIC SQL (overhead amortized over many rows)
+            -- For ASC: upper_bound is the exclusive upper limit (< condition)
+            -- For DESC: prefix_lower is the inclusive lower limit (>= condition)
+            FOR v_current IN EXECUTE v_batch_query
+                USING bucketname, v_next_seek,
+                    CASE WHEN v_is_asc THEN COALESCE(v_upper_bound, v_prefix_lower) ELSE v_prefix_lower END, v_file_batch_size
+            LOOP
+                v_common_prefix := storage.get_common_prefix(lower(v_current.name), v_prefix_lower, v_delimiter);
+
+                IF v_common_prefix IS NOT NULL THEN
+                    -- Hit a folder: exit batch, let peek handle it
+                    v_next_seek := lower(v_current.name);
+                    EXIT;
+                END IF;
+
+                -- Handle offset skipping
+                IF v_skipped < offsets THEN
+                    v_skipped := v_skipped + 1;
+                ELSE
+                    -- Emit file
+                    name := substring(v_current.name from v_prefix_len + 1);
+                    id := v_current.id;
+                    updated_at := v_current.updated_at;
+                    created_at := v_current.created_at;
+                    last_accessed_at := v_current.last_accessed_at;
+                    metadata := v_current.metadata;
+                    RETURN NEXT;
+                    v_count := v_count + 1;
+                END IF;
+
+                -- Advance seek past this file
+                IF v_is_asc THEN
+                    v_next_seek := lower(v_current.name) || v_delimiter;
+                ELSE
+                    v_next_seek := lower(v_current.name);
+                END IF;
+
+                EXIT WHEN v_count >= v_limit;
+            END LOOP;
+        END IF;
+    END LOOP;
+END;
+$_$;
+
+
+ALTER FUNCTION "storage"."search"("prefix" "text", "bucketname" "text", "limits" integer, "levels" integer, "offsets" integer, "search" "text", "sortcolumn" "text", "sortorder" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."search_by_timestamp"("p_prefix" "text", "p_bucket_id" "text", "p_limit" integer, "p_level" integer, "p_start_after" "text", "p_sort_order" "text", "p_sort_column" "text", "p_sort_column_after" "text") RETURNS TABLE("key" "text", "name" "text", "id" "uuid", "updated_at" timestamp with time zone, "created_at" timestamp with time zone, "last_accessed_at" timestamp with time zone, "metadata" "jsonb")
+    LANGUAGE "plpgsql" STABLE
+    AS $_$
+DECLARE
+    v_cursor_op text;
+    v_query text;
+    v_prefix text;
+    v_sort_order text;
+    v_sort_column text;
+BEGIN
+    v_prefix := coalesce(p_prefix, '');
+
+    -- Defense-in-depth: this function is independently reachable and must
+    -- not trust p_sort_order/p_sort_column to already be validated by a
+    -- caller. Normalize to the same strict allow-list storage.search_v2
+    -- uses before interpolating anything into dynamic SQL below.
+    v_sort_order := lower(coalesce(p_sort_order, 'asc'));
+    IF v_sort_order NOT IN ('asc', 'desc') THEN
+        v_sort_order := 'asc';
+    END IF;
+
+    v_sort_column := lower(coalesce(p_sort_column, 'updated_at'));
+    IF v_sort_column NOT IN ('updated_at', 'created_at') THEN
+        v_sort_column := 'updated_at';
+    END IF;
+
+    IF v_sort_order = 'asc' THEN
+        v_cursor_op := '>';
+    ELSE
+        v_cursor_op := '<';
+    END IF;
+
+    v_query := format($sql$
+        WITH raw_objects AS (
+            SELECT
+                o.name AS obj_name,
+                o.id AS obj_id,
+                o.updated_at AS obj_updated_at,
+                o.created_at AS obj_created_at,
+                o.last_accessed_at AS obj_last_accessed_at,
+                o.metadata AS obj_metadata,
+                storage.get_common_prefix(o.name, $1, '/') AS common_prefix
+            FROM storage.objects o
+            WHERE o.bucket_id = $2
+              AND o.name COLLATE "C" LIKE $1 || '%%'
+        ),
+        -- Aggregate common prefixes (folders)
+        -- Both created_at and updated_at use MIN(obj_created_at) to match the old prefixes table behavior
+        aggregated_prefixes AS (
+            SELECT
+                rtrim(common_prefix, '/') AS name,
+                NULL::uuid AS id,
+                MIN(obj_created_at) AS updated_at,
+                MIN(obj_created_at) AS created_at,
+                NULL::timestamptz AS last_accessed_at,
+                NULL::jsonb AS metadata,
+                TRUE AS is_prefix
+            FROM raw_objects
+            WHERE common_prefix IS NOT NULL
+            GROUP BY common_prefix
+        ),
+        leaf_objects AS (
+            SELECT
+                obj_name AS name,
+                obj_id AS id,
+                obj_updated_at AS updated_at,
+                obj_created_at AS created_at,
+                obj_last_accessed_at AS last_accessed_at,
+                obj_metadata AS metadata,
+                FALSE AS is_prefix
+            FROM raw_objects
+            WHERE common_prefix IS NULL
+        ),
+        combined AS (
+            SELECT * FROM aggregated_prefixes
+            UNION ALL
+            SELECT * FROM leaf_objects
+        ),
+        filtered AS (
+            SELECT *
+            FROM combined
+            WHERE (
+                $5 = ''
+                OR ROW(
+                    date_trunc('milliseconds', %I),
+                    name COLLATE "C"
+                ) %s ROW(
+                    COALESCE(NULLIF($6, '')::timestamptz, 'epoch'::timestamptz),
+                    $5
+                )
+            )
+        )
+        SELECT
+            split_part(name, '/', $3) AS key,
+            name,
+            id,
+            updated_at,
+            created_at,
+            last_accessed_at,
+            metadata
+        FROM filtered
+        ORDER BY
+            COALESCE(date_trunc('milliseconds', %I), 'epoch'::timestamptz) %s,
+            name COLLATE "C" %s
+        LIMIT $4
+    $sql$,
+        v_sort_column,
+        v_cursor_op,
+        v_sort_column,
+        v_sort_order,
+        v_sort_order
+    );
+
+    RETURN QUERY EXECUTE v_query
+    USING v_prefix, p_bucket_id, p_level, p_limit, p_start_after, p_sort_column_after;
+END;
+$_$;
+
+
+ALTER FUNCTION "storage"."search_by_timestamp"("p_prefix" "text", "p_bucket_id" "text", "p_limit" integer, "p_level" integer, "p_start_after" "text", "p_sort_order" "text", "p_sort_column" "text", "p_sort_column_after" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."search_v2"("prefix" "text", "bucket_name" "text", "limits" integer DEFAULT 100, "levels" integer DEFAULT 1, "start_after" "text" DEFAULT ''::"text", "sort_order" "text" DEFAULT 'asc'::"text", "sort_column" "text" DEFAULT 'name'::"text", "sort_column_after" "text" DEFAULT ''::"text") RETURNS TABLE("key" "text", "name" "text", "id" "uuid", "updated_at" timestamp with time zone, "created_at" timestamp with time zone, "last_accessed_at" timestamp with time zone, "metadata" "jsonb")
+    LANGUAGE "plpgsql" STABLE
+    AS $$
+DECLARE
+    v_sort_col text;
+    v_sort_ord text;
+    v_limit int;
+BEGIN
+    -- Cap limit to maximum of 1500 records
+    v_limit := LEAST(coalesce(limits, 100), 1500);
+
+    -- Validate and normalize sort_order
+    v_sort_ord := lower(coalesce(sort_order, 'asc'));
+    IF v_sort_ord NOT IN ('asc', 'desc') THEN
+        v_sort_ord := 'asc';
+    END IF;
+
+    -- Validate and normalize sort_column
+    v_sort_col := lower(coalesce(sort_column, 'name'));
+    IF v_sort_col NOT IN ('name', 'updated_at', 'created_at') THEN
+        v_sort_col := 'name';
+    END IF;
+
+    -- Route to appropriate implementation
+    IF v_sort_col = 'name' THEN
+        -- Use list_objects_with_delimiter for name sorting (most efficient: O(k * log n))
+        RETURN QUERY
+        SELECT
+            split_part(l.name, '/', levels) AS key,
+            l.name AS name,
+            l.id,
+            l.updated_at,
+            l.created_at,
+            l.last_accessed_at,
+            l.metadata
+        FROM storage.list_objects_with_delimiter(
+            bucket_name,
+            coalesce(prefix, ''),
+            '/',
+            v_limit,
+            start_after,
+            '',
+            v_sort_ord
+        ) l;
+    ELSE
+        -- Use aggregation approach for timestamp sorting
+        -- Not efficient for large datasets but supports correct pagination
+        RETURN QUERY SELECT * FROM storage.search_by_timestamp(
+            prefix, bucket_name, v_limit, levels, start_after,
+            v_sort_ord, v_sort_col, sort_column_after
+        );
+    END IF;
+END;
+$$;
+
+
+ALTER FUNCTION "storage"."search_v2"("prefix" "text", "bucket_name" "text", "limits" integer, "levels" integer, "start_after" "text", "sort_order" "text", "sort_column" "text", "sort_column_after" "text") OWNER TO "supabase_storage_admin";
+
+
+CREATE OR REPLACE FUNCTION "storage"."update_updated_at_column"() RETURNS "trigger"
+    LANGUAGE "plpgsql"
+    AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW; 
+END;
+$$;
+
+
+ALTER FUNCTION "storage"."update_updated_at_column"() OWNER TO "supabase_storage_admin";
+
+SET default_tablespace = '';
+
+SET default_table_access_method = "heap";
+
+
+CREATE TABLE IF NOT EXISTS "public"."events" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "name" "text" NOT NULL,
+    "date" "date" NOT NULL,
+    "start_date" "date",
+    "end_date" "date",
+    "location" "text",
+    "category" "text",
+    "description" "text",
+    "status" "text" DEFAULT 'DIAJUKAN'::"text",
+    "kabupaten_kota_id" "uuid",
+    "created_by" "uuid",
+    "deleted_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    CONSTRAINT "events_status_check" CHECK (("status" = ANY (ARRAY['DIAJUKAN'::"text", 'DISETUJUI'::"text", 'DITOLAK'::"text", 'SELESAI'::"text"])))
+);
+
+
+ALTER TABLE "public"."events" OWNER TO "postgres";
+
+
+CREATE OR REPLACE VIEW "public"."active_events" WITH ("security_invoker"='on') AS
+ SELECT "id",
+    "name",
+    "date",
+    "start_date",
+    "end_date",
+    "location",
+    "category",
+    "description",
+    "status",
+    "kabupaten_kota_id",
+    "created_by",
+    "deleted_at",
+    "created_at",
+    "updated_at"
+   FROM "public"."events"
+  WHERE ("deleted_at" IS NULL);
+
+
+ALTER VIEW "public"."active_events" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."honors" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "referee_id" "uuid" NOT NULL,
+    "event_id" "uuid",
+    "amount" integer NOT NULL,
+    "status" "text",
+    "notes" "text",
+    "verified_by" "uuid",
+    "verified_at" timestamp with time zone,
+    "deleted_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."honors" OWNER TO "postgres";
+
+
+CREATE OR REPLACE VIEW "public"."active_honors" WITH ("security_invoker"='on') AS
+ SELECT "id",
+    "referee_id",
+    "event_id",
+    "amount",
+    "status",
+    "notes",
+    "verified_by",
+    "verified_at",
+    "deleted_at",
+    "created_at",
+    "updated_at"
+   FROM "public"."honors"
+  WHERE ("deleted_at" IS NULL);
+
+
+ALTER VIEW "public"."active_honors" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."activity_logs" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "actor_id" "uuid",
+    "entity" "text" NOT NULL,
+    "entity_id" "uuid",
+    "action" "text" NOT NULL,
+    "metadata" "jsonb",
+    "created_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."activity_logs" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."audit_logs" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "action" "text" NOT NULL,
+    "entity_type" "text" NOT NULL,
+    "entity_id" "uuid" NOT NULL,
+    "actor_id" "uuid",
+    "old_data" "jsonb",
+    "new_data" "jsonb",
+    "metadata" "jsonb",
+    "created_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."audit_logs" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."auth_attempts" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "email" "text" NOT NULL,
+    "ip_address" "inet",
+    "attempt_type" "text" NOT NULL,
+    "success" boolean NOT NULL,
+    "user_agent" "text",
+    "created_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."auth_attempts" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."auth_event_logs" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "event" "text" NOT NULL,
+    "success" boolean NOT NULL,
+    "user_id" "uuid",
+    "identifier_hash" "text",
+    "metadata" "jsonb"
+);
+
+
+ALTER TABLE "public"."auth_event_logs" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."card_verification_logs" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "card_id" "uuid" NOT NULL,
+    "verified_at" timestamp with time zone DEFAULT "now"(),
+    "ip_address" character varying(45),
+    "user_agent" "text",
+    "location" "text"
+);
+
+
+ALTER TABLE "public"."card_verification_logs" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."discussion_replies" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "topic_id" "uuid" NOT NULL,
+    "author_id" "uuid" NOT NULL,
+    "parent_reply_id" "uuid",
+    "content" "text" NOT NULL,
+    "is_solution" boolean DEFAULT false,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."discussion_replies" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."discussion_topics" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "author_id" "uuid" NOT NULL,
+    "title" "text" NOT NULL,
+    "content" "text" NOT NULL,
+    "category" "text" NOT NULL,
+    "law_reference" "text",
+    "views_count" integer DEFAULT 0,
+    "replies_count" integer DEFAULT 0,
+    "is_pinned" boolean DEFAULT false,
+    "is_locked" boolean DEFAULT false,
+    "last_activity_at" timestamp with time zone DEFAULT "now"(),
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."discussion_topics" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."evaluation_criteria" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "name" "text" NOT NULL,
+    "description" "text",
+    "weight" integer DEFAULT 1 NOT NULL,
+    "sort_order" integer DEFAULT 0,
+    "is_active" boolean DEFAULT true,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."evaluation_criteria" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."evaluation_scores" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "evaluation_id" "uuid" NOT NULL,
+    "criteria_id" "uuid" NOT NULL,
+    "score" integer NOT NULL,
+    "notes" "text",
+    "created_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."evaluation_scores" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."evaluations" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "referee_id" "uuid" NOT NULL,
+    "event_id" "uuid",
+    "evaluator_id" "uuid",
+    "total_score" numeric,
+    "notes" "text",
+    "status" "text" DEFAULT 'draft'::"text",
+    "submitted_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."evaluations" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."event_approvals" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "event_id" "uuid" NOT NULL,
+    "approver_id" "uuid",
+    "status" "text" DEFAULT 'pending'::"text" NOT NULL,
+    "notes" "text",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    "action" "text",
+    "approved_by" "uuid"
+);
+
+
+ALTER TABLE "public"."event_approvals" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."event_assignments" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "event_id" "uuid" NOT NULL,
+    "referee_id" "uuid" NOT NULL,
+    "role" "text" DEFAULT 'referee'::"text",
+    "status" "text" DEFAULT 'pending'::"text",
+    "cancelled_by" "uuid",
+    "cancellation_reason" "text",
+    "deleted_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."event_assignments" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."event_logs" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "event_id" "uuid",
+    "action" "text" NOT NULL,
+    "created_at" timestamp without time zone DEFAULT "now"(),
+    "from_status" "text",
+    "to_status" "text",
+    "performed_by" "uuid"
+);
+
+
+ALTER TABLE "public"."event_logs" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."kabupaten_kota" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "provinsi_id" "uuid",
+    "name" "text" NOT NULL,
+    "code" "text",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."kabupaten_kota" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."learning_materials" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "title" "text" NOT NULL,
+    "description" "text",
+    "category" "text" NOT NULL,
+    "content" "text",
+    "content_type" "text" DEFAULT 'document'::"text" NOT NULL,
+    "content_url" "text",
+    "pdf_url" "text",
+    "video_url" "text",
+    "thumbnail_url" "text",
+    "law_number" "text",
+    "difficulty_level" "text" DEFAULT 'basic'::"text",
+    "duration_minutes" integer,
+    "sort_order" integer DEFAULT 0,
+    "is_published" boolean DEFAULT false,
+    "created_by" "uuid",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."learning_materials" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."learning_progress" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "material_id" "uuid" NOT NULL,
+    "is_completed" boolean DEFAULT false,
+    "completed_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."learning_progress" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."notification_preferences" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "event_enabled" boolean DEFAULT true,
+    "assignment_enabled" boolean DEFAULT true,
+    "honor_enabled" boolean DEFAULT true,
+    "evaluation_enabled" boolean DEFAULT true,
+    "discussion_enabled" boolean DEFAULT true,
+    "learning_enabled" boolean DEFAULT true,
+    "registration_enabled" boolean DEFAULT true,
+    "pengurus_enabled" boolean DEFAULT true,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."notification_preferences" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."notifications" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "type" "text" NOT NULL,
+    "title" "text" NOT NULL,
+    "message" "text",
+    "action" "text" NOT NULL,
+    "entity_type" "text",
+    "entity_id" "uuid",
+    "is_read" boolean DEFAULT false,
+    "read_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."notifications" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."pengurus" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "level" "public"."pengurus_level" NOT NULL,
+    "jabatan" "text" NOT NULL,
+    "provinsi_id" "uuid",
+    "kabupaten_kota_id" "uuid",
+    "is_active" boolean DEFAULT true,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."pengurus" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."profiles" (
+    "id" "uuid" NOT NULL,
+    "full_name" "text" NOT NULL,
+    "birth_date" "date",
+    "occupation" "text",
+    "kabupaten_kota_id" "uuid",
+    "afk_origin" "text",
+    "license_level" "text",
+    "license_expiry" "date",
+    "profile_photo_url" "text",
+    "license_photo_url" "text",
+    "ktp_photo_url" "text",
+    "is_active" boolean DEFAULT true,
+    "is_profile_complete" boolean DEFAULT false,
+    "registration_status" "text" DEFAULT 'approved'::"text",
+    "requested_role" "text",
+    "rejected_reason" "text",
+    "approved_at" timestamp with time zone,
+    "approved_by" "uuid",
+    "deleted_at" timestamp with time zone,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    "email" "text"
+);
+
+
+ALTER TABLE "public"."profiles" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."provinsi" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "name" "text" NOT NULL,
+    "code" "text",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"()
+);
+
+
+ALTER TABLE "public"."provinsi" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."referee_cards" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "referee_id" "uuid" NOT NULL,
+    "card_number" character varying(30) NOT NULL,
+    "verification_code" character varying(64) NOT NULL,
+    "issued_at" timestamp with time zone DEFAULT "now"(),
+    "expires_at" timestamp with time zone,
+    "status" character varying(20) DEFAULT 'active'::character varying,
+    "last_verified_at" timestamp with time zone,
+    "verification_count" integer DEFAULT 0,
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    CONSTRAINT "referee_cards_status_check" CHECK ((("status")::"text" = ANY (ARRAY[('active'::character varying)::"text", ('suspended'::character varying)::"text", ('revoked'::character varying)::"text", ('expired'::character varying)::"text"])))
+);
+
+
+ALTER TABLE "public"."referee_cards" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."referee_reviews" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "referee_id" "uuid" NOT NULL,
+    "reviewer_name" "text",
+    "rating" integer NOT NULL,
+    "comment" "text",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    CONSTRAINT "referee_reviews_rating_check" CHECK ((("rating" >= 1) AND ("rating" <= 5)))
+);
+
+
+ALTER TABLE "public"."referee_reviews" OWNER TO "postgres";
+
+
+CREATE OR REPLACE VIEW "public"."referee_review_stats" WITH ("security_invoker"='on') AS
+ SELECT "referee_id",
+    "avg"("rating") AS "avg_rating",
+    ("count"(*))::integer AS "total_reviews"
+   FROM "public"."referee_reviews"
+  GROUP BY "referee_id";
+
+
+ALTER VIEW "public"."referee_review_stats" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."system_settings" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "key" "text" NOT NULL,
+    "value" "text",
+    "description" "text",
+    "updated_by" "uuid",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "public"."system_settings" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "public"."user_roles" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "user_id" "uuid" NOT NULL,
+    "email" "text",
+    "role" "public"."app_role"
+);
+
+
+ALTER TABLE "public"."user_roles" OWNER TO "postgres";
+
+
+CREATE TABLE IF NOT EXISTS "storage"."buckets" (
+    "id" "text" NOT NULL,
+    "name" "text" NOT NULL,
+    "owner" "uuid",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    "public" boolean DEFAULT false,
+    "avif_autodetection" boolean DEFAULT false,
+    "file_size_limit" bigint,
+    "allowed_mime_types" "text"[],
+    "owner_id" "text",
+    "type" "storage"."buckettype" DEFAULT 'STANDARD'::"storage"."buckettype" NOT NULL,
+    "versioning_status" "text" DEFAULT 'DISABLED'::"text" NOT NULL,
+    CONSTRAINT "buckets_versioning_dark_check" CHECK (("versioning_status" = 'DISABLED'::"text")),
+    CONSTRAINT "buckets_versioning_standard_only_check" CHECK ((("type" = 'STANDARD'::"storage"."buckettype") OR ("versioning_status" = 'DISABLED'::"text"))),
+    CONSTRAINT "buckets_versioning_status_check" CHECK (("versioning_status" = ANY (ARRAY['DISABLED'::"text", 'ENABLED'::"text", 'SUSPENDED'::"text"])))
+);
+
+
+ALTER TABLE "storage"."buckets" OWNER TO "supabase_storage_admin";
+
+
+COMMENT ON COLUMN "storage"."buckets"."owner" IS 'Field is deprecated, use owner_id instead';
+
+
+
+CREATE TABLE IF NOT EXISTS "storage"."buckets_analytics" (
+    "name" "text" NOT NULL,
+    "type" "storage"."buckettype" DEFAULT 'ANALYTICS'::"storage"."buckettype" NOT NULL,
+    "format" "text" DEFAULT 'ICEBERG'::"text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "deleted_at" timestamp with time zone
+);
+
+
+ALTER TABLE "storage"."buckets_analytics" OWNER TO "supabase_storage_admin";
+
+
+CREATE TABLE IF NOT EXISTS "storage"."buckets_vectors" (
+    "id" "text" NOT NULL,
+    "type" "storage"."buckettype" DEFAULT 'VECTOR'::"storage"."buckettype" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "storage"."buckets_vectors" OWNER TO "supabase_storage_admin";
+
+
+CREATE TABLE IF NOT EXISTS "storage"."migrations" (
+    "id" integer NOT NULL,
+    "name" character varying(100) NOT NULL,
+    "hash" character varying(40) NOT NULL,
+    "executed_at" timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE "storage"."migrations" OWNER TO "supabase_storage_admin";
+
+
+CREATE TABLE IF NOT EXISTS "storage"."objects" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "bucket_id" "text",
+    "name" "text",
+    "owner" "uuid",
+    "created_at" timestamp with time zone DEFAULT "now"(),
+    "updated_at" timestamp with time zone DEFAULT "now"(),
+    "last_accessed_at" timestamp with time zone DEFAULT "now"(),
+    "metadata" "jsonb",
+    "path_tokens" "text"[] GENERATED ALWAYS AS ("string_to_array"("name", '/'::"text")) STORED,
+    "version" "text",
+    "owner_id" "text",
+    "user_metadata" "jsonb",
+    "archived_at" timestamp with time zone,
+    "is_delete_marker" boolean DEFAULT false NOT NULL,
+    "is_versioned" boolean DEFAULT false NOT NULL
+);
+
+
+ALTER TABLE "storage"."objects" OWNER TO "supabase_storage_admin";
+
+
+COMMENT ON COLUMN "storage"."objects"."owner" IS 'Field is deprecated, use owner_id instead';
+
+
+
+CREATE TABLE IF NOT EXISTS "storage"."s3_multipart_uploads" (
+    "id" "text" NOT NULL,
+    "in_progress_size" bigint DEFAULT 0 NOT NULL,
+    "upload_signature" "text" NOT NULL,
+    "bucket_id" "text" NOT NULL,
+    "key" "text" NOT NULL COLLATE "pg_catalog"."C",
+    "version" "text" NOT NULL,
+    "owner_id" "text",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "user_metadata" "jsonb",
+    "metadata" "jsonb"
+);
+
+
+ALTER TABLE "storage"."s3_multipart_uploads" OWNER TO "supabase_storage_admin";
+
+
+CREATE TABLE IF NOT EXISTS "storage"."s3_multipart_uploads_parts" (
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
+    "upload_id" "text" NOT NULL,
+    "size" bigint DEFAULT 0 NOT NULL,
+    "part_number" integer NOT NULL,
+    "bucket_id" "text" NOT NULL,
+    "key" "text" NOT NULL COLLATE "pg_catalog"."C",
+    "etag" "text" NOT NULL,
+    "owner_id" "text",
+    "version" "text" NOT NULL,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "storage"."s3_multipart_uploads_parts" OWNER TO "supabase_storage_admin";
+
+
+CREATE TABLE IF NOT EXISTS "storage"."vector_indexes" (
+    "id" "text" DEFAULT "gen_random_uuid"() NOT NULL,
+    "name" "text" NOT NULL COLLATE "pg_catalog"."C",
+    "bucket_id" "text" NOT NULL,
+    "data_type" "text" NOT NULL,
+    "dimension" integer NOT NULL,
+    "distance_metric" "text" NOT NULL,
+    "metadata_configuration" "jsonb",
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
+    "updated_at" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE "storage"."vector_indexes" OWNER TO "supabase_storage_admin";
+
+
+ALTER TABLE ONLY "public"."activity_logs"
+    ADD CONSTRAINT "activity_logs_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."audit_logs"
+    ADD CONSTRAINT "audit_logs_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."auth_attempts"
+    ADD CONSTRAINT "auth_attempts_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."auth_event_logs"
+    ADD CONSTRAINT "auth_event_logs_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."card_verification_logs"
+    ADD CONSTRAINT "card_verification_logs_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."discussion_replies"
+    ADD CONSTRAINT "discussion_replies_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."discussion_topics"
+    ADD CONSTRAINT "discussion_topics_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."evaluation_criteria"
+    ADD CONSTRAINT "evaluation_criteria_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."evaluation_scores"
+    ADD CONSTRAINT "evaluation_scores_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."evaluations"
+    ADD CONSTRAINT "evaluations_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."event_approvals"
+    ADD CONSTRAINT "event_approvals_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."event_assignments"
+    ADD CONSTRAINT "event_assignments_event_id_referee_id_key" UNIQUE ("event_id", "referee_id");
+
+
+
+ALTER TABLE ONLY "public"."event_assignments"
+    ADD CONSTRAINT "event_assignments_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."event_logs"
+    ADD CONSTRAINT "event_logs_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."events"
+    ADD CONSTRAINT "events_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."honors"
+    ADD CONSTRAINT "honors_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."kabupaten_kota"
+    ADD CONSTRAINT "kabupaten_kota_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."learning_materials"
+    ADD CONSTRAINT "learning_materials_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."learning_progress"
+    ADD CONSTRAINT "learning_progress_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."learning_progress"
+    ADD CONSTRAINT "learning_progress_user_id_material_id_key" UNIQUE ("user_id", "material_id");
+
+
+
+ALTER TABLE ONLY "public"."notification_preferences"
+    ADD CONSTRAINT "notification_preferences_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."notification_preferences"
+    ADD CONSTRAINT "notification_preferences_user_id_key" UNIQUE ("user_id");
+
+
+
+ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."pengurus"
+    ADD CONSTRAINT "pengurus_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."provinsi"
+    ADD CONSTRAINT "provinsi_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."referee_cards"
+    ADD CONSTRAINT "referee_cards_card_number_key" UNIQUE ("card_number");
+
+
+
+ALTER TABLE ONLY "public"."referee_cards"
+    ADD CONSTRAINT "referee_cards_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."referee_cards"
+    ADD CONSTRAINT "referee_cards_referee_id_key" UNIQUE ("referee_id");
+
+
+
+ALTER TABLE ONLY "public"."referee_cards"
+    ADD CONSTRAINT "referee_cards_verification_code_key" UNIQUE ("verification_code");
+
+
+
+ALTER TABLE ONLY "public"."referee_reviews"
+    ADD CONSTRAINT "referee_reviews_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."system_settings"
+    ADD CONSTRAINT "system_settings_key_key" UNIQUE ("key");
+
+
+
+ALTER TABLE ONLY "public"."system_settings"
+    ADD CONSTRAINT "system_settings_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "public"."user_roles"
+    ADD CONSTRAINT "user_roles_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."buckets_analytics"
+    ADD CONSTRAINT "buckets_analytics_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."buckets"
+    ADD CONSTRAINT "buckets_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."buckets_vectors"
+    ADD CONSTRAINT "buckets_vectors_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."migrations"
+    ADD CONSTRAINT "migrations_name_key" UNIQUE ("name");
+
+
+
+ALTER TABLE ONLY "storage"."migrations"
+    ADD CONSTRAINT "migrations_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."objects"
+    ADD CONSTRAINT "objects_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."s3_multipart_uploads_parts"
+    ADD CONSTRAINT "s3_multipart_uploads_parts_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."s3_multipart_uploads"
+    ADD CONSTRAINT "s3_multipart_uploads_pkey" PRIMARY KEY ("id");
+
+
+
+ALTER TABLE ONLY "storage"."vector_indexes"
+    ADD CONSTRAINT "vector_indexes_pkey" PRIMARY KEY ("id");
+
+
+
+CREATE INDEX "event_approvals_approved_by_idx" ON "public"."event_approvals" USING "btree" ("approved_by");
+
+
+
+CREATE INDEX "idx_audit_logs_actor_id" ON "public"."audit_logs" USING "btree" ("actor_id");
+
+
+
+CREATE INDEX "idx_audit_logs_created_at" ON "public"."audit_logs" USING "btree" ("created_at");
+
+
+
+CREATE INDEX "idx_audit_logs_entity_id" ON "public"."audit_logs" USING "btree" ("entity_id");
+
+
+
+CREATE INDEX "idx_audit_logs_entity_type" ON "public"."audit_logs" USING "btree" ("entity_type");
+
+
+
+CREATE INDEX "idx_card_verification_logs_card_id" ON "public"."card_verification_logs" USING "btree" ("card_id");
+
+
+
+CREATE INDEX "idx_discussion_replies_author_id" ON "public"."discussion_replies" USING "btree" ("author_id");
+
+
+
+CREATE INDEX "idx_discussion_replies_topic_id" ON "public"."discussion_replies" USING "btree" ("topic_id");
+
+
+
+CREATE INDEX "idx_discussion_topics_author_id" ON "public"."discussion_topics" USING "btree" ("author_id");
+
+
+
+CREATE INDEX "idx_discussion_topics_category" ON "public"."discussion_topics" USING "btree" ("category");
+
+
+
+CREATE INDEX "idx_evaluations_evaluator_id" ON "public"."evaluations" USING "btree" ("evaluator_id");
+
+
+
+CREATE INDEX "idx_evaluations_event_id" ON "public"."evaluations" USING "btree" ("event_id");
+
+
+
+CREATE INDEX "idx_evaluations_referee_id" ON "public"."evaluations" USING "btree" ("referee_id");
+
+
+
+CREATE INDEX "idx_evaluations_status" ON "public"."evaluations" USING "btree" ("status");
+
+
+
+CREATE INDEX "idx_event_assignments_deleted_at" ON "public"."event_assignments" USING "btree" ("deleted_at");
+
+
+
+CREATE INDEX "idx_event_assignments_event_id" ON "public"."event_assignments" USING "btree" ("event_id");
+
+
+
+CREATE INDEX "idx_event_assignments_referee_id" ON "public"."event_assignments" USING "btree" ("referee_id");
+
+
+
+CREATE INDEX "idx_event_assignments_status" ON "public"."event_assignments" USING "btree" ("status");
+
+
+
+CREATE INDEX "idx_events_created_by" ON "public"."events" USING "btree" ("created_by");
+
+
+
+CREATE INDEX "idx_events_date" ON "public"."events" USING "btree" ("date");
+
+
+
+CREATE INDEX "idx_events_deleted_at" ON "public"."events" USING "btree" ("deleted_at");
+
+
+
+CREATE INDEX "idx_events_kabupaten_kota_id" ON "public"."events" USING "btree" ("kabupaten_kota_id");
+
+
+
+CREATE INDEX "idx_events_status" ON "public"."events" USING "btree" ("status");
+
+
+
+CREATE INDEX "idx_honors_deleted_at" ON "public"."honors" USING "btree" ("deleted_at");
+
+
+
+CREATE INDEX "idx_honors_event_id" ON "public"."honors" USING "btree" ("event_id");
+
+
+
+CREATE INDEX "idx_honors_referee_id" ON "public"."honors" USING "btree" ("referee_id");
+
+
+
+CREATE INDEX "idx_honors_status" ON "public"."honors" USING "btree" ("status");
+
+
+
+CREATE INDEX "idx_learning_materials_category" ON "public"."learning_materials" USING "btree" ("category");
+
+
+
+CREATE INDEX "idx_learning_materials_is_published" ON "public"."learning_materials" USING "btree" ("is_published");
+
+
+
+CREATE INDEX "idx_learning_progress_material_id" ON "public"."learning_progress" USING "btree" ("material_id");
+
+
+
+CREATE INDEX "idx_learning_progress_user_id" ON "public"."learning_progress" USING "btree" ("user_id");
+
+
+
+CREATE INDEX "idx_notification_preferences_user" ON "public"."notification_preferences" USING "btree" ("user_id");
+
+
+
+CREATE INDEX "idx_notifications_user_created" ON "public"."notifications" USING "btree" ("user_id", "created_at" DESC);
+
+
+
+CREATE INDEX "idx_notifications_user_unread" ON "public"."notifications" USING "btree" ("user_id", "is_read", "created_at" DESC) WHERE ("is_read" = false);
+
+
+
+CREATE INDEX "idx_profiles_deleted_at" ON "public"."profiles" USING "btree" ("deleted_at");
+
+
+
+CREATE INDEX "idx_profiles_is_active" ON "public"."profiles" USING "btree" ("is_active");
+
+
+
+CREATE INDEX "idx_profiles_kabupaten_kota_id" ON "public"."profiles" USING "btree" ("kabupaten_kota_id");
+
+
+
+CREATE INDEX "idx_profiles_registration_status" ON "public"."profiles" USING "btree" ("registration_status");
+
+
+
+CREATE INDEX "idx_profiles_search" ON "public"."profiles" USING "gin" ("full_name" "public"."gin_trgm_ops");
+
+
+
+CREATE INDEX "idx_profiles_search_afk" ON "public"."profiles" USING "gin" ("afk_origin" "public"."gin_trgm_ops");
+
+
+
+CREATE INDEX "idx_profiles_search_name" ON "public"."profiles" USING "gin" ("full_name" "public"."gin_trgm_ops");
+
+
+
+CREATE INDEX "idx_referee_cards_card_number" ON "public"."referee_cards" USING "btree" ("card_number");
+
+
+
+CREATE INDEX "idx_referee_cards_status" ON "public"."referee_cards" USING "btree" ("status");
+
+
+
+CREATE INDEX "idx_referee_cards_verification_code" ON "public"."referee_cards" USING "btree" ("verification_code");
+
+
+
+CREATE INDEX "idx_referee_reviews_referee_id" ON "public"."referee_reviews" USING "btree" ("referee_id");
+
+
+
+CREATE INDEX "idx_user_roles_role" ON "public"."user_roles" USING "btree" ("role");
+
+
+
+CREATE INDEX "idx_user_roles_user_id" ON "public"."user_roles" USING "btree" ("user_id");
+
+
+
+CREATE UNIQUE INDEX "bname" ON "storage"."buckets" USING "btree" ("name");
+
+
+
+CREATE UNIQUE INDEX "bucketid_objname" ON "storage"."objects" USING "btree" ("bucket_id", "name");
+
+
+
+CREATE UNIQUE INDEX "buckets_analytics_unique_name_idx" ON "storage"."buckets_analytics" USING "btree" ("name") WHERE ("deleted_at" IS NULL);
+
+
+
+CREATE INDEX "idx_multipart_uploads_list" ON "storage"."s3_multipart_uploads" USING "btree" ("bucket_id", "key", "created_at");
+
+
+
+CREATE INDEX "idx_objects_bucket_id_name" ON "storage"."objects" USING "btree" ("bucket_id", "name" COLLATE "C");
+
+
+
+CREATE INDEX "idx_objects_bucket_id_name_lower" ON "storage"."objects" USING "btree" ("bucket_id", "lower"("name") COLLATE "C");
+
+
+
+CREATE UNIQUE INDEX "idx_objects_current_version" ON "storage"."objects" USING "btree" ("bucket_id", "name" COLLATE "C") WHERE ("archived_at" IS NULL);
+
+
+
+CREATE UNIQUE INDEX "idx_objects_null_version" ON "storage"."objects" USING "btree" ("bucket_id", "name" COLLATE "C") WHERE (NOT "is_versioned");
+
+
+
+CREATE INDEX "name_prefix_search" ON "storage"."objects" USING "btree" ("name" "text_pattern_ops");
+
+
+
+CREATE UNIQUE INDEX "objects_bucket_id_name_version_key" ON "storage"."objects" USING "btree" ("bucket_id", "name" COLLATE "C", "version") NULLS NOT DISTINCT;
+
+
+
+CREATE UNIQUE INDEX "vector_indexes_name_bucket_id_idx" ON "storage"."vector_indexes" USING "btree" ("name", "bucket_id");
+
+
+
+CREATE OR REPLACE TRIGGER "handle_honor_verification_trigger" BEFORE UPDATE ON "public"."honors" FOR EACH ROW EXECUTE FUNCTION "public"."handle_honor_verification"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_honor_verification_trigger" AFTER UPDATE ON "public"."honors" FOR EACH ROW EXECUTE FUNCTION "public"."log_honor_verification"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_referee_assignment_trigger" AFTER INSERT OR DELETE OR UPDATE ON "public"."event_assignments" FOR EACH ROW EXECUTE FUNCTION "public"."log_referee_assignment"();
+
+
+
+CREATE OR REPLACE TRIGGER "log_registration_approval_trigger" AFTER UPDATE ON "public"."profiles" FOR EACH ROW EXECUTE FUNCTION "public"."log_registration_approval"();
+
+
+
+CREATE OR REPLACE TRIGGER "on_license_expiry_update" AFTER UPDATE OF "license_expiry" ON "public"."profiles" FOR EACH ROW WHEN (("old"."license_expiry" IS DISTINCT FROM "new"."license_expiry")) EXECUTE FUNCTION "public"."sync_card_expiry"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_discussion_replies" BEFORE UPDATE ON "public"."discussion_replies" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_discussion_topics" BEFORE UPDATE ON "public"."discussion_topics" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_evaluation_criteria" BEFORE UPDATE ON "public"."evaluation_criteria" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_evaluations" BEFORE UPDATE ON "public"."evaluations" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_event_assignments" BEFORE UPDATE ON "public"."event_assignments" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_events" BEFORE UPDATE ON "public"."events" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_honors" BEFORE UPDATE ON "public"."honors" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_kabupaten_kota" BEFORE UPDATE ON "public"."kabupaten_kota" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_learning_materials" BEFORE UPDATE ON "public"."learning_materials" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_pengurus" BEFORE UPDATE ON "public"."pengurus" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_profiles" BEFORE UPDATE ON "public"."profiles" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "set_updated_at_provinsi" BEFORE UPDATE ON "public"."provinsi" FOR EACH ROW EXECUTE FUNCTION "public"."set_updated_at"();
+
+
+
+CREATE OR REPLACE TRIGGER "trg_log_event_approval" AFTER INSERT ON "public"."event_approvals" FOR EACH ROW EXECUTE FUNCTION "public"."log_event_approval"();
+
+
+
+CREATE OR REPLACE TRIGGER "update_notification_preferences_updated_at" BEFORE UPDATE ON "public"."notification_preferences" FOR EACH ROW EXECUTE FUNCTION "public"."update_updated_at_column"();
+
+
+
+CREATE OR REPLACE TRIGGER "update_referee_cards_updated_at" BEFORE UPDATE ON "public"."referee_cards" FOR EACH ROW EXECUTE FUNCTION "public"."update_updated_at_column"();
+
+
+
+CREATE OR REPLACE TRIGGER "update_topic_reply_count_trigger" AFTER INSERT OR DELETE ON "public"."discussion_replies" FOR EACH ROW EXECUTE FUNCTION "public"."update_topic_reply_count"();
+
+
+
+CREATE OR REPLACE TRIGGER "validate_honor_submission_trigger" BEFORE INSERT OR UPDATE ON "public"."honors" FOR EACH ROW EXECUTE FUNCTION "public"."validate_honor_submission"();
+
+
+
+CREATE OR REPLACE TRIGGER "enforce_bucket_name_length_trigger" BEFORE INSERT OR UPDATE OF "name" ON "storage"."buckets" FOR EACH ROW EXECUTE FUNCTION "storage"."enforce_bucket_name_length"();
+
+
+
+CREATE OR REPLACE TRIGGER "protect_buckets_delete" BEFORE DELETE ON "storage"."buckets" FOR EACH STATEMENT EXECUTE FUNCTION "storage"."protect_delete"();
+
+
+
+CREATE OR REPLACE TRIGGER "protect_objects_delete" BEFORE DELETE ON "storage"."objects" FOR EACH STATEMENT EXECUTE FUNCTION "storage"."protect_delete"();
+
+
+
+CREATE OR REPLACE TRIGGER "update_objects_updated_at" BEFORE UPDATE ON "storage"."objects" FOR EACH ROW EXECUTE FUNCTION "storage"."update_updated_at_column"();
+
+
+
+ALTER TABLE ONLY "public"."card_verification_logs"
+    ADD CONSTRAINT "card_verification_logs_card_id_fkey" FOREIGN KEY ("card_id") REFERENCES "public"."referee_cards"("id");
+
+
+
+ALTER TABLE ONLY "public"."discussion_replies"
+    ADD CONSTRAINT "discussion_replies_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."discussion_replies"
+    ADD CONSTRAINT "discussion_replies_parent_reply_id_fkey" FOREIGN KEY ("parent_reply_id") REFERENCES "public"."discussion_replies"("id");
+
+
+
+ALTER TABLE ONLY "public"."discussion_replies"
+    ADD CONSTRAINT "discussion_replies_topic_id_fkey" FOREIGN KEY ("topic_id") REFERENCES "public"."discussion_topics"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."discussion_topics"
+    ADD CONSTRAINT "discussion_topics_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."evaluation_scores"
+    ADD CONSTRAINT "evaluation_scores_criteria_id_fkey" FOREIGN KEY ("criteria_id") REFERENCES "public"."evaluation_criteria"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."evaluation_scores"
+    ADD CONSTRAINT "evaluation_scores_evaluation_id_fkey" FOREIGN KEY ("evaluation_id") REFERENCES "public"."evaluations"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."evaluations"
+    ADD CONSTRAINT "evaluations_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "public"."events"("id");
+
+
+
+ALTER TABLE ONLY "public"."evaluations"
+    ADD CONSTRAINT "evaluations_referee_id_fkey" FOREIGN KEY ("referee_id") REFERENCES "public"."profiles"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."event_approvals"
+    ADD CONSTRAINT "event_approvals_approver_id_fkey" FOREIGN KEY ("approver_id") REFERENCES "public"."profiles"("id") ON DELETE SET NULL;
+
+
+
+ALTER TABLE ONLY "public"."event_assignments"
+    ADD CONSTRAINT "event_assignments_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "public"."events"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."event_assignments"
+    ADD CONSTRAINT "event_assignments_referee_id_fkey" FOREIGN KEY ("referee_id") REFERENCES "public"."profiles"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."events"
+    ADD CONSTRAINT "events_created_by_fkey" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id");
+
+
+
+ALTER TABLE ONLY "public"."events"
+    ADD CONSTRAINT "events_kabupaten_kota_id_fkey" FOREIGN KEY ("kabupaten_kota_id") REFERENCES "public"."kabupaten_kota"("id");
+
+
+
+ALTER TABLE ONLY "public"."honors"
+    ADD CONSTRAINT "honors_event_id_fkey" FOREIGN KEY ("event_id") REFERENCES "public"."events"("id");
+
+
+
+ALTER TABLE ONLY "public"."honors"
+    ADD CONSTRAINT "honors_referee_id_fkey" FOREIGN KEY ("referee_id") REFERENCES "public"."profiles"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."honors"
+    ADD CONSTRAINT "honors_verified_by_fkey" FOREIGN KEY ("verified_by") REFERENCES "public"."profiles"("id");
+
+
+
+ALTER TABLE ONLY "public"."kabupaten_kota"
+    ADD CONSTRAINT "kabupaten_kota_provinsi_id_fkey" FOREIGN KEY ("provinsi_id") REFERENCES "public"."provinsi"("id");
+
+
+
+ALTER TABLE ONLY "public"."learning_progress"
+    ADD CONSTRAINT "learning_progress_material_id_fkey" FOREIGN KEY ("material_id") REFERENCES "public"."learning_materials"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."learning_progress"
+    ADD CONSTRAINT "learning_progress_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."notification_preferences"
+    ADD CONSTRAINT "notification_preferences_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."notifications"
+    ADD CONSTRAINT "notifications_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."pengurus"
+    ADD CONSTRAINT "pengurus_kabupaten_kota_id_fkey" FOREIGN KEY ("kabupaten_kota_id") REFERENCES "public"."kabupaten_kota"("id");
+
+
+
+ALTER TABLE ONLY "public"."pengurus"
+    ADD CONSTRAINT "pengurus_provinsi_id_fkey" FOREIGN KEY ("provinsi_id") REFERENCES "public"."provinsi"("id");
+
+
+
+ALTER TABLE ONLY "public"."pengurus"
+    ADD CONSTRAINT "pengurus_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_id_fkey" FOREIGN KEY ("id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."profiles"
+    ADD CONSTRAINT "profiles_kabupaten_kota_id_fkey" FOREIGN KEY ("kabupaten_kota_id") REFERENCES "public"."kabupaten_kota"("id");
+
+
+
+ALTER TABLE ONLY "public"."referee_cards"
+    ADD CONSTRAINT "referee_cards_referee_id_fkey" FOREIGN KEY ("referee_id") REFERENCES "public"."profiles"("id");
+
+
+
+ALTER TABLE ONLY "public"."referee_reviews"
+    ADD CONSTRAINT "referee_reviews_referee_id_fkey" FOREIGN KEY ("referee_id") REFERENCES "public"."profiles"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "public"."user_roles"
+    ADD CONSTRAINT "user_roles_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "storage"."objects"
+    ADD CONSTRAINT "objects_bucketId_fkey" FOREIGN KEY ("bucket_id") REFERENCES "storage"."buckets"("id");
+
+
+
+ALTER TABLE ONLY "storage"."s3_multipart_uploads"
+    ADD CONSTRAINT "s3_multipart_uploads_bucket_id_fkey" FOREIGN KEY ("bucket_id") REFERENCES "storage"."buckets"("id");
+
+
+
+ALTER TABLE ONLY "storage"."s3_multipart_uploads_parts"
+    ADD CONSTRAINT "s3_multipart_uploads_parts_bucket_id_fkey" FOREIGN KEY ("bucket_id") REFERENCES "storage"."buckets"("id");
+
+
+
+ALTER TABLE ONLY "storage"."s3_multipart_uploads_parts"
+    ADD CONSTRAINT "s3_multipart_uploads_parts_upload_id_fkey" FOREIGN KEY ("upload_id") REFERENCES "storage"."s3_multipart_uploads"("id") ON DELETE CASCADE;
+
+
+
+ALTER TABLE ONLY "storage"."vector_indexes"
+    ADD CONSTRAINT "vector_indexes_bucket_id_fkey" FOREIGN KEY ("bucket_id") REFERENCES "storage"."buckets_vectors"("id");
+
+
+
+CREATE POLICY "Admin can insert approvals" ON "public"."event_approvals" FOR INSERT WITH CHECK (("public"."is_admin"("auth"."uid"()) OR "public"."has_role"("auth"."uid"(), 'panitia'::"public"."app_role")));
+
+
+
+CREATE POLICY "Admin can manage all materials" ON "public"."learning_materials" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin can manage all scores" ON "public"."evaluation_scores" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin can manage criteria" ON "public"."evaluation_criteria" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin can update all evaluations" ON "public"."evaluations" FOR UPDATE USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin kab kota can manage own pengurus" ON "public"."pengurus" USING (("public"."is_admin_kab_kota"("auth"."uid"()) AND ("kabupaten_kota_id" = "public"."get_user_kabupaten_kota_id"("auth"."uid"())) AND ("level" = 'KAB_KOTA'::"public"."pengurus_level")));
+
+
+
+CREATE POLICY "Admin kab_kota can manage pengurus in their region" ON "public"."pengurus" USING (("public"."has_role"("auth"."uid"(), 'admin_kab_kota'::"public"."app_role") AND ("level" = 'KAB_KOTA'::"public"."pengurus_level") AND ("kabupaten_kota_id" = "public"."get_user_kabupaten_kota"("auth"."uid"()))));
+
+
+
+CREATE POLICY "Admin kab_kota can update profiles in their region" ON "public"."profiles" FOR UPDATE USING (("public"."has_role"("auth"."uid"(), 'admin_kab_kota'::"public"."app_role") AND ("kabupaten_kota_id" = "public"."get_user_kabupaten_kota"("auth"."uid"()))));
+
+
+
+CREATE POLICY "Admin kab_kota can view profiles in their region" ON "public"."profiles" FOR SELECT USING (("public"."has_role"("auth"."uid"(), 'admin_kab_kota'::"public"."app_role") AND ("kabupaten_kota_id" = "public"."get_user_kabupaten_kota"("auth"."uid"()))));
+
+
+
+CREATE POLICY "Admin provinsi can insert profiles" ON "public"."profiles" FOR INSERT WITH CHECK ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin provinsi can manage all pengurus" ON "public"."pengurus" USING ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin provinsi can manage kabupaten_kota" ON "public"."kabupaten_kota" USING ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin provinsi can manage provinsi" ON "public"."provinsi" USING ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin provinsi can manage user_roles" ON "public"."user_roles" USING ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin provinsi can update all profiles" ON "public"."profiles" FOR UPDATE USING ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admin provinsi can view all profiles" ON "public"."profiles" FOR SELECT USING ("public"."is_admin_provinsi"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can create events" ON "public"."events" FOR INSERT WITH CHECK (("public"."is_admin"("auth"."uid"()) OR "public"."has_role"("auth"."uid"(), 'panitia'::"public"."app_role")));
+
+
+
+CREATE POLICY "Admins can delete events" ON "public"."events" FOR DELETE USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can manage all cards" ON "public"."referee_cards" USING ("public"."is_admin"("auth"."uid"())) WITH CHECK ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can manage assignments" ON "public"."event_assignments" USING (("public"."is_admin"("auth"."uid"()) OR "public"."has_role"("auth"."uid"(), 'panitia'::"public"."app_role")));
+
+
+
+CREATE POLICY "Admins can manage event approvals" ON "public"."event_approvals" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can manage roles" ON "public"."user_roles" TO "authenticated" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can update all honors" ON "public"."honors" FOR UPDATE USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can update all profiles" ON "public"."profiles" FOR UPDATE TO "authenticated" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can update events" ON "public"."events" FOR UPDATE USING (("public"."is_admin"("auth"."uid"()) OR "public"."has_role"("auth"."uid"(), 'panitia'::"public"."app_role")));
+
+
+
+CREATE POLICY "Admins can view all assignments" ON "public"."event_assignments" FOR SELECT USING (("public"."is_admin"("auth"."uid"()) OR "public"."has_role"("auth"."uid"(), 'panitia'::"public"."app_role")));
+
+
+
+CREATE POLICY "Admins can view all cards" ON "public"."referee_cards" FOR SELECT USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view all evaluations" ON "public"."evaluations" FOR SELECT USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view all honors" ON "public"."honors" FOR SELECT USING ((("deleted_at" IS NULL) AND "public"."is_admin"("auth"."uid"())));
+
+
+
+CREATE POLICY "Admins can view all profiles" ON "public"."profiles" FOR SELECT TO "authenticated" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view all roles" ON "public"."user_roles" FOR SELECT TO "authenticated" USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view all verification logs" ON "public"."card_verification_logs" FOR SELECT USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view audit logs" ON "public"."audit_logs" FOR SELECT USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view auth event logs" ON "public"."auth_event_logs" FOR SELECT USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Admins can view event approvals" ON "public"."event_approvals" FOR SELECT USING ("public"."is_admin"("auth"."uid"()));
+
+
+
+CREATE POLICY "Anyone authenticated can view pengurus" ON "public"."pengurus" FOR SELECT USING (("auth"."uid"() IS NOT NULL));
+
+
+
+CREATE POLICY "Anyone can insert verification logs" ON "public"."card_verification_logs" FOR INSERT WITH CHECK (("card_id" IS NOT NULL));
+
+
+
+CREATE POLICY "Anyone can submit reviews" ON "public"."referee_reviews" FOR INSERT WITH CHECK (true);
+
+
+
+CREATE POLICY "Anyone can view reviews" ON "public"."referee_reviews" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Authenticated users can create replies" ON "public"."discussion_replies" FOR INSERT WITH CHECK (("auth"."uid"() = "author_id"));
+
+
+
+CREATE POLICY "Authenticated users can create topics" ON "public"."discussion_topics" FOR INSERT WITH CHECK (("auth"."uid"() = "author_id"));
+
+
+
+CREATE POLICY "Authenticated users can insert notifications" ON "public"."notifications" FOR INSERT WITH CHECK (("auth"."uid"() IS NOT NULL));
+
+
+
+CREATE POLICY "Authenticated users can view replies" ON "public"."discussion_replies" FOR SELECT USING (("auth"."uid"() IS NOT NULL));
+
+
+
+CREATE POLICY "Authenticated users can view topics" ON "public"."discussion_topics" FOR SELECT USING (("auth"."uid"() IS NOT NULL));
+
+
+
+CREATE POLICY "Authors can delete their own replies" ON "public"."discussion_replies" FOR DELETE USING ((("auth"."uid"() = "author_id") OR "public"."is_admin"("auth"."uid"())));
+
+
+
+CREATE POLICY "Authors can delete their own topics" ON "public"."discussion_topics" FOR DELETE USING ((("auth"."uid"() = "author_id") OR "public"."is_admin"("auth"."uid"())));
+
+
+
+CREATE POLICY "Authors can update their own replies" ON "public"."discussion_replies" FOR UPDATE USING ((("auth"."uid"() = "author_id") OR "public"."is_admin"("auth"."uid"())));
+
+
+
+CREATE POLICY "Authors can update their own topics" ON "public"."discussion_topics" FOR UPDATE USING ((("auth"."uid"() = "author_id") OR "public"."is_admin"("auth"."uid"())));
+
+
+
+CREATE POLICY "Evaluators can create evaluations" ON "public"."evaluations" FOR INSERT WITH CHECK (("auth"."uid"() = "evaluator_id"));
+
+
+
+CREATE POLICY "Evaluators can manage scores for their evaluations" ON "public"."evaluation_scores" USING ((EXISTS ( SELECT 1
+   FROM "public"."evaluations" "e"
+  WHERE (("e"."id" = "evaluation_scores"."evaluation_id") AND ("e"."evaluator_id" = "auth"."uid"()) AND ("e"."status" = 'draft'::"text")))));
+
+
+
+CREATE POLICY "Evaluators can update their draft evaluations" ON "public"."evaluations" FOR UPDATE USING ((("auth"."uid"() = "evaluator_id") AND ("status" = 'draft'::"text")));
+
+
+
+CREATE POLICY "Evaluators can view their own evaluations" ON "public"."evaluations" FOR SELECT USING (("auth"."uid"() = "evaluator_id"));
+
+
+
+CREATE POLICY "Everyone can view active criteria" ON "public"."evaluation_criteria" FOR SELECT USING (("is_active" = true));
+
+
+
+CREATE POLICY "Everyone can view event approvals" ON "public"."event_approvals" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Everyone can view events" ON "public"."events" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Everyone can view kabupaten_kota" ON "public"."kabupaten_kota" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Everyone can view pengurus" ON "public"."pengurus" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Everyone can view provinsi" ON "public"."provinsi" FOR SELECT USING (true);
+
+
+
+CREATE POLICY "Everyone can view published materials" ON "public"."learning_materials" FOR SELECT USING (("is_published" = true));
+
+
+
+CREATE POLICY "Public can insert auth event logs (restricted)" ON "public"."auth_event_logs" FOR INSERT WITH CHECK ((("event" = ANY (ARRAY['AUTH_LOGIN'::"text", 'AUTH_LOGOUT'::"text", 'AUTH_PASSWORD_RESET'::"text", 'AUTH_LOGIN_FAILED'::"text"])) AND ("success" = ANY (ARRAY[true, false])) AND ((("user_id" IS NOT NULL) AND ("auth"."uid"() = "user_id")) OR (("user_id" IS NULL) AND ("identifier_hash" IS NOT NULL)))));
+
+
+
+CREATE POLICY "Public can view referee profiles" ON "public"."profiles" FOR SELECT USING (("deleted_at" IS NULL));
+
+
+
+CREATE POLICY "Referees can create their own honors" ON "public"."honors" FOR INSERT WITH CHECK (("auth"."uid"() = "referee_id"));
+
+
+
+CREATE POLICY "Referees can delete their own draft honors" ON "public"."honors" FOR UPDATE USING ((("deleted_at" IS NULL) AND ("auth"."uid"() = "referee_id") AND ("status" = 'draft'::"text")));
+
+
+
+CREATE POLICY "Referees can insert own card" ON "public"."referee_cards" FOR INSERT TO "authenticated" WITH CHECK (("referee_id" = "auth"."uid"()));
+
+
+
+CREATE POLICY "Referees can update their own assignment status" ON "public"."event_assignments" FOR UPDATE USING ((("referee_id" = "auth"."uid"()) AND ("deleted_at" IS NULL))) WITH CHECK ((("referee_id" = "auth"."uid"()) AND ("status" = ANY (ARRAY['confirmed'::"text", 'declined'::"text"]))));
+
+
+
+CREATE POLICY "Referees can update their own draft honors" ON "public"."honors" FOR UPDATE USING ((("auth"."uid"() = "referee_id") AND ("status" = 'draft'::"text")));
+
+
+
+CREATE POLICY "Referees can view their own assignments" ON "public"."event_assignments" FOR SELECT USING (("auth"."uid"() = "referee_id"));
+
+
+
+CREATE POLICY "Referees can view their own card" ON "public"."referee_cards" FOR SELECT USING (("auth"."uid"() = "referee_id"));
+
+
+
+CREATE POLICY "Referees can view their own card logs" ON "public"."card_verification_logs" FOR SELECT USING ((EXISTS ( SELECT 1
+   FROM "public"."referee_cards" "rc"
+  WHERE (("rc"."id" = "card_verification_logs"."card_id") AND ("rc"."referee_id" = "auth"."uid"())))));
+
+
+
+CREATE POLICY "Referees can view their own evaluations" ON "public"."evaluations" FOR SELECT USING ((("auth"."uid"() = "referee_id") AND ("status" = 'submitted'::"text")));
+
+
+
+CREATE POLICY "Referees can view their own honors" ON "public"."honors" FOR SELECT USING ((("deleted_at" IS NULL) AND ("auth"."uid"() = "referee_id")));
+
+
+
+CREATE POLICY "System can insert audit logs" ON "public"."audit_logs" FOR INSERT WITH CHECK (true);
+
+
+
+CREATE POLICY "Users can insert own preferences" ON "public"."notification_preferences" FOR INSERT WITH CHECK (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can insert their own profile during signup" ON "public"."profiles" FOR INSERT WITH CHECK (("auth"."uid"() = "id"));
+
+
+
+CREATE POLICY "Users can insert their own progress" ON "public"."learning_progress" FOR INSERT WITH CHECK (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can read their notifications" ON "public"."notifications" FOR SELECT USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can update own notifications" ON "public"."notifications" FOR UPDATE USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can update own preferences" ON "public"."notification_preferences" FOR UPDATE USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can update their own profile" ON "public"."profiles" FOR UPDATE USING (("auth"."uid"() = "id"));
+
+
+
+CREATE POLICY "Users can update their own progress" ON "public"."learning_progress" FOR UPDATE USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can view own notifications" ON "public"."notifications" FOR SELECT USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can view own preferences" ON "public"."notification_preferences" FOR SELECT USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can view their own profile" ON "public"."profiles" FOR SELECT USING (("auth"."uid"() = "id"));
+
+
+
+CREATE POLICY "Users can view their own progress" ON "public"."learning_progress" FOR SELECT USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "Users can view their own roles" ON "public"."user_roles" FOR SELECT USING (("auth"."uid"() = "user_id"));
+
+
+
+CREATE POLICY "View scores for accessible evaluations" ON "public"."evaluation_scores" FOR SELECT USING ((EXISTS ( SELECT 1
+   FROM "public"."evaluations" "e"
+  WHERE (("e"."id" = "evaluation_scores"."evaluation_id") AND ("public"."is_admin"("auth"."uid"()) OR ("e"."evaluator_id" = "auth"."uid"()) OR (("e"."referee_id" = "auth"."uid"()) AND ("e"."status" = 'submitted'::"text")))))));
+
+
+
+ALTER TABLE "public"."activity_logs" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."audit_logs" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."auth_attempts" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."auth_event_logs" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."card_verification_logs" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."discussion_replies" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."discussion_topics" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."evaluation_criteria" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."evaluation_scores" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."evaluations" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."event_approvals" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."event_assignments" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."event_logs" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."events" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."honors" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."kabupaten_kota" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."learning_materials" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."learning_progress" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."notification_preferences" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."notifications" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."pengurus" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."profiles" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."provinsi" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."referee_cards" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."referee_reviews" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."system_settings" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "public"."user_roles" ENABLE ROW LEVEL SECURITY;
+
+
+CREATE POLICY "Avatar images are publicly accessible" ON "storage"."objects" FOR SELECT USING (("bucket_id" = 'avatars'::"text"));
+
+
+
+CREATE POLICY "Users can delete their own avatar" ON "storage"."objects" FOR DELETE USING ((("bucket_id" = 'avatars'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+CREATE POLICY "Users can delete their own documents" ON "storage"."objects" FOR DELETE USING ((("bucket_id" = 'documents'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+CREATE POLICY "Users can update their own avatar" ON "storage"."objects" FOR UPDATE USING ((("bucket_id" = 'avatars'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+CREATE POLICY "Users can update their own documents" ON "storage"."objects" FOR UPDATE USING ((("bucket_id" = 'documents'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+CREATE POLICY "Users can upload their own avatar" ON "storage"."objects" FOR INSERT WITH CHECK ((("bucket_id" = 'avatars'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+CREATE POLICY "Users can upload their own documents" ON "storage"."objects" FOR INSERT WITH CHECK ((("bucket_id" = 'documents'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+CREATE POLICY "Users can view their own documents" ON "storage"."objects" FOR SELECT USING ((("bucket_id" = 'documents'::"text") AND (("auth"."uid"())::"text" = ("storage"."foldername"("name"))[1])));
+
+
+
+ALTER TABLE "storage"."buckets" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."buckets_analytics" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."buckets_vectors" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."migrations" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."objects" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."s3_multipart_uploads" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."s3_multipart_uploads_parts" ENABLE ROW LEVEL SECURITY;
+
+
+ALTER TABLE "storage"."vector_indexes" ENABLE ROW LEVEL SECURITY;
+
+
+REVOKE USAGE ON SCHEMA "public" FROM PUBLIC;
+GRANT USAGE ON SCHEMA "public" TO "anon";
+GRANT USAGE ON SCHEMA "public" TO "authenticated";
+GRANT USAGE ON SCHEMA "public" TO "service_role";
+GRANT USAGE ON SCHEMA "public" TO "postgres";
+
+
+
+GRANT USAGE ON SCHEMA "storage" TO "postgres" WITH GRANT OPTION;
+GRANT USAGE ON SCHEMA "storage" TO "anon";
+GRANT USAGE ON SCHEMA "storage" TO "authenticated";
+GRANT USAGE ON SCHEMA "storage" TO "service_role";
+GRANT ALL ON SCHEMA "storage" TO "supabase_storage_admin" WITH GRANT OPTION;
+GRANT ALL ON SCHEMA "storage" TO "dashboard_user";
+
+
+
+GRANT ALL ON FUNCTION "public"."auto_mark_expired_cards"() TO "anon";
+GRANT ALL ON FUNCTION "public"."auto_mark_expired_cards"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."auto_mark_expired_cards"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."can_access_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."can_access_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."can_access_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."can_approve_registration"("_admin_id" "uuid", "_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."can_approve_registration"("_admin_id" "uuid", "_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."can_approve_registration"("_admin_id" "uuid", "_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."check_duplicate_event"("p_kota_id" "text", "p_location" "text", "p_name" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."check_duplicate_event"("p_kota_id" "text", "p_location" "text", "p_name" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."check_duplicate_event"("p_kota_id" "text", "p_location" "text", "p_name" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."count_referee_cards"("p_search" "text", "p_status" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."count_referee_cards"("p_search" "text", "p_status" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."count_referee_cards"("p_search" "text", "p_status" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."count_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."count_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."count_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."generate_card_number"("p_referee_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."generate_card_number"("p_referee_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."generate_card_number"("p_referee_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_accessible_regions"("_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_accessible_regions"("_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_accessible_regions"("_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_admin_dashboard_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_audit_logs"("_entity_type" "text", "_entity_id" "uuid", "_action" "text", "_actor_id" "uuid", "_start_date" timestamp with time zone, "_end_date" timestamp with time zone, "_limit" integer, "_offset" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_audit_logs"("_entity_type" "text", "_entity_id" "uuid", "_action" "text", "_actor_id" "uuid", "_start_date" timestamp with time zone, "_end_date" timestamp with time zone, "_limit" integer, "_offset" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_audit_logs"("_entity_type" "text", "_entity_id" "uuid", "_action" "text", "_actor_id" "uuid", "_start_date" timestamp with time zone, "_end_date" timestamp with time zone, "_limit" integer, "_offset" integer) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_honor_statistics"("_referee_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_honor_statistics"("_referee_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_honor_statistics"("_referee_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_my_referee_event_count"("_start_date" "date", "_end_date" "date") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_my_referee_event_count"("_start_date" "date", "_end_date" "date") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_my_referee_event_count"("_start_date" "date", "_end_date" "date") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_pending_registrations"() TO "anon";
+GRANT ALL ON FUNCTION "public"."get_pending_registrations"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_pending_registrations"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_public_referee"("_referee_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_public_referee"("_referee_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_public_referee"("_referee_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_public_referees"("_search" "text", "_is_active" boolean) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_public_referees"("_search" "text", "_is_active" boolean) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_public_referees"("_search" "text", "_is_active" boolean) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_referee_event_count"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_referee_event_count"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_referee_event_count"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_referee_income_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_referee_income_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_referee_income_summary"("_kabupaten_kota_id" "uuid", "_start_date" "date", "_end_date" "date") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text", "_limit" integer, "_offset" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."get_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text", "_limit" integer, "_offset" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_referees"("_license_level" "text", "_is_active" boolean, "_kabupaten_kota_id" "uuid", "_search" "text", "_limit" integer, "_offset" integer) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_registration_history"() TO "anon";
+GRANT ALL ON FUNCTION "public"."get_registration_history"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_registration_history"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_user_kabupaten_kota"("_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_user_kabupaten_kota"("_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_user_kabupaten_kota"("_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."get_user_kabupaten_kota_id"("_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."get_user_kabupaten_kota_id"("_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."get_user_kabupaten_kota_id"("_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."handle_honor_verification"() TO "anon";
+GRANT ALL ON FUNCTION "public"."handle_honor_verification"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."handle_honor_verification"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "anon";
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."handle_new_user"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."has_role"("_user_id" "uuid", "_role" "public"."app_role") TO "anon";
+GRANT ALL ON FUNCTION "public"."has_role"("_user_id" "uuid", "_role" "public"."app_role") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."has_role"("_user_id" "uuid", "_role" "public"."app_role") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."has_schedule_conflict"("_referee_id" "uuid", "_event_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."has_schedule_conflict"("_referee_id" "uuid", "_event_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."has_schedule_conflict"("_referee_id" "uuid", "_event_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_admin"("_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."is_admin"("_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_admin"("_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_admin_kab_kota"("_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."is_admin_kab_kota"("_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_admin_kab_kota"("_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_admin_provinsi"("_user_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."is_admin_provinsi"("_user_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_admin_provinsi"("_user_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_event_approved"("_event_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."is_event_approved"("_event_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_event_approved"("_event_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_referee_active"("_referee_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."is_referee_active"("_referee_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_referee_active"("_referee_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."is_same_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") TO "anon";
+GRANT ALL ON FUNCTION "public"."is_same_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."is_same_region"("_user_id" "uuid", "_kabupaten_kota_id" "uuid") TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."log_event_approval"() TO "anon";
+GRANT ALL ON FUNCTION "public"."log_event_approval"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."log_event_approval"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."log_honor_verification"() TO "anon";
+GRANT ALL ON FUNCTION "public"."log_honor_verification"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."log_honor_verification"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."log_referee_assignment"() TO "anon";
+GRANT ALL ON FUNCTION "public"."log_referee_assignment"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."log_referee_assignment"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."log_registration_approval"() TO "anon";
+GRANT ALL ON FUNCTION "public"."log_registration_approval"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."log_registration_approval"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."prevent_hard_delete"() TO "anon";
+GRANT ALL ON FUNCTION "public"."prevent_hard_delete"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."prevent_hard_delete"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."search_referee_cards"("p_search" "text", "p_status" "text", "p_limit" integer, "p_offset" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."search_referee_cards"("p_search" "text", "p_status" "text", "p_limit" integer, "p_offset" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."search_referee_cards"("p_search" "text", "p_status" "text", "p_limit" integer, "p_offset" integer) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."search_referee_cards"("search" "text", "is_active" boolean, "license_level" "text", "page" integer, "page_size" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."search_referee_cards"("search" "text", "is_active" boolean, "license_level" "text", "page" integer, "page_size" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."search_referee_cards"("search" "text", "is_active" boolean, "license_level" "text", "page" integer, "page_size" integer) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."set_updated_at"() TO "anon";
+GRANT ALL ON FUNCTION "public"."set_updated_at"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."set_updated_at"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."soft_delete_record"() TO "anon";
+GRANT ALL ON FUNCTION "public"."soft_delete_record"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."soft_delete_record"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."sync_card_expiry"() TO "anon";
+GRANT ALL ON FUNCTION "public"."sync_card_expiry"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."sync_card_expiry"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."update_topic_reply_count"() TO "anon";
+GRANT ALL ON FUNCTION "public"."update_topic_reply_count"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."update_topic_reply_count"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."update_updated_at_column"() TO "anon";
+GRANT ALL ON FUNCTION "public"."update_updated_at_column"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."update_updated_at_column"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."validate_honor_submission"() TO "anon";
+GRANT ALL ON FUNCTION "public"."validate_honor_submission"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."validate_honor_submission"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."validate_referee_assignment"() TO "anon";
+GRANT ALL ON FUNCTION "public"."validate_referee_assignment"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."validate_referee_assignment"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."validate_regional_access"() TO "anon";
+GRANT ALL ON FUNCTION "public"."validate_regional_access"() TO "authenticated";
+GRANT ALL ON FUNCTION "public"."validate_regional_access"() TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."verify_referee_card"("p_code" "text") TO "anon";
+GRANT ALL ON FUNCTION "public"."verify_referee_card"("p_code" "text") TO "authenticated";
+GRANT ALL ON FUNCTION "public"."verify_referee_card"("p_code" "text") TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."events" TO "anon";
+GRANT ALL ON TABLE "public"."events" TO "authenticated";
+GRANT ALL ON TABLE "public"."events" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."active_events" TO "anon";
+GRANT ALL ON TABLE "public"."active_events" TO "authenticated";
+GRANT ALL ON TABLE "public"."active_events" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."honors" TO "anon";
+GRANT ALL ON TABLE "public"."honors" TO "authenticated";
+GRANT ALL ON TABLE "public"."honors" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."active_honors" TO "anon";
+GRANT ALL ON TABLE "public"."active_honors" TO "authenticated";
+GRANT ALL ON TABLE "public"."active_honors" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."activity_logs" TO "anon";
+GRANT ALL ON TABLE "public"."activity_logs" TO "authenticated";
+GRANT ALL ON TABLE "public"."activity_logs" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."audit_logs" TO "anon";
+GRANT ALL ON TABLE "public"."audit_logs" TO "authenticated";
+GRANT ALL ON TABLE "public"."audit_logs" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."auth_attempts" TO "anon";
+GRANT ALL ON TABLE "public"."auth_attempts" TO "authenticated";
+GRANT ALL ON TABLE "public"."auth_attempts" TO "service_role";
+
+
+
+GRANT SELECT,INSERT,REFERENCES,TRIGGER,TRUNCATE,MAINTAIN ON TABLE "public"."auth_event_logs" TO "anon";
+GRANT SELECT,INSERT,REFERENCES,TRIGGER,TRUNCATE,MAINTAIN ON TABLE "public"."auth_event_logs" TO "authenticated";
+GRANT ALL ON TABLE "public"."auth_event_logs" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."card_verification_logs" TO "anon";
+GRANT ALL ON TABLE "public"."card_verification_logs" TO "authenticated";
+GRANT ALL ON TABLE "public"."card_verification_logs" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."discussion_replies" TO "anon";
+GRANT ALL ON TABLE "public"."discussion_replies" TO "authenticated";
+GRANT ALL ON TABLE "public"."discussion_replies" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."discussion_topics" TO "anon";
+GRANT ALL ON TABLE "public"."discussion_topics" TO "authenticated";
+GRANT ALL ON TABLE "public"."discussion_topics" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."evaluation_criteria" TO "anon";
+GRANT ALL ON TABLE "public"."evaluation_criteria" TO "authenticated";
+GRANT ALL ON TABLE "public"."evaluation_criteria" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."evaluation_scores" TO "anon";
+GRANT ALL ON TABLE "public"."evaluation_scores" TO "authenticated";
+GRANT ALL ON TABLE "public"."evaluation_scores" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."evaluations" TO "anon";
+GRANT ALL ON TABLE "public"."evaluations" TO "authenticated";
+GRANT ALL ON TABLE "public"."evaluations" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."event_approvals" TO "anon";
+GRANT ALL ON TABLE "public"."event_approvals" TO "authenticated";
+GRANT ALL ON TABLE "public"."event_approvals" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."event_assignments" TO "anon";
+GRANT ALL ON TABLE "public"."event_assignments" TO "authenticated";
+GRANT ALL ON TABLE "public"."event_assignments" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."event_logs" TO "anon";
+GRANT ALL ON TABLE "public"."event_logs" TO "authenticated";
+GRANT ALL ON TABLE "public"."event_logs" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."kabupaten_kota" TO "anon";
+GRANT ALL ON TABLE "public"."kabupaten_kota" TO "authenticated";
+GRANT ALL ON TABLE "public"."kabupaten_kota" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."learning_materials" TO "anon";
+GRANT ALL ON TABLE "public"."learning_materials" TO "authenticated";
+GRANT ALL ON TABLE "public"."learning_materials" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."learning_progress" TO "anon";
+GRANT ALL ON TABLE "public"."learning_progress" TO "authenticated";
+GRANT ALL ON TABLE "public"."learning_progress" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."notification_preferences" TO "anon";
+GRANT ALL ON TABLE "public"."notification_preferences" TO "authenticated";
+GRANT ALL ON TABLE "public"."notification_preferences" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."notifications" TO "anon";
+GRANT ALL ON TABLE "public"."notifications" TO "authenticated";
+GRANT ALL ON TABLE "public"."notifications" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."pengurus" TO "anon";
+GRANT ALL ON TABLE "public"."pengurus" TO "authenticated";
+GRANT ALL ON TABLE "public"."pengurus" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."profiles" TO "anon";
+GRANT ALL ON TABLE "public"."profiles" TO "authenticated";
+GRANT ALL ON TABLE "public"."profiles" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."provinsi" TO "anon";
+GRANT ALL ON TABLE "public"."provinsi" TO "authenticated";
+GRANT ALL ON TABLE "public"."provinsi" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."referee_cards" TO "anon";
+GRANT ALL ON TABLE "public"."referee_cards" TO "authenticated";
+GRANT ALL ON TABLE "public"."referee_cards" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."referee_reviews" TO "anon";
+GRANT ALL ON TABLE "public"."referee_reviews" TO "authenticated";
+GRANT ALL ON TABLE "public"."referee_reviews" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."referee_review_stats" TO "anon";
+GRANT ALL ON TABLE "public"."referee_review_stats" TO "authenticated";
+GRANT ALL ON TABLE "public"."referee_review_stats" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."system_settings" TO "anon";
+GRANT ALL ON TABLE "public"."system_settings" TO "authenticated";
+GRANT ALL ON TABLE "public"."system_settings" TO "service_role";
+
+
+
+GRANT ALL ON TABLE "public"."user_roles" TO "anon";
+GRANT ALL ON TABLE "public"."user_roles" TO "authenticated";
+GRANT ALL ON TABLE "public"."user_roles" TO "service_role";
+
+
+
+REVOKE ALL ON TABLE "storage"."buckets" FROM "supabase_storage_admin";
+GRANT ALL ON TABLE "storage"."buckets" TO "supabase_storage_admin" WITH GRANT OPTION;
+GRANT ALL ON TABLE "storage"."buckets" TO "service_role";
+GRANT ALL ON TABLE "storage"."buckets" TO "authenticated";
+GRANT ALL ON TABLE "storage"."buckets" TO "anon";
+GRANT ALL ON TABLE "storage"."buckets" TO "postgres" WITH GRANT OPTION;
+
+
+
+GRANT ALL ON TABLE "storage"."buckets_analytics" TO "service_role";
+GRANT ALL ON TABLE "storage"."buckets_analytics" TO "authenticated";
+GRANT ALL ON TABLE "storage"."buckets_analytics" TO "anon";
+
+
+
+GRANT SELECT ON TABLE "storage"."buckets_vectors" TO "service_role";
+GRANT SELECT ON TABLE "storage"."buckets_vectors" TO "authenticated";
+GRANT SELECT ON TABLE "storage"."buckets_vectors" TO "anon";
+
+
+
+REVOKE ALL ON TABLE "storage"."objects" FROM "supabase_storage_admin";
+GRANT ALL ON TABLE "storage"."objects" TO "supabase_storage_admin" WITH GRANT OPTION;
+GRANT ALL ON TABLE "storage"."objects" TO "service_role";
+GRANT ALL ON TABLE "storage"."objects" TO "authenticated";
+GRANT ALL ON TABLE "storage"."objects" TO "anon";
+GRANT ALL ON TABLE "storage"."objects" TO "postgres" WITH GRANT OPTION;
+
+
+
+GRANT ALL ON TABLE "storage"."s3_multipart_uploads" TO "service_role";
+GRANT SELECT ON TABLE "storage"."s3_multipart_uploads" TO "authenticated";
+GRANT SELECT ON TABLE "storage"."s3_multipart_uploads" TO "anon";
+
+
+
+GRANT ALL ON TABLE "storage"."s3_multipart_uploads_parts" TO "service_role";
+GRANT SELECT ON TABLE "storage"."s3_multipart_uploads_parts" TO "authenticated";
+GRANT SELECT ON TABLE "storage"."s3_multipart_uploads_parts" TO "anon";
+
+
+
+GRANT SELECT ON TABLE "storage"."vector_indexes" TO "service_role";
+GRANT SELECT ON TABLE "storage"."vector_indexes" TO "authenticated";
+GRANT SELECT ON TABLE "storage"."vector_indexes" TO "anon";
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON SEQUENCES TO "service_role";
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON FUNCTIONS TO "service_role";
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "service_role";
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON SEQUENCES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON SEQUENCES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON SEQUENCES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON SEQUENCES TO "service_role";
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON FUNCTIONS TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON FUNCTIONS TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON FUNCTIONS TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON FUNCTIONS TO "service_role";
+
+
+
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON TABLES TO "postgres";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON TABLES TO "anon";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON TABLES TO "authenticated";
+ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "storage" GRANT ALL ON TABLES TO "service_role";
+
+
+
+

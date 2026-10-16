@@ -1,0 +1,9 @@
+{
+  "phase": "8.6",
+  "typecheck": "PASS",
+  "tests": {"status":"PASS", "test_files":12, "tests":38},
+  "build": "PASS",
+  "lint": {"status":"BASELINE/UNRELATED FAILURES", "errors":67, "warnings":11, "note":"Repository lint remains failing; no unrelated remediation performed."},
+  "build_warnings": ["large minified chunk", "stale Browserslist data"],
+  "production_access": 0
+}

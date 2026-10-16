@@ -1,0 +1,50 @@
+{
+  "phase": "PHASE 7.4J-D1-D.4",
+  "baseline": {
+    "path": "production-schema.sql",
+    "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "authority": "PHASE-7.4J-D1-D.2",
+    "decision": "PASS — CANONICAL BASELINE PROVENANCE VERIFIED"
+  },
+  "d1d3_snapshot": {
+    "path": "tmp/PHASE-7.4J-D1-D.3-NONPROD-SNAPSHOT.sql",
+    "sha256": "c214e785cff8f5323158d0dc5e9d9e51d88f21a56968a00c816c2640398210da",
+    "counts": {
+      "tables": 14,
+      "columns": 119,
+      "functions": 20,
+      "views": 1,
+      "triggers": 8,
+      "indexes": 11,
+      "foreign_keys": 14,
+      "policies": 32
+    }
+  },
+  "artifacts": [
+    {
+      "path": "CANONICAL-RUNTIME-BASELINE-MANIFEST.json",
+      "kind": "generated baseline artifact",
+      "timestamp": "2026-09-07T10:35:27.518Z",
+      "classification": "DERIVED_ARTIFACT"
+    },
+    {
+      "path": "PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+      "kind": "generated dependency artifact",
+      "timestamp": "not recorded in file",
+      "classification": "DERIVED_ARTIFACT"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D1-D.3-NONPROD-SNAPSHOT.json",
+      "kind": "non-production observation",
+      "timestamp": "2026-09-08T08:29:10.0300767Z",
+      "classification": "HISTORICAL_ARTIFACT"
+    },
+    {
+      "path": "docs/PHASE-7.4J-D1-D.3-PREFLIGHT.json",
+      "kind": "preflight assertion",
+      "timestamp": "2026-09-08",
+      "classification": "TARGET_ASSERTION"
+    }
+  ],
+  "root_cause": "D1-D.3 compared an incomplete non-production snapshot against a valid canonical target. The canonical 27/249/etc. inventory is reproduced directly from production-schema.sql; the non-production 14-table snapshot was not evidence of canonical SQL inconsistency."
+}

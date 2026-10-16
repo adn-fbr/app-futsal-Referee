@@ -1,0 +1,18 @@
+{
+  "phase": "8.5D",
+  "parameters": {
+    "p_kota_id": {
+      "observed_use": "Compared to events.kota_id::text",
+      "proven_meaning": null,
+      "candidate_meanings": ["kabupaten/kota identifier", "distinct city identifier", "obsolete field"],
+      "mapping_to_kabupaten_kota_id": "NOT PROVEN",
+      "status": "AMBIGUOUS"
+    },
+    "p_location": {"application_candidate": "events.location", "type": "text", "mapping": "plausible but not runtime-validated"},
+    "p_name": {"application_candidate": "events.name", "type": "text", "mapping": "plausible but not runtime-validated"},
+    "kabupaten_kota_id": {"meaning": "regional identifier for a kabupaten/kota row", "type": "uuid", "foreign_key": "public.kabupaten_kota(id)", "status": "PROVEN_CANONICAL_COLUMN"}
+  },
+  "equivalence": false,
+  "reason": "Names alone cannot establish that p_kota_id and events.kabupaten_kota_id are semantically identical, and the function references a missing column.",
+  "decision": "Do not map or adapt callers in Phase 8.5D"
+}

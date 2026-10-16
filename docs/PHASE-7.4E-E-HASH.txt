@@ -1,0 +1,8 @@
+PHASE-7.4E-E-REMAINING-GOVERNANCE-DECISION-RESOLUTION v1.0.0
+NORMALIZED RECOMMENDATION PACKAGE SHA-256
+
+RUN 1: aec6c0c2e2c5b7585fc05559faf18a14d13bd570bf9202917692873660bb2552
+RUN 2: aec6c0c2e2c5b7585fc05559faf18a14d13bd570bf9202917692873660bb2552
+IDENTICAL: YES
+
+The hash covers the ten required Phase 7.4E-E recommendation artifacts in deterministic path order. This hash file is excluded to avoid self-reference.

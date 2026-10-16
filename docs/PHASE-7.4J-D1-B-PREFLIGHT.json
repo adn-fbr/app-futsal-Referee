@@ -1,0 +1,70 @@
+{
+  "phase": "7.4J-D1-B",
+  "status": "BLOCKED",
+  "authorization": {
+    "d01_d10": "APPROVED",
+    "scope": "NON-PRODUCTION ONLY",
+    "non_production_project": "shorsqyycpptxcutrqrb",
+    "production_project": "xfscfjwapwnkiinkgbjg",
+    "production_access_allowed": false
+  },
+  "source_of_truth": {
+    "baseline_file": "production-schema.sql",
+    "dependency_graph": "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+    "manifest": "PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+    "contract_freeze": "PHASE-7.4H APPROVED CONTRACT FREEZE",
+    "d0_evidence": [
+      "D0.9A migration and data disposition evidence",
+      "D0.9D Auth boundary evidence",
+      "D1-A human authorization record"
+    ]
+  },
+  "target": {
+    "tables": 27,
+    "columns": 249,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "rls_policies": 86,
+    "indexes": 47,
+    "extensions": 7,
+    "enum_types": 2,
+    "pk": 27,
+    "unique": 7,
+    "check": 3,
+    "fk": 30
+  },
+  "current_non_production_state": {
+    "known_drift": true,
+    "tables": 6,
+    "columns": 48,
+    "functions": 3,
+    "views": 1,
+    "triggers": 4,
+    "rls_enabled_tables": 6,
+    "rls_policies": 23,
+    "missing_canonical_fields": [
+      "events.deleted_at",
+      "events.kabupaten_kota_id"
+    ],
+    "missing_tables": [
+      "pengurus"
+    ],
+    "duplicate_event_function_present": false,
+    "rich_duplicate_search_function_present": false,
+    "storage_bucket_count": 0,
+    "local_migration_conflicts": true
+  },
+  "data_disposition": "SYNTHETIC_ONLY",
+  "auth_governance": "SYNTHETIC_ONLY / GOVERNANCE_BOUNDARY",
+  "storage_governance": "SYNTHETIC_ONLY",
+  "migration_policy": {
+    "historical_pg_dump": "ARCHIVE_AS_HISTORICAL",
+    "events_drift": "SUPERSEDE",
+    "duplicate_function_conflict": "REJECT",
+    "active_policy": "OPTION_C_AFTER_VALIDATION"
+  },
+  "reconstruction_method": "CANONICAL_BASELINE_ONLY",
+  "blocker": "No live execution channel or safe remote validation path was available in this session; therefore the controlled reconstruction remains blocked and no actual DB mutation was performed.",
+  "baseline_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88bbf1c6a816f1f1c9ed98db1"
+}

@@ -1,0 +1,15 @@
+{
+  "phase": "8.1",
+  "repositories": [
+    {"name":"SupabaseAuthRepository","file":"src/repositories/auth/supabase-auth-repository.ts","entity":"Auth/session","demo":false,"supabase":true,"auth_dependency":true,"rls_dependency":true,"status":"IMPLEMENTED"},
+    {"name":"SupabaseUserProfileRepository","file":"src/repositories/auth/user-profile-repository.ts","entity":"profiles","demo":false,"supabase":true,"auth_dependency":true,"rls_dependency":true,"status":"IMPLEMENTED"},
+    {"name":"SupabaseUserRoleRepository","file":"src/repositories/auth/user-role-repository.ts","entity":"user_roles","demo":false,"supabase":true,"auth_dependency":true,"rls_dependency":true,"status":"IMPLEMENTED"},
+    {"name":"Authorization helpers","file":"src/repositories/auth/authorization.ts","entity":"route authorization","demo":false,"supabase":false,"auth_dependency":true,"rls_dependency":true,"status":"IMPLEMENTED"},
+    {"name":"General entity repositories","file":"src/repositories","entity":"events/users/learning/etc.","demo":false,"supabase":false,"auth_dependency":"varies","rls_dependency":"varies","status":"MISSING"},
+    {"name":"DemoRepositories","file":"src/repositories","entity":"all entities","demo":false,"supabase":false,"auth_dependency":false,"rls_dependency":false,"status":"MISSING"},
+    {"name":"SupabaseRepositories","file":"src/repositories","entity":"all entities","demo":false,"supabase":false,"auth_dependency":false,"rls_dependency":false,"status":"MISSING"},
+    {"name":"RepositoriesProvider","file":"src/repositories","entity":"repository selection","demo":false,"supabase":false,"auth_dependency":false,"rls_dependency":false,"status":"MISSING"},
+    {"name":"MembershipRepository","file":"src/repositories","entity":"memberships","demo":false,"supabase":false,"auth_dependency":false,"rls_dependency":false,"status":"MISSING / SCHEMA-GAP"}
+  ],
+  "direct_access": {"files_with_direct_table_or_rpc_access": 33,"references_observed": 229,"classification":"APPLICATION-ONLY ACCESS LAYER; NOT CENTRALIZED"}
+}

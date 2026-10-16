@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "existing_assignment_audit_trigger":"public.log_referee_assignment",
+  "audit_schema_changed":false,
+  "audit_validation":"DEFERRED_UNTIL_RLS_APPLIED"
+}

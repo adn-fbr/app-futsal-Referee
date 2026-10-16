@@ -1,0 +1,11 @@
+{
+  "phase":"8.5G.1",
+  "status":"PASS_FOR_EXECUTED_TRANSITIONS",
+  "confirmed_readback":true,
+  "declined_readback":true,
+  "cancelled_readback":true,
+  "final_assignment_a_status":"pending",
+  "final_assignment_b_status":"pending",
+  "audit_readback_records":6,
+  "production_requests":0
+}

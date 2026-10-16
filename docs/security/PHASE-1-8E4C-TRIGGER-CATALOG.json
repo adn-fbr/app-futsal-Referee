@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "capturedCount": 0,
+  "missing":["trigger identity/timing/events","enabled state","orientation","condition","function identity","pg_get_triggerdef output"]
+}

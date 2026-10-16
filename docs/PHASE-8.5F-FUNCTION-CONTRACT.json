@@ -1,0 +1,19 @@
+{
+  "phase": "8.5F",
+  "target": "shorsqyycpptxcutrqrb",
+  "identity": "public.check_duplicate_event(text,text,text)",
+  "arguments": {"p_kota_id": "text", "p_location": "text", "p_name": "text"},
+  "return": "boolean",
+  "true_means": "An event exists with the exact same kabupaten_kota_id, location, and name.",
+  "false_means": "No such exact match exists, or any required comparison input is NULL.",
+  "predicate": "p_kota_id IS NOT NULL AND p_location IS NOT NULL AND p_name IS NOT NULL AND EXISTS events WHERE kabupaten_kota_id::text = p_kota_id AND location = p_location AND name = p_name",
+  "date_in_identity": false,
+  "status_in_identity": false,
+  "deleted_state_in_identity": false,
+  "normalization": "exact equality; no case or whitespace normalization",
+  "null_behavior": "any NULL input returns false; NULL stored region/location cannot match",
+  "security": {"mode": "INVOKER", "volatility": "STABLE", "search_path": "public", "anon_execute": true, "authenticated_execute": true},
+  "overload_count": 1,
+  "events_kota_id_reference": false,
+  "source": "supabase/migrations/20260908120844_phase_8_5f_duplicate_event_contract.sql"
+}

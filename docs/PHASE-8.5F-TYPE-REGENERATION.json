@@ -1,0 +1,12 @@
+{
+  "phase": "8.5F",
+  "target": "shorsqyycpptxcutrqrb",
+  "command": "npx --yes supabase@latest gen types --linked --lang=typescript --schema public",
+  "source": "Non-Production linked project",
+  "generated_file": "src/integrations/supabase/types.ts",
+  "manual_edit": false,
+  "contract": {"p_kota_id": "string", "p_location": "string", "p_name": "string", "returns": "boolean"},
+  "five_argument_contract": false,
+  "status": "PASS",
+  "production_used": false
+}

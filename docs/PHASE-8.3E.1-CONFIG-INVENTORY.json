@@ -1,0 +1,18 @@
+{
+  "phase":"8.3E.1",
+  "mode":"CONTROLLED NON-PRODUCTION PREPARATION ONLY",
+  "sources":[
+    {"path":".env","present":true,"VITE_SUPABASE_URL":"present_redacted","VITE_SUPABASE_PROJECT_ID":"present_redacted","VITE_SUPABASE_PUBLISHABLE_KEY":"present_redacted","resolved_project_ref":"xfscfjwapwnkiinkgbjg","classification":"EFFECTIVE_RUNTIME_SOURCE","safe_to_use_for_non_production":false},
+    {"path":".env.example","present":true,"VITE_SUPABASE_URL":"present_redacted","VITE_SUPABASE_PROJECT_ID":"present_redacted","VITE_SUPABASE_PUBLISHABLE_KEY":"present_redacted","declared_project_ref":"shorsqyycpptxcutrqrb","classification":"EXAMPLE_ONLY","safe_to_use_for_runtime":false},
+    {"path":"supabase/config.toml","present":true,"project_id":"xfscfjwapwnkiinkgbjg","classification":"CLI_CONFIG_SOURCE","safe_to_use_for_non_production":false},
+    {"path":"supabase/.temp/project-ref","present":true,"project_ref":"shorsqyycpptxcutrqrb","classification":"BINDING_METADATA_ONLY","effective_for_vite":false},
+    {"path":"src/integrations/supabase/client.ts","present":true,"url_source":"import.meta.env.VITE_SUPABASE_URL","key_source":"import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY","service_role_guard":true,"classification":"CLIENT_INITIALIZATION"},
+    {"path":"vite.config.ts","present":true,"environment_loading":"loadEnv(mode, process.cwd(), '')","browser_service_role_guard":true,"classification":"BUILD_CONFIGURATION"},
+    {"path":"vitest.config.ts","present":true,"browser_harness":"none","classification":"LOCAL_TEST_CONFIGURATION"},
+    {"path":"package.json","present":true,"playwright_script":false,"cypress_script":false,"typecheck_script":"tsc --noEmit","classification":"PACKAGE_CONFIGURATION"},
+    {"path":"supabase/tests/security.integration.test.ts","present":true,"required_runtime_variables":["SUPABASE_URL","SUPABASE_ANON_KEY","TEST_USER_A_EMAIL","TEST_USER_A_PASSWORD","TEST_USER_B_EMAIL","TEST_USER_B_PASSWORD","TEST_EVENT_A_ID","TEST_EVENT_B_ID"],"classification":"DENO_INTEGRATION_TEST"},
+    {"path":"supabase/tests/seed-security-fixtures.ts","present":true,"requires_service_role":true,"requires_TEST_ENVIRONMENT_non_production":true,"classification":"MUTATING_FIXTURE_HELPER_NOT_RUN"}
+  ],
+  "hardcoded_project_refs":{"authorized_non_production":"shorsqyycpptxcutrqrb","forbidden_production":"xfscfjwapwnkiinkgbjg"},
+  "secret_policy":"No key, token, password, JWT, session, or service-role value recorded."
+}

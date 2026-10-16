@@ -1,0 +1,167 @@
+{
+  "phase": "PHASE 7.4J-D1-D.4",
+  "assertions": {
+    "tables": {
+      "baseline_fact": 27,
+      "target_assertion": 27,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "columns": {
+      "baseline_fact": 249,
+      "target_assertion": 249,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "primary_keys": {
+      "baseline_fact": 27,
+      "target_assertion": 27,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "unique_constraints": {
+      "baseline_fact": 7,
+      "target_assertion": 7,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "check_constraints": {
+      "baseline_fact": 3,
+      "target_assertion": 3,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "foreign_keys": {
+      "baseline_fact": 30,
+      "target_assertion": 30,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "functions": {
+      "baseline_fact": 47,
+      "target_assertion": 47,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "procedures": {
+      "baseline_fact": 0,
+      "target_assertion": 0,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "views": {
+      "baseline_fact": 3,
+      "target_assertion": 3,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "materialized_views": {
+      "baseline_fact": 0,
+      "target_assertion": 0,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "triggers": {
+      "baseline_fact": 22,
+      "target_assertion": 22,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "rls_policies": {
+      "baseline_fact": 86,
+      "target_assertion": 86,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "indexes": {
+      "baseline_fact": 47,
+      "target_assertion": 47,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "extensions": {
+      "baseline_fact": 7,
+      "target_assertion": 7,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "enum_types": {
+      "baseline_fact": 2,
+      "target_assertion": 2,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    },
+    "schemas": {
+      "baseline_fact": 0,
+      "target_assertion": 0,
+      "status": "PASS",
+      "classification": "BASELINE_FACT"
+    }
+  },
+  "events": {
+    "columns": [
+      "id",
+      "name",
+      "date",
+      "start_date",
+      "end_date",
+      "location",
+      "category",
+      "description",
+      "status",
+      "kabupaten_kota_id",
+      "created_by",
+      "deleted_at",
+      "created_at",
+      "updated_at"
+    ],
+    "has_deleted_at": true,
+    "has_kabupaten_kota_id": true
+  },
+  "duplicate_event": {
+    "canonical_boolean_function": [
+      {
+        "schema": "public",
+        "name": "check_duplicate_event",
+        "identity_arguments": "text,text,text",
+        "return_type": "boolean",
+        "volatility": "VOLATILE",
+        "security_mode": "DEFINER",
+        "argument_definitions": "\"p_kota_id\" \"text\", \"p_location\" \"text\", \"p_name\" \"text\"",
+        "identity": "public.check_duplicate_event(text,text,text)",
+        "definition_fingerprint": "b77abd9b14179dc58b68a71c840806a08249778fa627e3a93cee2ca26004c760"
+      }
+    ],
+    "rich_five_argument_functions": []
+  },
+  "dependency": {
+    "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "canonical_hash_matches": true,
+    "graph_records": 351,
+    "manifest_dependency_counts": {
+      "total": 351,
+      "resolved": 282,
+      "unresolved": 47,
+      "not_exposed": 0,
+      "external_managed": 22,
+      "ambiguous": 0
+    },
+    "graph_resolution_counts": {
+      "RESOLVED": 282,
+      "UNRESOLVED": 47,
+      "NOT_EXPOSED_BY_DUMP": 0,
+      "EXTERNAL_MANAGED_SCHEMA": 22
+    },
+    "manifest_matches_graph": true,
+    "foreign_keys_in_canonical": 30,
+    "foreign_key_manifest_claim": "PASS",
+    "notes": [
+      "auth.users references are external-managed dependencies",
+      "47 unresolved records are function-body static-analysis markers",
+      "overloaded functions retain full identity arguments",
+      "no missing canonical identity was inferred"
+    ]
+  },
+  "target_reconciled": true,
+  "decision": "PASS — CANONICAL TARGET RECONCILED"
+}

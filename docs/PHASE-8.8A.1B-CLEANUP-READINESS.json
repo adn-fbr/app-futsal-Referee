@@ -1,0 +1,9 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "cleanup_executed": false,
+  "automatic_cleanup": false,
+  "scope": ["fixture emails", "PHASE_8_8A_1B_EVENT_REGION_A", "PHASE_8_8A_1B_EVENT_REGION_B", "linked assignments", "linked profiles", "linked roles"],
+  "shared_regions_deleted": false,
+  "unrelated_records": "EXCLUDED"
+}

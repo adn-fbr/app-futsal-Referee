@@ -1,0 +1,14 @@
+{
+  "project": "shorsqyycpptxcutrqrb",
+  "source": "production-schema.sql",
+  "source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "target_type": "canonical_production_structure_without_production_data",
+  "counts": {"tables":27,"columns":249,"primary_keys":27,"unique_constraints":7,"check_constraints":3,"foreign_keys":30,"functions":47,"views":3,"triggers":22,"indexes":47,"rls_policies":86,"extensions":7,"enum_types":2},
+  "tables": [
+    {"name":"events","columns":14,"action":"RECONSTRUCT"},{"name":"honors","columns":11,"action":"RECONSTRUCT"},{"name":"activity_logs","columns":7,"action":"RECONSTRUCT"},{"name":"audit_logs","columns":9,"action":"RECONSTRUCT"},{"name":"auth_attempts","columns":7,"action":"RECONSTRUCT"},{"name":"auth_event_logs","columns":7,"action":"RECONSTRUCT"},{"name":"card_verification_logs","columns":6,"action":"RECONSTRUCT"},{"name":"discussion_replies","columns":8,"action":"RECONSTRUCT"},{"name":"discussion_topics","columns":13,"action":"RECONSTRUCT"},{"name":"evaluation_criteria","columns":8,"action":"RECONSTRUCT"},{"name":"evaluation_scores","columns":6,"action":"RECONSTRUCT"},{"name":"evaluations","columns":10,"action":"RECONSTRUCT"},{"name":"event_approvals","columns":9,"action":"RECONSTRUCT"},{"name":"event_assignments","columns":9,"action":"RECONSTRUCT"},{"name":"event_logs","columns":7,"action":"RECONSTRUCT"},{"name":"kabupaten_kota","columns":6,"action":"RECONSTRUCT"},{"name":"learning_materials","columns":18,"action":"RECONSTRUCT"},{"name":"learning_progress","columns":6,"action":"RECONSTRUCT"},{"name":"notification_preferences","columns":11,"action":"RECONSTRUCT"},{"name":"notifications","columns":11,"action":"RECONSTRUCT"},{"name":"pengurus","columns":9,"action":"RECONSTRUCT"},{"name":"profiles","columns":23,"action":"RECONSTRUCT"},{"name":"provinsi","columns":5,"action":"RECONSTRUCT"},{"name":"referee_cards","columns":11,"action":"RECONSTRUCT"},{"name":"referee_reviews","columns":6,"action":"RECONSTRUCT"},{"name":"system_settings","columns":8,"action":"RECONSTRUCT"},{"name":"user_roles","columns":4,"action":"RECONSTRUCT"}
+  ],
+  "enums": ["public.app_role","public.pengurus_level"],
+  "external_managed": ["auth.users","auth.*","storage.*"],
+  "events_contract": {"deleted_at":"timestamp with time zone","kabupaten_kota_id":"uuid REFERENCES public.kabupaten_kota(id)","duplicate_function":"public.check_duplicate_event(text,text,text) RETURNS boolean"},
+  "execution": "NOT AUTHORIZED"
+}

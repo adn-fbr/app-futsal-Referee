@@ -1,0 +1,13 @@
+{
+  "phase":"8.5G.2D",
+  "target":"shorsqyycpptxcutrqrb",
+  "steps":[
+    {"step":"target_guard","result":"PASS"},
+    {"step":"migration_hash","result":"PASS"},
+    {"step":"sql_operation_scope","result":"PASS"},
+    {"step":"sql_channel_discovery","result":"UNAVAILABLE_CONNECTION_NOT_FOUND"},
+    {"step":"migration_execution","result":"NOT_EXECUTED"},
+    {"step":"post_rls_validation","result":"NOT_EXECUTED"},
+    {"step":"authenticated_isolation_tests","result":"NOT_EXECUTED"}
+  ]
+}

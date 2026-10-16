@@ -1,0 +1,13 @@
+{
+  "phase": "8.5F",
+  "scan_results": {
+    "active_check_duplicate_event_callers": ["src/hooks/useEvents.ts"],
+    "active_three_argument_calls": 1,
+    "active_five_argument_calls": 0,
+    "active_events_kota_id_references": 0,
+    "active_rich_duplicate_result_assumptions": 0,
+    "historical_migration_references": ["supabase/migrations/20260121161308_170f4f14-a4bb-494b-ac16-77f99251a8c4.sql"],
+    "dead_rich_ui": ["src/components/events/DuplicateEventDialog.tsx"]
+  },
+  "status": "PASS_ACTIVE_CONTRACT_SCAN"
+}

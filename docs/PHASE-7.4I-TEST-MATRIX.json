@@ -1,0 +1,27 @@
+{
+  "status":"DESIGN COMPLETE - NOT EXECUTED",
+  "cases":[
+    {"id":"T01","case":"valid input, duplicate found","expected":"success; isDuplicate=true; bounded duplicates"},
+    {"id":"T02","case":"valid input, no duplicate","expected":"success; isDuplicate=false; duplicates=[]"},
+    {"id":"T03","case":"exact name match","expected":"candidate ranked"},
+    {"id":"T04","case":"contains name match","expected":"candidate ranked"},
+    {"id":"T05","case":"date proximity match","expected":"candidate ranked per approved proximity"},
+    {"id":"T06","case":"optional location absent","expected":"location filter not applied"},
+    {"id":"T07","case":"optional region absent","expected":"region filter not applied"},
+    {"id":"T08","case":"location filtering","expected":"only matching authorized candidates"},
+    {"id":"T09","case":"event exclusion","expected":"excluded event absent"},
+    {"id":"T10","case":"five-result maximum","expected":"at most 5 candidates"},
+    {"id":"T11","case":"ordering by similarity","expected":"similarity_score DESC"},
+    {"id":"T12","case":"ordering by date","expected":"date DESC after score"},
+    {"id":"T13","case":"NULL optional input","expected":"filter not applied"},
+    {"id":"T14","case":"NULL database field","expected":"does not match"},
+    {"id":"T15","case":"NULL similarity","expected":"not duplicate evidence; non-NULL first"},
+    {"id":"T16","case":"invalid required input","expected":"ValidationError"},
+    {"id":"T17","case":"database failure","expected":"DatabaseError; never no duplicate"},
+    {"id":"T18","case":"RLS denial","expected":"AuthorizationError"},
+    {"id":"T19","case":"timeout","expected":"TimeoutError"},
+    {"id":"T20","case":"deterministic repeated execution","expected":"same ordered result for same authorized snapshot"}
+  ],
+  "invariant":"DATABASE ERROR != NO DUPLICATE",
+  "execution":"NOT EXECUTED"
+}

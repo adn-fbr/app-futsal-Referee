@@ -1,0 +1,1 @@
+{"status":"BLOCKED","expected":47,"extracted":47,"complete":0,"securityDefinerExpected":41,"securityDefinerComplete":0,"missing":["pg_get_functiondef","owner","proconfig","ACL","dependencies"]}

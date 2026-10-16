@@ -1,0 +1,15 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "auth_users": 4,
+  "profiles": 4,
+  "roles": 4,
+  "profiles_match_auth_ids": true,
+  "role_mapping": {
+    "admin_provinsi": "admin_provinsi",
+    "admin_kab_kota_a": "admin_kab_kota",
+    "admin_kab_kota_b": "admin_kab_kota",
+    "referee": "wasit"
+  },
+  "region_ownership_verified": true
+}

@@ -1,0 +1,12 @@
+{
+  "phase":"8.5A",
+  "canonical":{"name":"public.check_duplicate_event","parameters":["p_kota_id:text","p_location:text","p_name:text"],"returns":"boolean","source":"production-schema.sql:151"},
+  "callers":[
+    {"file":"src/hooks/useEvents.ts:556","function":"useCheckDuplicateEvent","arguments":["p_name","p_date","p_location","p_kabupaten_kota_id","p_exclude_event_id"],"expected_return":"DuplicateEvent[]","status":"MISMATCH"},
+    {"file":"src/pages/EventEdit.tsx:83","function":"handleCheckDuplicate","input":"name/date/excludeEventId","status":"depends_on_mismatched_hook"}
+  ],
+  "generated_types":{"file":"src/integrations/supabase/types.ts:1430","status":"STALE_HISTORICAL_SIGNATURE","manual_edit":"not performed"},
+  "rich_duplicate_rpc_created":false,
+  "reconciliation_status":"BLOCKED — approved canonical type source required before adapting caller/types",
+  "required_next_action":"Regenerate generated types from approved canonical source, then adapt hook/UI to boolean semantics; do not change database function."
+}

@@ -1,0 +1,7 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "event_region_a": {"name":"PHASE_8_8A_1B_EVENT_REGION_A","event_id":"ac3243e1-4d94-41b7-99b6-5f6163e7ff87","region_id":"be019cc8-1e5e-4ea6-a82f-d15b96e3aff0","status":"DIAJUKAN"},
+  "event_region_b": {"name":"PHASE_8_8A_1B_EVENT_REGION_B","event_id":"6e0886ca-1cb4-4af3-b72c-5597fb5cda67","region_id":"e2c10dfe-4744-46c0-b1ba-e2e0c197ef8f","status":"DIAJUKAN"},
+  "created": 2
+}

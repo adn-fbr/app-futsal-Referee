@@ -1,0 +1,17 @@
+{
+  "phase":"8.5",
+  "canonical_table":"event_assignments",
+  "relationship":"event_id -> events.id; referee_id -> profiles.id",
+  "tests":[
+    {"id":"EV-HIST-013","case":"Admin Provinsi opens assignment","result":"STATIC_PASS_ROUTE; LIVE_BLOCKED"},
+    {"id":"EV-HIST-014","case":"eligible referee selection","result":"IMPLEMENTED_STATIC","evidence":"useAvailableReferees/get_referees and search UI"},
+    {"id":"EV-HIST-015","case":"assignment succeeds","result":"BLOCKED_LIVE","evidence":"fixture/RLS unavailable"},
+    {"id":"EV-HIST-016","case":"duplicate assignment prevented","result":"PARTIAL_STATIC","evidence":"available/referee filtering exists; live constraint not tested"},
+    {"id":"EV-HIST-017","case":"non-admin assignment denied","result":"STATIC_ROUTE; LIVE_BLOCKED"},
+    {"id":"EV-HIST-018","case":"pending -> confirmed","result":"IMPLEMENTED_STATIC; LIVE_BLOCKED"},
+    {"id":"EV-HIST-019","case":"invalid transition rejected","result":"IMPLEMENTED_STATIC; LIVE_BLOCKED"},
+    {"id":"EV-HIST-020","case":"double submit prevention","result":"IMPLEMENTED_STATIC; LIVE_BLOCKED"}
+  ],
+  "assignment_ui":"existing RefereeAssignment and AdminEventAssignments reused",
+  "schema_mutation":false
+}

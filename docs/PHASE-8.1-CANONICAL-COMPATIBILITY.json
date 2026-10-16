@@ -1,0 +1,17 @@
+{
+  "phase": "8.1",
+  "canonical_hash": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "canonical_inventory": {"tables":27,"columns":249,"functions":47,"views":3,"triggers":22,"rls_policies":86,"indexes":47,"extensions":7,"enum_types":2},
+  "assumptions": [
+    {"application_assumption":"events with deleted_at and kabupaten_kota_id","canonical_object":"public.events","classification":"CANONICAL_MATCH"},
+    {"application_assumption":"profiles and user_roles identity mapping","canonical_object":"public.profiles / public.user_roles / auth.users FK","classification":"CANONICAL_MATCH"},
+    {"application_assumption":"regional organization management","canonical_object":"public.provinsi / public.kabupaten_kota / public.pengurus","classification":"CANONICAL_MATCH"},
+    {"application_assumption":"organizations/clubs/memberships tables","canonical_object":"none; absent from canonical schema","classification":"SCHEMA-GAP / APPLICATION-ONLY"},
+    {"application_assumption":"public_system_settings view","canonical_object":"not among canonical views; canonical views are active_events, active_honors, referee_review_stats","classification":"HISTORICAL / SCHEMA-GAP"},
+    {"application_assumption":"increment_view_count RPC","canonical_object":"not in canonical function inventory","classification":"SCHEMA-GAP"},
+    {"application_assumption":"five-argument duplicate event search returning array","canonical_object":"public.check_duplicate_event(text,text,text) RETURNS boolean","classification":"CONFLICT"},
+    {"application_assumption":"public views used by public reviews","canonical_object":"public.referee_review_stats","classification":"CANONICAL_MATCH"}
+  ],
+  "canonical_views": ["public.active_events","public.active_honors","public.referee_review_stats"],
+  "source_does_not_create_schema_objects": true
+}

@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "direct_assignment_a_by_uuid":"PRE_REMEDIATION_ALLOWED_FOR_ADMIN_A_SCOPE_TEST",
+  "direct_assignment_b_by_uuid":"PRE_REMEDIATION_LEAKAGE_CONFIRMED",
+  "post_remediation":"NOT_VERIFIED"
+}

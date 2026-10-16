@@ -1,0 +1,14 @@
+{
+  "phase":"8.10",
+  "sources":{
+    "events":"public.events",
+    "assignments":"public.event_assignments",
+    "referees":"public.profiles joined public.user_roles role=wasit",
+    "honors":"public.honors",
+    "activity":"public.audit_logs",
+    "regions":"public.kabupaten_kota"
+  },
+  "period":"[startDate,endDateExclusive)",
+  "timezone":"Asia/Makassar",
+  "scope":"RLS plus authenticated profile region; frontend filtering is not security"
+}

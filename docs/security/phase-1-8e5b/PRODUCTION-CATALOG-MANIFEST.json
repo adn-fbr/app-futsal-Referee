@@ -1,0 +1,40 @@
+{
+  "status": "BLOCKED",
+  "phase": "1.8E.5B",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "test_project_ref": "shorsqyycpptxcutrqrb",
+  "production_mutations": "NONE",
+  "data_exported": "NONE",
+  "catalog_completeness": "BLOCKED",
+  "definitions_completeness": "BLOCKED",
+  "security_metadata_completeness": "BLOCKED",
+  "integrity": "BLOCKED",
+  "canonical_baseline": "NOT CREATED",
+  "counts": {
+    "public_tables": { "expected": 27, "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No live PostgreSQL authentication/session is configured; runtime table inventory is not verified." },
+    "public_views": { "expected": 3, "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No live PostgreSQL SQL access; view definitions were not queried." },
+    "public_functions": { "expected": 47, "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No live function catalog extraction is available." },
+    "security_definer_functions": { "expected": 41, "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No live `pg_proc` / `prosecdef` verification is available." },
+    "rls_policies": { "expected": 86, "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No live policy metadata was extracted." },
+    "roles": { "expected": "5 app_role values", "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No live `pg_enum` / `public.app_role` verification is available." },
+    "constraints": { "expected": "NOT SPECIFIED", "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No constraint definitions were extracted from production." },
+    "indexes": { "expected": "NOT SPECIFIED", "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No index definitions were extracted from production." },
+    "triggers": { "expected": "NOT SPECIFIED", "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No trigger definitions were extracted from production." },
+    "extensions": { "expected": "NOT SPECIFIED", "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No extension catalog was queried." },
+    "sequences": { "expected": "NOT SPECIFIED", "actual": "NOT VERIFIED", "delta": "NOT VERIFIED", "explanation": "No sequence catalog was queried." }
+  },
+  "mismatches": [
+    {
+      "category": "All runtime catalog categories",
+      "expected": "Complete live PostgreSQL catalog artifacts required by phase 1.8E.5B",
+      "actual": "BLOCKED due to missing production SQL channel",
+      "delta": "Not applicable; extraction did not run",
+      "explanation": "The current workspace has project metadata only. No authenticated production PostgreSQL session, role, or direct read-only catalog channel is configured, so no live SQL queries could be executed without violating the safety boundary."
+    }
+  ],
+  "notes": [
+    "This file is a forensic blocker artifact, not a canonical production baseline.",
+    "The workspace remains configured to the production project ref only for metadata visibility; no production data or schema was modified.",
+    "The canonical baseline generation gate remains explicitly disabled until live catalog extraction is available."
+  ]
+}

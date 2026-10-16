@@ -1,0 +1,12 @@
+-- PHASE 1.8E.4A FUNCTION CATALOG
+-- STATUS: BLOCKED
+--
+-- This file intentionally contains no invented function SQL. The captured
+-- production dump established 47 public functions and 41 SECURITY DEFINER
+-- functions, but the complete pg_get_functiondef/owner/ACL catalog is not
+-- available as a repository-local artifact. Do not use this file for deploy.
+--
+-- Required read-only extraction:
+-- pg_get_functiondef(p.oid), pg_get_userbyid(p.proowner),
+-- pg_get_function_identity_arguments(p.oid), pg_get_function_result(p.oid),
+-- p.proconfig, and aclexplode(p.proacl), scoped to application functions.

@@ -1,0 +1,13 @@
+{
+  "phase": "8.3A",
+  "source": "src/hooks/useEventAssignments.ts",
+  "canonical_table": "public.event_assignments",
+  "identity_column": "id",
+  "status_column": "status",
+  "supported_values": ["pending", "confirmed", "declined", "cancelled"],
+  "transition_policy": "Existing application status values only; no new enum or transition rule was invented.",
+  "ui_behavior": "Current status and selected next status are shown before password verification.",
+  "mutation": "UPDATE event_assignments SET status = nextStatus WHERE id = assignmentId",
+  "same_status_option": false,
+  "schema_mutation": false
+}

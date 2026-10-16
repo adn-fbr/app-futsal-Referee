@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2E",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "select_isolation":"NOT_TESTED",
+  "update_isolation":"NOT_TESTED",
+  "pre_remediation_leakage":"CONFIRMED"
+}

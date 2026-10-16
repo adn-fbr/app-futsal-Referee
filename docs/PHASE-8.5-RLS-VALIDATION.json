@@ -1,0 +1,15 @@
+{
+  "phase":"8.5",
+  "target":"shorsqyycpptxcutrqrb",
+  "production_target":"xfscfjwapwnkiinkgbjg",
+  "status":"BLOCKED — NON-PRODUCTION FIXTURE/RLS EXECUTION UNAVAILABLE",
+  "tests":[
+    {"id":"RLS-EV-001","identity":"admin_provinsi","operation":"create historical events row","expected":"allowed by canonical contract","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"id":"RLS-EV-002","identity":"admin_provinsi","operation":"validate event","expected":"allowed","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"id":"RLS-EV-003","identity":"admin_provinsi","operation":"assign referee","expected":"allowed for authorized event","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"id":"RLS-EV-004","identity":"non_admin","operation":"all historical mutations","expected":"denied","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"id":"RLS-EV-005","identity":"anonymous","operation":"all mutations","expected":"denied","actual":"NOT_EXECUTED","status":"BLOCKED"}
+  ],
+  "schema_change":0,"rls_change":0,"production_access":0,
+  "blockers":["approved synthetic Auth identities unavailable","pending event/assignment fixture unavailable","browser/RLS harness unavailable"]
+}

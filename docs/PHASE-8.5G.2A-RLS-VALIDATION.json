@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2A",
+  "status":"BLOCKED_NOT_APPLIED",
+  "migration_applied":false,
+  "rls_enabled_post": "NOT_VERIFIED_LIVE",
+  "regional_predicate_post":"NOT_VERIFIED_LIVE",
+  "using_with_check_post":"NOT_VERIFIED_LIVE",
+  "cross_region_tests":"NOT_EXECUTED"
+}

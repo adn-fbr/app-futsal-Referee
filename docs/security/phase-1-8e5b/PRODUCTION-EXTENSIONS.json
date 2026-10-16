@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "extensions",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "installed extensions including `pg_trgm`",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No extension catalog query was executed."
+}

@@ -1,0 +1,13 @@
+{
+  "count": 3,
+  "overall": "UNRESOLVED",
+  "classification": "COMBINATION_OF_LOCAL_HISTORY_CANONICAL_RECONSTRUCTION_AND_REMOTE_TARGET_STATE_CONFLICTS",
+  "conflicts": [
+    {"migration":"20260103165842_remix_migration_from_pg_dump.sql","classification":"LOCAL_ONLY_AND_CANONICAL_RECONSTRUCTION","remote_history":"ABSENT","remote_object_state":"PARTIAL_OVERLAP_PRESENT","status":"UNRESOLVED"},
+    {"migration":"20260110162455_98e87d41-5e63-4dba-9290-9fb5f39f3a12.sql","classification":"LOCAL_ONLY_AND_REMOTE_SCHEMA_DRIFT","remote_history":"ABSENT","remote_object_state":"events fields absent","status":"UNRESOLVED"},
+    {"migration":"20260121161308_170f4f14-a4bb-494b-ac16-77f99251a8c4.sql","classification":"LOCAL_ONLY_AND_CANONICAL_FUNCTION_CONFLICT","remote_history":"ABSENT","remote_object_state":"duplicate function absent","status":"UNRESOLVED"}
+  ],
+  "migration_execution": 0,
+  "history_repair": 0,
+  "gate": "BLOCKED"
+}

@@ -1,0 +1,29 @@
+{
+  "phase": "8.3A",
+  "flow": [
+    "ProtectedRoute requires admin_provinsi",
+    "useChangeAdminAssignmentStatus obtains current supabase.auth.getUser()",
+    "user_roles is queried by current user id",
+    "admin_provinsi role is required",
+    "supabase.auth.signInWithPassword uses current user's email and supplied password",
+    "getUser is called again after re-authentication",
+    "user_roles is queried again after re-authentication",
+    "canonical assignment id mutation executes only after both checks pass"
+  ],
+  "password": {
+    "input_type": "password",
+    "prefilled": false,
+    "persisted": false,
+    "logged": false,
+    "sent_to_database": false,
+    "cleared_on_close_or_success": true,
+    "included_in_url": false
+  },
+  "failure_behavior": {
+    "wrong_password": "Password tidak valid. Tindakan administratif tidak dilakukan.",
+    "role_missing": "deny before step-up",
+    "session_expired": "deny with login/session message",
+    "mutation_error": "safe user-facing failure; raw database error not shown"
+  },
+  "status": "PASS"
+}

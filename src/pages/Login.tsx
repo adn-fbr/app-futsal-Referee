@@ -1,0 +1,236 @@
+import { useState, useEffect } from "react";
+import { Eye, EyeOff, Loader2, AlertCircle, Star, ArrowRight } from "lucide-react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useAuth } from "@/contexts/AuthContext";
+import { FFILogo } from "@/components/reviews/FFILogo";
+import { z } from "zod";
+import { loginSchema } from "@/lib/validations";
+import { logAuthEvent } from "@/lib/authAudit";
+import { getDefaultRouteByRole } from "@/lib/routeUtils";
+
+export default function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { signIn, user, role, isProfileComplete, isLoading: authLoading, isAdmin } = useAuth();
+  
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user && !authLoading && role) {
+      redirectBasedOnRole();
+    }
+  }, [user, role, isProfileComplete, authLoading]);
+
+  const redirectBasedOnRole = () => {
+    // Check if there's a redirect path from protected route
+    const from = (location.state as { from?: { pathname: string } })?.from?.pathname;
+    
+    if (from) {
+      navigate(from, { replace: true });
+      return;
+    }
+
+    // Use centralized route logic
+    const defaultRoute = getDefaultRouteByRole(role, isAdmin());
+    navigate(defaultRoute, { replace: true });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    // Validate with Zod
+    try {
+      loginSchema.parse({ email, password });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        setError(err.errors[0].message);
+        return;
+      }
+    }
+
+    setIsLoading(true);
+    
+    const { error } = await signIn(email, password);
+    
+    setIsLoading(false);
+    
+    if (error) {
+      void logAuthEvent({
+        event: "AUTH_LOGIN_FAILED",
+        success: false,
+        identifier: email,
+        metadata: {
+          reason: error.message,
+        },
+      });
+      if (error.message.includes("Invalid login credentials")) {
+        setError("Email atau password salah");
+      } else if (error.message.includes("Email not confirmed")) {
+        setError("Email belum diverifikasi. Silakan cek email Anda");
+      } else {
+        setError(error.message);
+      }
+    }
+  };
+
+  // Show loading while checking auth state
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Header with gradient */}
+      <div className="bg-gradient-to-br from-primary to-accent px-6 pt-12 pb-16 text-center">
+        <FFILogo size="lg" showSubtitle={true} />
+      </div>
+
+      {/* Login Form Card */}
+      <div className="flex-1 px-6 -mt-8">
+        <div className="bg-card rounded-2xl shadow-lg border border-border p-6 animate-fade-in">
+          <h2 className="text-lg font-bold text-center mb-1">
+            Login Sistem Asosiasi Futsal Provinsi Sulawesi Selatan
+          </h2>
+          <p className="text-sm text-muted-foreground text-center mb-6">
+            Masuk untuk mengelola event dan wasit
+          </p>
+
+          {/* Error Alert */}
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="nama@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                className="h-12 text-base"
+                autoComplete="email"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-sm font-medium">
+                Password
+              </Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Masukkan password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
+                  className="h-12 text-base pr-12"
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Forgot Password Link */}
+            <div className="text-right">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-primary hover:underline"
+              >
+                Lupa Password?
+              </Link>
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Memproses...
+                </>
+              ) : (
+                "Masuk"
+              )}
+            </Button>
+
+            <div className="text-center mt-4 text-sm text-muted-foreground">
+              Belum punya akun?{" "}
+              <Link to="/signup" className="text-primary hover:underline font-medium">
+                Daftar di sini
+              </Link>
+            </div>
+          </form>
+        </div>
+
+        {/* Public Review CTA */}
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 rounded-xl p-4 mt-4 border border-amber-200 dark:border-amber-800">
+          <div className="flex items-center gap-3">
+            <div className="bg-amber-100 dark:bg-amber-900/50 p-2 rounded-lg">
+              <Star className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-semibold text-sm">Beri Penilaian Wasit</h3>
+              <p className="text-xs text-muted-foreground">
+                Bantu tingkatkan kualitas wasit dengan ulasan Anda
+              </p>
+            </div>
+            <Button variant="outline" size="sm" asChild className="shrink-0">
+              <Link to="/review">
+                Review <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-6 pb-8">
+          <p className="text-xs text-muted-foreground">
+            © 2026 Asosiasi Futsal Provinsi Sulawesi Selatan
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Sistem Manajemen Wasit & Event
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,8 @@
+{
+  "phase": "8.9.1",
+  "status": "PARTIAL",
+  "public_auth_forms": {"login":"RENDERED","signup":"RENDERED","forgot_password":"RENDERED","reset_password":"RENDERED"},
+  "protected_event_forms": "NOT_VALIDATED",
+  "password_step_up": "NOT_VALIDATED",
+  "reason_for_missing_protected_forms": "AUTH_FIXTURE_UNAVAILABLE"
+}

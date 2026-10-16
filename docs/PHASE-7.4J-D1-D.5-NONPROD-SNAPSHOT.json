@@ -1,0 +1,31 @@
+{
+  "phase": "PHASE 7.4J-D1-D.5",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "captured_utc": "2026-09-08T08:40:05.2515622Z",
+  "path": "tmp/PHASE-7.4J-D1-D.5-NONPROD-SNAPSHOT.sql",
+  "bytes": 67413,
+  "sha256": "c214e785cff8f5323158d0dc5e9d9e51d88f21a56968a00c816c2640398210da",
+  "scope": ["public", "storage"],
+  "inventory": {
+    "schemas": 2,
+    "tables": 14,
+    "columns": 119,
+    "constraints": "captured in schema SQL; current state is pre-reconstruction",
+    "foreign_keys": "captured in schema SQL; current state is pre-reconstruction",
+    "functions": 20,
+    "views": 1,
+    "triggers": 8,
+    "indexes": 11,
+    "rls_enabled_tables": 14,
+    "policies": 32,
+    "extensions": 0,
+    "enum_types": 2
+  },
+  "events": {
+    "has_deleted_at": false,
+    "has_kabupaten_kota_id": false
+  },
+  "auth_users_definition_dumped": false,
+  "data_statements": 0,
+  "note": "This is the disposable non-production state to be reconstructed in the separately authorized D1-D.6 phase; it is not the canonical target."
+}

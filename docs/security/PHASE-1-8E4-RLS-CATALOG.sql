@@ -1,0 +1,7 @@
+-- PHASE 1.8E.4A RLS CATALOG
+-- STATUS: PARTIAL / BLOCKED
+-- Verified: 27 public application tables have RLS enabled and 86 policies
+-- were observed. Broad policy examples and policy risks are documented in
+-- PHASE-1-8B-RUNTIME-RLS-INVENTORY.md.
+-- Complete pg_policies role/permissive/USING/WITH CHECK definitions are not
+-- preserved here. Do not simplify or deploy this file.

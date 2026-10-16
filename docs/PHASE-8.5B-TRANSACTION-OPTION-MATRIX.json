@@ -1,0 +1,11 @@
+{
+  "phase":"8.5B",
+  "options":[
+    {"option":"A_DATABASE_FUNCTION_RPC","atomicity":"YES if one PostgreSQL statement/function transaction","rls":"SECURITY INVOKER preferred; existing events/event_approvals policies apply; auth.uid/user_roles/scope must be enforced","security":"best when invoker/RLS preserved; SECURITY DEFINER only with separate review","complexity":"HIGH","recommended":true,"reason":"Actual atomic boundary belongs in PostgreSQL and preserves one logical operation","requires":"new governed backend function/RPC; implementation not authorized in 8.5B"},
+    {"option":"B_EDGE_FUNCTION","atomicity":"NOT BY ITSELF; requires DB transaction function or equivalent","rls":"service-role would bypass RLS and is forbidden as a browser authority; bearer identity must be rechecked","security":"HIGH risk if service-role path is used without strict authorization","complexity":"HIGH","recommended":false,"reason":"Edge Function alone does not make two PostgREST writes atomic"},
+    {"option":"C_POSTGRES_PROCEDURE","atomicity":"depends on invocation/transaction semantics and Supabase exposure","rls":"requires separate security and API analysis","security":"uncertain","complexity":"HIGH","recommended":false,"reason":"No evidence this is needed over a function/RPC; do not select by name alone"},
+    {"option":"D_EXISTING_MULTI_MUTATION","atomicity":"NO","rls":"separate policies and partial failure remain","security":"existing auth but data integrity unsafe","complexity":"LOW","recommended":false,"reason":"Confirmed insufficient by Phase 8.5A"}
+  ],
+  "selection":"OPTION A — governed PostgreSQL function/RPC, preferably SECURITY INVOKER; stop before implementation.",
+  "schema_change_required":"BACKEND_TRANSACTION_MECHANISM_REQUIRED; exact function identity/signature requires approval"
+}

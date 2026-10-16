@@ -1,0 +1,82 @@
+{
+  "phase": "PHASE 7.4J-D1-D.1",
+  "status": "BLOCKED",
+  "inventory": [
+    {
+      "path": "D:\\AFP SULSEL\\app-futsal\\production-schema.sql",
+      "name": "production-schema.sql",
+      "size_bytes": 126597,
+      "modified_utc": "2026-09-07T07:23:53.3207946Z",
+      "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+      "matches_expected": false,
+      "matches_observed": true,
+      "byte_identical_to_expected": false,
+      "byte_identical_to_observed": true,
+      "bom_prefix_bytes": [10, 10, 10, 83],
+      "crlf": true,
+      "lf": true,
+      "notes": "Actual file bytes. Independent hash reproduction matched this value exactly."
+    },
+    {
+      "path": "D:\\AFP SULSEL\\app-futsal\\CANONICAL-RUNTIME-BASELINE-HASH.txt",
+      "name": "CANONICAL-RUNTIME-BASELINE-HASH.txt",
+      "size_bytes": 64,
+      "modified_utc": "2026-09-07T10:35:27.883Z",
+      "sha256": "0ae8ebe3c3493adf4f23766b97d3f41d8a3d4717741c90838c00d8d766ba32e0",
+      "matches_expected": false,
+      "matches_observed": true,
+      "byte_identical_to_expected": false,
+      "byte_identical_to_observed": false,
+      "notes": "Contains the observed hash only."
+    },
+    {
+      "path": "D:\\AFP SULSEL\\app-futsal\\CANONICAL-RUNTIME-BASELINE-MANIFEST.json",
+      "name": "CANONICAL-RUNTIME-BASELINE-MANIFEST.json",
+      "size_bytes": 25317,
+      "modified_utc": "2026-09-07T10:35:27.518Z",
+      "sha256": "5a4d777731f1cedd131ef8377bb7e3b28fecb1a54f85ec9ef104128dce32a8ef",
+      "matches_expected": false,
+      "matches_observed": true,
+      "byte_identical_to_expected": false,
+      "byte_identical_to_observed": false,
+      "notes": "Generated artifact records the observed hash as the baseline source hash."
+    },
+    {
+      "path": "D:\\AFP SULSEL\\app-futsal\\CANONICAL-RUNTIME-BASELINE-REPORT.md",
+      "name": "CANONICAL-RUNTIME-BASELINE-REPORT.md",
+      "size_bytes": 2823,
+      "modified_utc": "2026-09-07T10:35:27.571Z",
+      "sha256": "3e68d72a48ef00d9eb306c9ee9f7c659260c8701d5af5a9f38e49fafea146f43",
+      "matches_expected": false,
+      "matches_observed": true,
+      "byte_identical_to_expected": false,
+      "byte_identical_to_observed": false,
+      "notes": "Report contains the observed hash and states baseline pass."
+    },
+    {
+      "path": "D:\\AFP SULSEL\\app-futsal\\PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+      "name": "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+      "size_bytes": 327348,
+      "modified_utc": "2026-09-07T10:44:34.351Z",
+      "sha256": "db10e2d2f8e2a227f7d2c3bb2f5a06f8c58d41bd4e252dbdabf1be1ecb3d83cd",
+      "matches_expected": false,
+      "matches_observed": true,
+      "byte_identical_to_expected": false,
+      "byte_identical_to_observed": false,
+      "notes": "Contains an observed-hash dependency record for the canonical baseline."
+    },
+    {
+      "path": "D:\\AFP SULSEL\\app-futsal\\PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+      "name": "PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+      "size_bytes": 34106,
+      "modified_utc": "2026-09-07T10:44:34.202Z",
+      "sha256": "8d023f25d4d13f553b7fbf6d78a26cd7ad6d303e358c7bd556d1fb29f3d7d965",
+      "matches_expected": false,
+      "matches_observed": true,
+      "byte_identical_to_expected": false,
+      "byte_identical_to_observed": false,
+      "notes": "Generated manifest uses the observed hash as the canonical baseline fingerprint."
+    }
+  ],
+  "summary": "No repository copy of the expected hash was found in this inventory. The observed hash is present in the generated baseline artifacts and the actual file itself."
+}

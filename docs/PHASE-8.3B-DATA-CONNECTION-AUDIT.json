@@ -1,0 +1,14 @@
+{
+  "phase":"8.3B","source_occurrences":"84 supabase. occurrences; 149 useQuery/useMutation occurrences; static counts",
+  "data_sources":[
+    {"surface":"AuthContext","source":"repository abstractions backed by Supabase","classification":"REPOSITORY","location":"src/contexts/AuthContext.tsx"},
+    {"surface":"AdminEventAssignments","source":"supabase.from('event_assignments') direct in hook","classification":"REAL SUPABASE DATA","location":"src/hooks/useAdminEventAssignments.ts"},
+    {"surface":"RefereeAssignment","source":"direct Supabase-backed hooks for event/assignment/referee/smart suggestions","classification":"REAL SUPABASE DATA","location":"src/hooks/useEventAssignments.ts; src/hooks/useSmartAssignment.ts"},
+    {"surface":"RefereeEvents","source":"direct Supabase-backed hooks","classification":"REAL SUPABASE DATA","location":"src/hooks/useRefereeEvents.ts"},
+    {"surface":"DatabaseExport seed tab","source":"useSeedDatabase and SEED_DATA_SUMMARY","classification":"DEMO_DATA / MUTATING SUPPORT","location":"src/pages/DatabaseExport.tsx; src/hooks/useSeedDatabase.ts"},
+    {"surface":"Most business hooks","source":"direct Supabase calls rather than common repository abstraction","classification":"DIRECT_CLIENT_ACCESS","location":"src/hooks/*","gap":"F-012 state/contract consistency risk"}
+  ],
+  "hardcoded_or_static_risks":["Seed summary contains hardcoded counts such as 21 users and 15 referees","UI status option list in AdminEventAssignments is hardcoded to canonical-looking statuses","No evidence of fake production records in normal list pages from static scan"],
+  "contract_sensitive_surfaces":["event_assignments","check_duplicate_event","increment_view_count"],
+  "not_performed":["database inspection","RPC execution","Production access","migration"]
+}

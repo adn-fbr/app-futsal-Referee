@@ -1,0 +1,16 @@
+{
+  "phase":"8.5C",
+  "status":"BLOCKED_NOT_IMPLEMENTED",
+  "function_created":false,
+  "migration_created":false,
+  "migration_applied":false,
+  "tests":[
+    {"id":"HIST-X-001","atomic success","status":"NOT_EXECUTED"},
+    {"id":"HIST-X-002","duplicate prevents creation","status":"NOT_EXECUTED"},
+    {"id":"HIST-X-003","validation failure rollback","status":"NOT_EXECUTED"},
+    {"id":"HIST-X-004","approval failure rollback","status":"NOT_EXECUTED"},
+    {"id":"HIST-X-005","retry idempotency","status":"NOT_EXECUTED"},
+    {"id":"HIST-X-006","double submit","status":"NOT_EXECUTED"}
+  ],
+  "reason":"No safe implementation can proceed until canonical p_kota_id/event scope semantics and idempotency contract are resolved."
+}

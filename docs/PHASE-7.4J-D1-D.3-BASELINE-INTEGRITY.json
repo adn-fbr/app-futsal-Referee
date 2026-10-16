@@ -1,0 +1,34 @@
+{
+  "phase": "PHASE 7.4J-D1-D.3",
+  "file": "production-schema.sql",
+  "authoritative_hash_source": "PHASE-7.4J-D1-D.2 observed_sha256",
+  "authoritative_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "methods": [
+    {
+      "method": "PowerShell Get-FileHash SHA256",
+      "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+      "matches_authoritative": true
+    },
+    {
+      "method": ".NET SHA256 over raw bytes",
+      "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+      "matches_authoritative": true
+    }
+  ],
+  "all_methods_match": true,
+  "bytes": 126597,
+  "last_write_utc": "2026-09-07T07:23:53.3207946Z",
+  "canonical_copy": {
+    "path": "CANONICAL-RUNTIME-BASELINE.sql",
+    "bytes": 126597,
+    "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "byte_identical": true
+  },
+  "git": {
+    "working_tree_diff": false,
+    "staged_diff": false,
+    "tracked": true,
+    "git_ls_files_eol": "i/lf w/mixed attr/ production-schema.sql"
+  },
+  "integrity_gate": "PASS"
+}

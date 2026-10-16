@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G.2",
+  "status": "BLOCKED",
+  "canonical_relationship": "event_assignments.event_id -> events.id -> events.kabupaten_kota_id -> kabupaten_kota.id/name",
+  "existing_reference_row": "NOT VERIFIED REMOTELY",
+  "synthetic_region_created": false,
+  "region_read_back": "NOT EXECUTED",
+  "null_region_case": "NOT EXECUTED"
+}

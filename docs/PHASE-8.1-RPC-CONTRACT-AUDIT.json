@@ -1,0 +1,24 @@
+{
+  "phase": "8.1",
+  "rpc_invocations": [
+    {"rpc_name":"can_access_region","files":["src/lib/systemRules.ts:35"],"canonical_status":"CANONICAL"},
+    {"rpc_name":"check_duplicate_event","files":["src/hooks/useEvents.ts:556"],"canonical_status":"CONFLICT / SCHEMA-GAP","expected_canonical":"text,text,text -> boolean","observed_application_contract":"five named arguments; expects duplicate array"},
+    {"rpc_name":"count_referee_cards","files":["src/hooks/useRefereeCard.ts:148"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"count_referees","files":["src/hooks/useReferees.ts:109"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"generate_card_number","files":["src/hooks/useRefereeCard.ts:252","src/hooks/useRefereeCard.ts:450","src/hooks/useRefereeCard.ts:514"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_admin_dashboard_summary","files":["src/hooks/useReports.ts:48"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_audit_logs","files":["src/hooks/useAuditLogs.ts:45"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_pending_registrations","files":["src/hooks/useRegistrations.ts:36","src/hooks/useRegistrations.ts:60"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_public_referee","files":["src/hooks/usePublicReviews.ts:85"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_public_referees","files":["src/hooks/usePublicReviews.ts:29","src/hooks/usePublicReviews.ts:173"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_referee_event_count","files":["src/hooks/useReports.ts:85"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_referee_income_summary","files":["src/hooks/useReports.ts:68"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_referees","files":["src/hooks/useEventAssignments.ts:179","src/hooks/useReferees.ts:42","src/hooks/useReferees.ts:85","src/hooks/useReferees.ts:205","src/hooks/useSmartAssignment.ts:65"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"get_registration_history","files":["src/hooks/useRegistrations.ts:48"],"canonical_status":"CANONICAL_FUNCTION"},
+    {"rpc_name":"increment_view_count","files":["src/hooks/useDiscussions.ts:118"],"canonical_status":"SCHEMA_GAP","canonical_reference":"PHASE 7.3B"},
+    {"rpc_name":"search_referee_cards","files":["src/hooks/useRefereeCard.ts:102"],"canonical_status":"CANONICAL_OVERLOAD"},
+    {"rpc_name":"verify_referee_card","files":["src/hooks/useRefereeCard.ts:368"],"canonical_status":"CANONICAL_FUNCTION"}
+  ],
+  "historical_contracts": [{"name":"public_system_settings","files":["src/hooks/useSettings.ts:31","src/hooks/useSettings.ts:46"],"status":"HISTORICAL CONTRACT / SCHEMA-GAP"}],
+  "duplicate_event_governance": {"canonical":"public.check_duplicate_event(text,text,text) RETURNS boolean","application_match":false,"rich_function_created":false}
+}

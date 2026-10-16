@@ -1,0 +1,11 @@
+{
+  "phase": "8.5G.3B",
+  "active_project": "shorsqyycpptxcutrqrb",
+  "active_vite_url": "PASS - Non-Production",
+  "project_guard_before_client": "PASS",
+  "environment_guard_before_client": "PASS",
+  "production_target": "NOT CONNECTED",
+  "production_rejection": "STATIC PASS via allowlist guard; no Production request made",
+  "supabase_client_created_by_diagnostic": false,
+  "status": "PASS FOR GUARD; CHANNEL BLOCKED"
+}

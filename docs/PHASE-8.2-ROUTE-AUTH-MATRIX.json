@@ -1,0 +1,20 @@
+{
+  "phase": "8.2",
+  "route_source": "src/App.tsx",
+  "guard_source": "src/components/auth/ProtectedRoute.tsx",
+  "public_route_count": 11,
+  "protected_route_count": 39,
+  "catch_all_count": 1,
+  "auth_contract": "All protected routes remain behind ProtectedRoute and now have explicit AuthContext.isAuthenticated state available.",
+  "route_behavior": {
+    "loading": "loading UI",
+    "unauthenticated": "redirect /login",
+    "profile_missing": "identity-incomplete UI",
+    "role_missing": "pending/unauthorized UI",
+    "authorized": "render route",
+    "forbidden": "role-aware forbidden redirect"
+  },
+  "route_matrix_inherited_from": "docs/PHASE-8.1-ROUTE-MATRIX.json",
+  "route_definitions_changed": false,
+  "protected_route_security": "AUTHENTICATED SESSION, not sidebar/button visibility"
+}

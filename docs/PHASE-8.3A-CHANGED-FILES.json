@@ -1,0 +1,13 @@
+{
+  "phase": "8.3A",
+  "files": [
+    {"file":"src/hooks/useAdminEventAssignments.ts","change_type":"created","purpose":"Canonical event assignment query and role-plus-step-up status mutation.","schema_related":false},
+    {"file":"src/pages/AdminEventAssignments.tsx","change_type":"created","purpose":"Responsive Admin Provinsi assignment management UI and dialogs.","schema_related":false},
+    {"file":"src/App.tsx","change_type":"modified","purpose":"Register protected /administration/event-assignments route.","schema_related":false},
+    {"file":"src/components/layout/MobileNav.tsx","change_type":"modified","purpose":"Show Event Assignment menu item only for Admin Provinsi.","schema_related":false}
+  ],
+  "source_files_changed": 4,
+  "schema_files_changed": 0,
+  "migration_files_created": 0,
+  "database_files_changed": 0
+}

@@ -1,0 +1,10 @@
+{
+  "phase": "8.5G.2",
+  "status": "DOCUMENTED; NOT EXECUTED",
+  "scope": "fixture identifiers only",
+  "dependency_order": ["event_assignments", "events", "profiles/user_roles", "Auth identities"],
+  "broad_delete": false,
+  "unrelated_data_delete": false,
+  "cleanup_executed": false,
+  "cleanup_blocker": "No fixture identifiers exist because provisioning was blocked."
+}

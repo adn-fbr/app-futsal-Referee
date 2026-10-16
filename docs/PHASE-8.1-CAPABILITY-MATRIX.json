@@ -1,0 +1,25 @@
+{
+  "phase": "8.1",
+  "capabilities": [
+    {"capability":"Authentication","implemented":"yes","backend":"Supabase Auth","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Session Management","implemented":"yes","backend":"AuthContext/client persistence","rbac":"n/a","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Profile","implemented":"yes","backend":"profiles","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Role Management","implemented":"yes","backend":"user_roles + Edge Functions","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Dashboard","implemented":"yes","backend":"RPC/direct tables","rbac":"admin guard","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Events","implemented":"yes","backend":"events/event_approvals","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Event Assignment","implemented":"yes","backend":"event_assignments","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Referee Cards","implemented":"yes","backend":"referee_cards/RPCs","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Referee Reviews","implemented":"yes","backend":"referee_reviews/referee_review_stats","rbac":"partial","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Evaluations","implemented":"yes","backend":"evaluations/evaluation_scores","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Learning","implemented":"yes","backend":"learning_materials/learning_progress","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Notifications","implemented":"yes","backend":"notifications/notification_preferences","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Honors","implemented":"yes","backend":"honors/active_honors","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Discussion","implemented":"yes","backend":"discussion_topics/replies","rbac":"partial","rls":"schema-gap increment_view_count","demo_fallback":"no","status":"PARTIAL"},
+    {"capability":"Pengurus","implemented":"yes","backend":"pengurus/provinsi/kabupaten_kota","rbac":"yes","rls":"yes","demo_fallback":"static header","status":"PARTIAL"},
+    {"capability":"Regional Data","implemented":"yes","backend":"provinsi/kabupaten_kota","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Settings","implemented":"yes","backend":"system_settings + public_system_settings","rbac":"admin guard","rls":"historical view gap","demo_fallback":"no","status":"PARTIAL"},
+    {"capability":"Audit Logs","implemented":"yes","backend":"audit_logs/auth_event_logs","rbac":"admin guard","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"},
+    {"capability":"Activity Logs","implemented":"partial","backend":"audit_logs references","rbac":"unknown","rls":"yes","demo_fallback":"no","status":"PARTIAL"},
+    {"capability":"Card Verification","implemented":"yes","backend":"card_verification_logs/RPC","rbac":"yes","rls":"yes","demo_fallback":"no","status":"IMPLEMENTED"}
+  ]
+}

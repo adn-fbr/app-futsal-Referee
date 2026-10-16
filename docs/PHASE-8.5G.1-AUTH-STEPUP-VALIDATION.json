@@ -1,0 +1,13 @@
+{
+  "phase": "8.5G.1",
+  "role_source": "user_roles and AuthContext",
+  "password_role_authority": false,
+  "admin_provinsi": "STATIC PASS; LIVE NOT VERIFIED",
+  "password_step_up": "NOT VERIFIED",
+  "wrong_password_rejection": "NOT VERIFIED",
+  "empty_password_rejection": "STATIC PASS; LIVE NOT VERIFIED",
+  "session_expiry": "NOT VERIFIED",
+  "non_admin_correct_password_rejection": "NOT VERIFIED",
+  "password_logged": false,
+  "approved_credentials_available": false
+}

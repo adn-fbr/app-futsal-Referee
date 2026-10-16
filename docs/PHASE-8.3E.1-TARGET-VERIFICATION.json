@@ -1,0 +1,20 @@
+{
+  "phase":"8.3E.1",
+  "authorized_target":"shorsqyycpptxcutrqrb",
+  "forbidden_target":"xfscfjwapwnkiinkgbjg",
+  "effective_application_target":"xfscfjwapwnkiinkgbjg",
+  "target_verification":"FAIL_SAFE_BLOCKED",
+  "evidence":[
+    {"source":".env VITE_SUPABASE_URL","resolved_ref":"xfscfjwapwnkiinkgbjg","result":"FORBIDDEN_PRODUCTION"},
+    {"source":"supabase/config.toml project_id","resolved_ref":"xfscfjwapwnkiinkgbjg","result":"FORBIDDEN_PRODUCTION"},
+    {"source":"supabase/.temp/project-ref","resolved_ref":"shorsqyycpptxcutrqrb","result":"NON_PRODUCTION_METADATA_ONLY"},
+    {"source":".env.example","declared_ref":"shorsqyycpptxcutrqrb","result":"EXAMPLE_NOT_RUNTIME_CONFIGURATION"}
+  ],
+  "production_access":0,
+  "production_queries":0,
+  "production_mutations":0,
+  "production_authentication":0,
+  "production_browser_sessions":0,
+  "environment_rebinding_performed":false,
+  "reason":"Effective application configuration still resolves to forbidden Production and no authorized non-production runtime credential is available."
+}

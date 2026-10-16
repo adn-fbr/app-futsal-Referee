@@ -1,0 +1,12 @@
+{
+  "phase":"8.5C",
+  "status":"BLOCKED_DESIGN_GAP",
+  "risks":["double click","browser retry","timeout after commit","user retry"],
+  "canonical_constraint_or_key_identified":false,
+  "new_idempotency_field_created":false,
+  "tests":[
+    {"id":"HIST-X-005","retry","status":"NOT_EXECUTED"},
+    {"id":"HIST-X-006","double submit","status":"NOT_EXECUTED"}
+  ],
+  "required_next_decision":"reuse approved canonical uniqueness constraint/key or separately design idempotency contract; do not invent schema in this phase"
+}

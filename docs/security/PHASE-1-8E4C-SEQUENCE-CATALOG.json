@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "capturedCount": 0,
+  "missing": ["application sequence names","owners","parameters","ownership dependencies"]
+}

@@ -1,0 +1,6 @@
+-- PHASE 1.8E.4A INDEX CATALOG
+-- STATUS: BLOCKED
+-- The production catalog confirmed application indexes exist, but complete
+-- index definitions, expressions, predicates, methods, and relationships are
+-- not preserved in a repository-local extraction artifact.
+-- Do not use this file for deployment.

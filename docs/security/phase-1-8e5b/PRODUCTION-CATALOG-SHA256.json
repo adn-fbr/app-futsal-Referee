@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "phase": "1.8E.5B",
+  "canonical_manifest_sha256": "NOT GENERATED",
+  "artifacts": {},
+  "note": "The complete live catalog is not available; this file documents the blocker artifact set only."
+}

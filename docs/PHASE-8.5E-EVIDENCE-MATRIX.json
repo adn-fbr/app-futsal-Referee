@@ -1,0 +1,15 @@
+{
+  "phase": "8.5E",
+  "rows": [
+    {"source": "production-schema.sql", "identifier": "public.check_duplicate_event", "meaning": "three text parameters, boolean exact EXISTS body referencing kota_id", "strength": "AUTHORITATIVE_CANONICAL", "finding": "body/table conflict"},
+    {"source": "production-schema.sql", "identifier": "public.events.kabupaten_kota_id", "meaning": "nullable UUID FK to kabupaten_kota.id", "strength": "AUTHORITATIVE_CANONICAL", "finding": "kota_id absent"},
+    {"source": "production-schema.sql", "identifier": "public.kabupaten_kota.id", "meaning": "regional kabupaten/kota entity", "strength": "AUTHORITATIVE_CANONICAL", "finding": "linked to provinsi.id"},
+    {"source": "supabase/migrations/20260121161308_170f4f14-a4bb-494b-ac16-77f99251a8c4.sql", "identifier": "check_duplicate_event", "meaning": "five-argument fuzzy/date-aware duplicate rows", "strength": "HISTORICAL", "finding": "conflicts with canonical identity"},
+    {"source": "src/hooks/useEvents.ts", "identifier": "useCheckDuplicateEvent", "meaning": "application sends five historical arguments", "strength": "APPLICATION", "finding": "caller mismatch"},
+    {"source": "src/pages/EventEdit.tsx", "identifier": "handleCheckDuplicate", "meaning": "expects duplicate records and names", "strength": "APPLICATION", "finding": "rich-result dependency"},
+    {"source": "src/integrations/supabase/types.ts", "identifier": "Functions.check_duplicate_event", "meaning": "derived five-argument array result", "strength": "DERIVED_GENERATED", "finding": "not authoritative"},
+    {"source": "docs/PHASE-7.4J-D1-D.4-CANONICAL-INVENTORY.json", "identifier": "check_duplicate_event", "meaning": "three text args, boolean, no rich overload", "strength": "CANONICAL_INVENTORY", "finding": "supports frozen identity"},
+    {"source": "docs/security/PHASE-1-8E4C-DEPENDENCY-GRAPH.json", "identifier": "events.kabupaten_kota_id -> kabupaten_kota.id", "meaning": "regional FK topology", "strength": "SECURITY_EVIDENCE", "finding": "no kota_id edge"}
+  ],
+  "ownership_result": "SEMANTICALLY UNRESOLVED"
+}

@@ -1,0 +1,11 @@
+{
+  "phase": "8.7",
+  "timezone": "Asia/Makassar",
+  "utility": "src/lib/currentYear.ts",
+  "provider": "src/contexts/CurrentYearContext.tsx",
+  "api": ["getCurrentYear","getToday","formatToday","getYearFromDate","getAnnualRange","formatAnnualPeriod"],
+  "current_year": "dynamic from zoned clock",
+  "annual_range": "[YYYY-01-01, (YYYY+1)-01-01)",
+  "rollover": "provider refreshes every minute and recalculates on year boundary",
+  "hard_coded_business_year": false
+}

@@ -1,0 +1,17 @@
+{
+  "phase": "PHASE 7.4J-D1-D.6",
+  "canonical_graph": "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+  "canonical_source_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "post_reconstruction_public_identity_match": true,
+  "post_reconstruction_definition_match": true,
+  "records": 351,
+  "resolved": 282,
+  "unresolved": 47,
+  "external_managed": 22,
+  "not_exposed": 0,
+  "ambiguous": 0,
+  "foreign_keys": {"expected": 30, "actual": 30, "status": "PASS"},
+  "external_managed_dependencies": ["auth.users references remain managed Auth boundaries"],
+  "unresolved_methodology": "47 explicit function-body static-analysis markers; unqualified identifiers, comments, and strings were not inferred",
+  "status": "PASS"
+}

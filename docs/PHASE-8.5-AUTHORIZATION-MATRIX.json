@@ -1,0 +1,13 @@
+{
+  "phase":"8.5",
+  "roles":[
+    {"role":"admin_provinsi","create_historical_event":"UI_ALLOWED_STATIC; RLS_NOT_EXECUTED","validate_event":"EXISTING_APPROVAL_PATH; LIVE_NOT_EXECUTED","assign_referee":"EXISTING_ADMIN_ROUTE; LIVE_NOT_EXECUTED","change_assignment_status":"EXISTING_STEP_UP_PATH; LIVE_NOT_EXECUTED"},
+    {"role":"admin_kab_kota","create_historical_event":"ROUTE_ALLOWED_FOR_EVENTS; historical capability not separately proven","validate_event":"canonical scope decision required","assign_referee":"route requires admin and CTA alignment static","change_assignment_status":"denied by admin-provinsi-only route"},
+    {"role":"panitia","create_historical_event":"existing event route; historical capability not separately proven","validate_event":"not established","assign_referee":"CTA hidden by prior remediation","change_assignment_status":"denied"},
+    {"role":"wasit","create_historical_event":"denied","validate_event":"denied","assign_referee":"denied","change_assignment_status":"denied"},
+    {"role":"anonymous","create_historical_event":"denied by ProtectedRoute","validate_event":"denied","assign_referee":"denied","change_assignment_status":"denied"}
+  ],
+  "authorization_sources":["AuthContext session","user_roles repository","ProtectedRoute","existing AdminEventAssignments step-up and role re-check","database RLS remains final boundary"],
+  "live_results":"BLOCKED — no synthetic identities/fixtures or browser/RLS execution",
+  "password_is_role_authority":false
+}

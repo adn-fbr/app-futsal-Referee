@@ -1,0 +1,17 @@
+{
+  "phase": "8.5F",
+  "target": "shorsqyycpptxcutrqrb",
+  "tests": [
+    {"id": "F-009", "case": "sentinel no matching event", "result": "PASS", "observed": true},
+    {"id": "F-010", "case": "exact matching event", "result": "NOT_EXECUTED", "reason": "No existing row with non-null region, location, and name; fixture creation forbidden"},
+    {"id": "F-011", "case": "different kabupaten/kota", "result": "NOT_EXECUTED", "reason": "No populated sample row"},
+    {"id": "F-012", "case": "different location", "result": "PASS", "observed": true, "mode": "sentinel"},
+    {"id": "F-013", "case": "different name", "result": "PASS", "observed": true, "mode": "sentinel"},
+    {"id": "F-014", "case": "NULL regional identifier", "result": "PASS", "observed": true},
+    {"id": "F-015", "case": "case behavior", "result": "STATIC_PASS", "observed": "exact equality; no normalization"},
+    {"id": "F-016", "case": "whitespace behavior", "result": "STATIC_PASS", "observed": "exact equality; no trimming"}
+  ],
+  "sample_count_with_non_null_region_location_name": 0,
+  "predicate": "exact name + exact location + exact kabupaten_kota_id; no date/status/deleted filtering",
+  "status": "PARTIAL"
+}

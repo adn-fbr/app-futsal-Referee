@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "dependencies",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "application dependency graph across tables/functions/views/constraints/indexes/policies/triggers",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No dependency catalog query was executed."
+}

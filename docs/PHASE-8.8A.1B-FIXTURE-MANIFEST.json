@@ -1,0 +1,38 @@
+{
+  "phase": "8.8A.1B",
+  "environment": "non-production",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "users": {
+    "fixture-admin-provinsi@nonprod.invalid": "35999d8c-4ffb-4dae-854a-fede06b56afa",
+    "fixture-admin-kabkota-a@nonprod.invalid": "c5395935-4311-450d-8178-77f7ade21719",
+    "fixture-admin-kabkota-b@nonprod.invalid": "24598e43-a13f-42af-a7fa-e963e44680e6",
+    "fixture-referee@nonprod.invalid": "5cd22a8c-c79d-40d1-b39e-70088dffae5d"
+  },
+  "roles": {
+    "fixture-admin-provinsi@nonprod.invalid": "admin_provinsi",
+    "fixture-admin-kabkota-a@nonprod.invalid": "admin_kab_kota",
+    "fixture-admin-kabkota-b@nonprod.invalid": "admin_kab_kota",
+    "fixture-referee@nonprod.invalid": "wasit"
+  },
+  "regions": {
+    "region_a": "be019cc8-1e5e-4ea6-a82f-d15b96e3aff0",
+    "region_b": "e2c10dfe-4744-46c0-b1ba-e2e0c197ef8f"
+  },
+  "events": {
+    "event_region_a": "ac3243e1-4d94-41b7-99b6-5f6163e7ff87",
+    "event_region_b": "6e0886ca-1cb4-4af3-b72c-5597fb5cda67"
+  },
+  "assignments": {
+    "assignment_a": "09c66364-f9f0-4946-8fc9-b2b0a2426c40",
+    "assignment_b": "3e7df7c1-09ae-4a11-bbd5-1fea70708c17"
+  },
+  "mutation_counts": {
+    "auth_users_created": 0,
+    "profiles_created": 0,
+    "profiles_updated": 4,
+    "roles_created": 0,
+    "roles_updated": 4,
+    "events_created": 0,
+    "assignments_created": 0
+  }
+}

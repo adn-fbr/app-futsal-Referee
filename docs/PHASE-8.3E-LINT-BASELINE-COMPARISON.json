@@ -1,0 +1,11 @@
+{
+  "phase":"8.3E",
+  "command":"npm run lint",
+  "baseline_before_8_3e":{"exit_code":1,"errors":66,"warnings":11,"total_problems":77,"affected_files":41},
+  "observed_in_8_3e":{"exit_code":1,"errors":66,"warnings":11,"total_problems":77,"affected_files":41},
+  "comparison":"UNCHANGED",
+  "lint_regression":"NONE",
+  "classification":{"PRE_EXISTING":true,"INTRODUCED_BY_8_3D":false,"INTRODUCED_BY_8_3E":false,"RESOLVED":false},
+  "modified_phase_8_3d_files_reported":[],
+  "decision":"No ESLint configuration changes, rule disabling, or repository-wide lint cleanup performed."
+}

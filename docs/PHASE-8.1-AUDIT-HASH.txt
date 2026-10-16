@@ -1,0 +1,7 @@
+PHASE 8.1 - APPLICATION BASELINE AUDIT HASH
+
+Deterministic input set: package.json, package-lock.json, vite.config.ts, tsconfig*.json, src/**/*.{ts,tsx}, supabase/functions/**/*.{ts,tsx}, supabase/config.toml, canonical baseline hash metadata.
+
+RUN 1 SHA-256: b63c2a4fe267a12d273823a29e937b92237d2dd432d82a3e3c5a822f253141a1
+RUN 2 SHA-256: b63c2a4fe267a12d273823a29e937b92237d2dd432d82a3e3c5a822f253141a1
+RESULT: IDENTICAL

@@ -1,0 +1,7 @@
+{
+  "contract_hash":"7ccbcced5b3ebfd74b5eb4e60c6c89c8f878a4a1162f312c51121ad6a7ed4bc6",
+  "wrapper":{"typescript_type":"DuplicateEventSearchResult","fields":{"isDuplicate":"boolean","duplicates":"DuplicateEventCandidate[]"},"no_match":{"isDuplicate":false,"duplicates":[]}},
+  "candidate":{"typescript_type":"DuplicateEventCandidate","database_row_type":"TBD","fields":{"id":"string","name":"string","date":"string","location":"string | null","status":"string","similarity_score":"number | null"}},
+  "mapping_rules":["Preserve six evidence-established candidate fields","Do not add undocumented fields","NULL similarity is not duplicate evidence","Database errors map to DatabaseError, never empty success"],
+  "status":"PASS - DESIGN MAPPING"
+}

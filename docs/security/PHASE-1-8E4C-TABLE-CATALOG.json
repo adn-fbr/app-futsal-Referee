@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "expected": 27,
+  "capturedCount": 27,
+  "completeCount": 0,
+  "tables": ["events","honors","activity_logs","audit_logs","auth_attempts","auth_event_logs","card_verification_logs","discussion_replies","discussion_topics","evaluation_criteria","evaluation_scores","evaluations","event_approvals","event_assignments","event_logs","kabupaten_kota","learning_materials","learning_progress","notification_preferences","notifications","pengurus","profiles","provinsi","referee_cards","referee_reviews","system_settings","user_roles"],
+  "completeDefinitions": false,
+  "missing": ["columns/defaults/generated metadata","owners","RLS forced flags","privileges","complete constraints/indexes"]
+}

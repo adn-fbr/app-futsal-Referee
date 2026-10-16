@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2B",
+  "status":"PARTIAL_STATIC_BROWSER_EVIDENCE",
+  "assignment_page_mobile_overflow_after_fix":false,
+  "tested_viewports":"Phase 8.5G.1 static session matrix",
+  "authenticated_role_specific_ui":"NOT_VALIDATED",
+  "security_boundary":"RLS_NOT_APPLIED"
+}

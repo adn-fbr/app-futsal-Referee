@@ -1,0 +1,8 @@
+PHASE-7.4E-B-CODEBASE-CONTRACT-EVIDENCE v1.0.0
+NORMALIZED EVIDENCE PACKAGE SHA-256
+
+RUN 1: 31003fd683df762839b96bffce4f942a167307fbe2b60c5b49d7718a0128b608
+RUN 2: 31003fd683df762839b96bffce4f942a167307fbe2b60c5b49d7718a0128b608
+IDENTICAL: YES
+
+The hash covers the six required Phase 7.4E-B evidence artifacts in deterministic path order. This hash file is excluded to avoid self-reference.

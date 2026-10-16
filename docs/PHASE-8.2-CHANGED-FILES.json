@@ -1,0 +1,13 @@
+{
+  "phase": "8.2",
+  "files": [
+    {"file":"src/contexts/AuthContext.tsx","change_type":"modified","purpose":"Expose derived isAuthenticated state from live Supabase session/user state.","auth_related":true,"schema_related":false},
+    {"file":"src/hooks/useSeedDatabase.ts","change_type":"modified","purpose":"Remove plaintext demo passwords from client-visible seed summary.","auth_related":true,"schema_related":false},
+    {"file":"src/pages/DatabaseExport.tsx","change_type":"modified","purpose":"Stop rendering seed passwords in the application UI.","auth_related":true,"schema_related":false},
+    {"file":"src/components/users/BulkUserImportDialog.tsx","change_type":"modified","purpose":"Replace sample import passwords with non-secret required-password placeholders.","auth_related":true,"schema_related":false}
+  ],
+  "source_files_changed": 4,
+  "schema_files_changed": 0,
+  "migration_files_created": 0,
+  "package_files_changed": 0
+}

@@ -1,0 +1,11 @@
+{
+  "phase":"8.5G.2C",
+  "channels":[
+    {"name":"Supabase MCP/database query","classification":"UNAVAILABLE","reason":"Connection not found"},
+    {"name":"Repository server-side SQL tooling","classification":"UNAVAILABLE","reason":"No existing controlled SQL driver/tool found"},
+    {"name":"Supabase CLI direct SQL","classification":"UNAVAILABLE","reason":"CLI 2.67.1 db help has no query/execute_sql command"},
+    {"name":"Supabase CLI migration push","classification":"AVAILABLE_BUT_UNSAFE_FOR_THIS_DRIFT","reason":"remote-only migration history blocks single approved migration"}
+  ],
+  "selected_channel":"NONE",
+  "target":"shorsqyycpptxcutrqrb"
+}

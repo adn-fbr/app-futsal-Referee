@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "tables",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": 27,
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "The required live `pg_catalog` query is unavailable in this workspace."
+}

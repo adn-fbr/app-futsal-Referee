@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "user_scope":"profiles.kabupaten_kota_id",
+  "event_scope":"events.kabupaten_kota_id",
+  "relationship":"event_assignments.event_id -> events.id -> events.kabupaten_kota_id",
+  "post_migration_validation":"NOT_EXECUTED"
+}

@@ -1,0 +1,11 @@
+{
+  "phase":"8.10",
+  "status":"PARTIAL",
+  "dashboard":"PASS",
+  "preview":"PASS",
+  "official_issued_report":"BLOCKED_SCHEMA_GAP",
+  "report_history":"BLOCKED_SCHEMA_GAP",
+  "public_validation":"BLOCKED_SCHEMA_GAP",
+  "responsive_full_matrix":"NOT_VALIDATED",
+  "production_access":0
+}

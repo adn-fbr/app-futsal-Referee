@@ -1,0 +1,27 @@
+{
+  "status": "BLOCKED",
+  "blocker_classification": "AGENT EXECUTION CHANNEL LIMITATION",
+  "phase": "1.8E.6",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "production_project": "xfscfjwapwnkiinkgbjg",
+  "database": "postgres",
+  "postgres_version": "17.6",
+  "test_project_ref": "shorsqyycpptxcutrqrb",
+  "external_channel_verification_reported": true,
+  "external_transaction_read_only_reported": true,
+  "read_only_catalog_access": false,
+  "production_identity_verified": false,
+  "catalog_extraction_verified": false,
+  "baseline_generation_permitted": false,
+  "no_production_mutation": true,
+  "no_production_data_copied": true,
+  "blocking_issues": [
+    "The independently reported production channel is not accessible from this agent execution environment.",
+    "No production SQL catalog queries were executed by this agent.",
+    "No runtime definitions were extracted from PostgreSQL metadata."
+  ],
+  "notes": [
+    "This manifest distinguishes external channel verification from agent execution evidence.",
+    "The canonical baseline remains prohibited until verified production metadata is available."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "manifest":"D0.9A canonical non-production reconstruction input set",
+  "target_project":"shorsqyycpptxcutrqrb",
+  "canonical_source":"production-schema.sql",
+  "canonical_sha256":"b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "remote_current_sha256":"15bd39c8b6d0c7abb76177ea694bf7c4f8cfa2dc07a9c6dcce59732e731a3814",
+  "categories":{"extensions":{"count":7,"source":"production-schema.sql CREATE EXTENSION"},"enum_types":{"count":2,"items":["public.app_role","public.pengurus_level"]},"tables":{"count":27,"source":"production-schema.sql CREATE TABLE"},"columns":{"count":249,"source":"canonical names/types/defaults/nullability"},"primary_keys":{"count":27},"unique_constraints":{"count":7},"check_constraints":{"count":3},"foreign_keys":{"count":30,"source":"canonical constraints and dependency graph"},"indexes":{"count":47},"functions":{"count":47,"source":"canonical identities/security"},"views":{"count":3,"security_invoker":true},"triggers":{"count":22},"rls_policies":{"count":86},"dependencies":{"count":351,"resolved":282,"unresolved":47,"external_managed":22,"source":"PRODUCTION-FULL-DEPENDENCY-GRAPH.json"}},
+  "special_contracts":{"events_deleted_at":"canonical present","events_kabupaten_kota_id":"canonical present; FK public.kabupaten_kota(id)","check_duplicate_event":"public.check_duplicate_event(text,text,text) RETURNS boolean; preserve","rich_duplicate_search":"future/TBD; do not create","auth.users":"external managed; no DDL or Production data"},
+  "data_policy":"synthetic non-production data only after governance approval",
+  "execution_authorization":"NOT_GRANTED",
+  "executable_sql_included":false
+}

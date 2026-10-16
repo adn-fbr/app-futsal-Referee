@@ -1,0 +1,11 @@
+{
+  "phase": "8.8",
+  "shared_temporal_context": "PASS",
+  "admin_dashboard_current_year_card": "PASS",
+  "admin_kab_kota_scope": "existing dashboard filter preserved",
+  "calendar_month_count": "PASS",
+  "pending_count": "existing PendingApprovalsWidget preserved",
+  "regional_summary_kpi": "NOT IMPLEMENTED",
+  "today/upcoming_attention_panel": "NOT IMPLEMENTED",
+  "live_metric_validation": "NOT EXECUTED"
+}

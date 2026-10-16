@@ -1,0 +1,25 @@
+{
+  "phase":"8.3C",
+  "root_cause_groups":[
+    {"id":"ROOT_CAUSE_A","name":"Environment/capability separation failure","gaps":["F-007"],"remediation":"Remove or hard-gate seed UI and seed mutation from UAT/production","dependencies":["environment policy","deployment capability gate"],"validation":["static route/surface inspection","non-production negative test proving seed unavailable in UAT","no database mutation in this phase"],"wave":"WAVE_0","risk":"HIGH"},
+    {"id":"ROOT_CAUSE_B","name":"Capability-policy drift","gaps":["F-001","F-003"],"remediation":"Approve role capability matrix and use it for CTA/menu/route decisions","dependencies":["RBAC decision","route/action tests"],"validation":["role matrix unit tests","direct URL forbidden tests","visible menu/CTA matrix"],"wave":"WAVE_1","risk":"HIGH"},
+    {"id":"ROOT_CAUSE_C","name":"Route literal drift","gaps":["F-002"],"remediation":"Reconcile mobile path with registered route and add route inventory check","dependencies":["route inventory"],"validation":["mobile navigation route test","catch-all negative test"],"wave":"WAVE_1","risk":"LOW"},
+    {"id":"ROOT_CAUSE_D","name":"Missing shared async query-state contract","gaps":["F-004","F-008"],"remediation":"Define error/empty/loading/retry/offline pattern and apply to assignment/referee queries","dependencies":["React Query error policy","shared UX decision"],"validation":["query failure tests","retry test","empty-vs-error assertions"],"wave":"WAVE_1","risk":"MEDIUM"},
+    {"id":"ROOT_CAUSE_E","name":"Canonical assignment transition bypass","gaps":["F-005"],"remediation":"Map each status transition to approved mutation/audit/notification contract","dependencies":["event_assignments contract","API/RPC/RLS governance decision","non-production only mutation tests"],"validation":["transition matrix tests","audit/notification assertions","authorized/forbidden RLS tests"],"wave":"WAVE_1","risk":"CRITICAL"},
+    {"id":"ROOT_CAUSE_F","name":"Incomplete mutation busy-state policy","gaps":["F-006"],"remediation":"Disable per-row actions while pending and define failure revalidation/rollback behavior","dependencies":["React Query mutation policy"],"validation":["duplicate-click test","pending control test","failure refresh test"],"wave":"WAVE_1","risk":"MEDIUM"},
+    {"id":"ROOT_CAUSE_G","name":"Baseline quality/documentation governance debt","gaps":["F-011","F-013"],"remediation":"Disposition lint baseline, add typecheck gate, regenerate route inventory","dependencies":["ownership/scope decision","disposable build workspace"],"validation":["npm run lint exit policy","npx tsc --noEmit","route count comparison"],"wave":"WAVE_2","risk":"MEDIUM"},
+    {"id":"ROOT_CAUSE_H","name":"Missing runtime responsive evidence","gaps":["F-009"],"remediation":"Run required viewport matrix and fix only confirmed defects","dependencies":["browser harness"],"validation":["screenshots/overflow checks at 8 widths"],"wave":"WAVE_2","risk":"LOW"},
+    {"id":"ROOT_CAUSE_I","name":"Missing accessibility acceptance evidence","gaps":["F-010"],"remediation":"Run keyboard/focus/axe/screen-reader checks and remediate confirmed issues","dependencies":["WCAG acceptance criteria","browser harness"],"validation":["axe scan","keyboard traversal","screen-reader smoke test"],"wave":"WAVE_2","risk":"MEDIUM"},
+    {"id":"ROOT_CAUSE_J","name":"Fragmented assignment data-access/cache contract","gaps":["F-012"],"remediation":"Document query keys and decide repository consolidation before refactor","dependencies":["architecture decision","Phase 8.3A contract stability"],"validation":["cross-surface revalidation tests","stale-state test"],"wave":"WAVE_2","risk":"HIGH"},
+    {"id":"ROOT_CAUSE_K","name":"Design-system consolidation debt","gaps":["F-014"],"remediation":"Consolidate only confirmed repeated variants after functional readiness","dependencies":["component inventory","design owner"],"validation":["visual regression review"],"wave":"WAVE_3","risk":"LOW"}
+  ],
+  "execution_order":[
+    {"step":1,"gaps":["F-007"],"reason":"Protect UAT data integrity before any workflow testing."},
+    {"step":2,"gaps":["F-001","F-003","F-002"],"reason":"Remove visible broken navigation and capability mismatches."},
+    {"step":3,"gaps":["F-005","F-006","F-004","F-008"],"reason":"Stabilize assignment mutation/read workflows; F-005 is isolated high-risk contract work."},
+    {"step":4,"gaps":["F-011","F-012","F-013"],"reason":"Restore quality and governance signals after core behavior is stable."},
+    {"step":5,"gaps":["F-009","F-010"],"reason":"Verify runtime UX/accessibility without changing business contracts."},
+    {"step":6,"gaps":["F-014"],"reason":"Polish after functional and UAT gates."}
+  ],
+  "recommended_next_phase":"PHASE 8.3D — P0/P1 CORE WORKFLOW REMEDIATION"
+}

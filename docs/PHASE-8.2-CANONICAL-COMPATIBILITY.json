@@ -1,0 +1,16 @@
+{
+  "phase": "8.2",
+  "canonical_baseline": "production-schema.sql",
+  "canonical_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "schema_mutation": 0,
+  "canonical_objects_changed": false,
+  "identity_contract": {"auth_users": "managed Auth boundary", "profiles_id": "authenticated user id", "user_roles_user_id": "authenticated user id"},
+  "preserved_gaps": [
+    "public.check_duplicate_event contract mismatch remains for a later governed application phase",
+    "increment_view_count remains a known schema gap",
+    "public_system_settings remains a historical application contract",
+    "organizations/clubs/memberships were not introduced",
+    "general repository consolidation remains deferred"
+  ],
+  "status": "PASS"
+}

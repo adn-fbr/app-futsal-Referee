@@ -1,0 +1,14 @@
+{
+  "phase": "8.8A",
+  "production_project_id_in_bundle": 0,
+  "production_url_in_active_runtime": 0,
+  "service_role_in_frontend": 0,
+  "secret_values_exposed": 0,
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_deployments": 0,
+  "schema_mutations": 0,
+  "rls_changes": 0,
+  "auth_mutations": 0,
+  "storage_mutations": 0
+}

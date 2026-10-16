@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED",
+  "approved_migration_applied":false,
+  "post_rls_state":"NOT_AVAILABLE",
+  "post_policies":"NOT_AVAILABLE",
+  "post_schema_invariant":"NOT_EXECUTED",
+  "reason":"direct SQL connection unavailable"
+}

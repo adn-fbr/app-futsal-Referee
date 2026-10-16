@@ -1,0 +1,16 @@
+{
+  "phase": "8.5G.3B",
+  "process_environment": {
+    "TEST_ENVIRONMENT": "ABSENT",
+    "SUPABASE_URL": "ABSENT",
+    "SUPABASE_SERVICE_ROLE_KEY": "ABSENT",
+    "FIXTURE_ADMIN_PASSWORD": "ABSENT"
+  },
+  "configuration_file_names": {
+    "TEST_ENVIRONMENT": "PRESENT",
+    "SUPABASE_SERVICE_ROLE_KEY": "PRESENT",
+    "FIXTURE_ADMIN_PASSWORD": "PRESENT"
+  },
+  "file_vs_process_gap": true,
+  "secret_values_included": false
+}

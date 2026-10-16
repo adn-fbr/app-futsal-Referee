@@ -1,0 +1,15 @@
+{
+  "phase": "8.7",
+  "timezone": "Asia/Makassar",
+  "sources": [
+    {"table":"events","column":"start_date","meaning":"event execution date","year_filter":"event analytics annual range"},
+    {"table":"events","column":"end_date","meaning":"event end date","year_filter":"event display/range"},
+    {"table":"events","column":"created_at","meaning":"record creation timestamp","year_filter":"approval/creation analytics only"},
+    {"table":"event_assignments","column":"created_at","meaning":"assignment creation timestamp","year_filter":"assignment reporting candidate"},
+    {"table":"honors","column":"created_at","meaning":"honor record timestamp","year_filter":"honor reporting candidate"},
+    {"table":"audit_logs","column":"created_at","meaning":"audit activity timestamp","year_filter":"activity reporting candidate"},
+    {"table":"auth_event_logs","column":"created_at","meaning":"auth activity timestamp","year_filter":"security activity reporting candidate"}
+  ],
+  "storage_rule":"Keep canonical ISO/API values; format only at display boundary.",
+  "authorization":"RLS/RBAC remains independent from temporal filtering."
+}

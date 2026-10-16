@@ -1,0 +1,9 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "region_a_id": "be019cc8-1e5e-4ea6-a82f-d15b96e3aff0",
+  "region_b_id": "e2c10dfe-4744-46c0-b1ba-e2e0c197ef8f",
+  "regions_distinct": true,
+  "source": "existing canonical public.kabupaten_kota records",
+  "schema_mutation": false
+}

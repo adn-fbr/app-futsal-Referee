@@ -1,0 +1,7 @@
+{
+  "status": "BLOCKED",
+  "expected": 41,
+  "capturedCount": 41,
+  "completeCount": 0,
+  "missing": ["owner","security type","proconfig/search_path","ACL","complete function definition","referenced objects","identity/tenant input classification"]
+}

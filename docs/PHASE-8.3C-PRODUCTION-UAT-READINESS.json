@@ -1,0 +1,26 @@
+{
+  "phase":"8.3C",
+  "decision":"NOT READY",
+  "build":"BUILD: NOT VERIFIED IN PHASE 8.3C",
+  "typescript":"PASS via npx tsc --noEmit, exit 0",
+  "lint":{"command":"npm run lint","exit_code":1,"errors":66,"warnings":11,"total_problems":77,"affected_file_count":41,"pre_existing":true,"phase_8_3a_introduced":false,"runtime_impact":"No direct runtime defect proven from lint count alone; affected auth/pages/hooks require separate review.","blocks_uat":"Yes as a release-quality gate unless formally dispositioned"},
+  "findings":[
+    {"finding":"F-007","production_uat_impact":"P0 data-integrity blocker","must_fix_before_uat":true,"can_test_around":false,"risk":"Seed surface can contaminate target data","evidence":"DatabaseExport seed tab and useSeedDatabase are production-visible through /export"},
+    {"finding":"F-001","production_uat_impact":"Panitia assignment CTA cannot complete","must_fix_before_uat":true,"can_test_around":true,"risk":"Role-specific workflow failure","evidence":"CTA role and route guard disagree"},
+    {"finding":"F-002","production_uat_impact":"Mobile admin export dead link","must_fix_before_uat":true,"can_test_around":true,"risk":"Mobile navigation failure","evidence":"/database-export not registered; /export is registered"},
+    {"finding":"F-003","production_uat_impact":"admin_kab_kota sees forbidden approval item","must_fix_before_uat":true,"can_test_around":true,"risk":"Role IA inconsistency","evidence":"Menu visibility differs from route role guard"},
+    {"finding":"F-004","production_uat_impact":"Assignment read failures can look like empty/not-found","must_fix_before_uat":true,"can_test_around":false,"risk":"Operator may make decision from incomplete data","evidence":"Multiple assignment query errors are not surfaced"},
+    {"finding":"F-005","production_uat_impact":"Status mutation may omit canonical cancellation/audit semantics","must_fix_before_uat":true,"can_test_around":false,"risk":"Assignment contract/data audit inconsistency","evidence":"Direct status update differs from cancellation hook contract"},
+    {"finding":"F-006","production_uat_impact":"Repeated row actions can duplicate mutation requests","must_fix_before_uat":true,"can_test_around":true,"risk":"Stale/duplicate assignment writes","evidence":"Role/remove controls lack complete pending disablement"},
+    {"finding":"F-008","production_uat_impact":"Referee failed retrieval looks like no assignments","must_fix_before_uat":true,"can_test_around":true,"risk":"Misleading referee workflow","evidence":"Upcoming/past query errors are not read"},
+    {"finding":"F-011","production_uat_impact":"Quality gate fails","must_fix_before_uat":true,"can_test_around":true,"risk":"Regression signal is noisy","evidence":"66 errors/11 warnings baseline; prior Phase 8.3A recorded same condition"},
+    {"finding":"F-009","production_uat_impact":"Potential responsive defects unverified","must_fix_before_uat":false,"can_test_around":true,"risk":"Unconfirmed overflow/clipping","evidence":"No required viewport execution"},
+    {"finding":"F-010","production_uat_impact":"Accessibility conformance unverified","must_fix_before_uat":false,"can_test_around":true,"risk":"Assistive technology gaps","evidence":"No axe/keyboard/screen-reader execution"},
+    {"finding":"F-012","production_uat_impact":"Potential stale cross-surface assignment state","must_fix_before_uat":false,"can_test_around":true,"risk":"Manual refresh workaround","evidence":"Fragmented query keys/invalidation"},
+    {"finding":"F-013","production_uat_impact":"Governance route inventory stale","must_fix_before_uat":false,"can_test_around":true,"risk":"Audit coverage gap","evidence":"Phase 8.1 matrix omits later route"},
+    {"finding":"F-014","production_uat_impact":"Visual consistency debt","must_fix_before_uat":false,"can_test_around":true,"risk":"Cosmetic/maintainability","evidence":"Repeated page-level patterns"}
+  ],
+  "security_review":{"result":"NO_SECURITY_EXPLOIT_FOUND","confirmed_exploit_types":[],"notes":["ProtectedRoute remains client-side gating with RLS documented as final database boundary","Admin step-up rechecks current user and user_roles before and after password verification","F-007 is a privileged data-integrity risk, not a proven privilege escalation/BOLA/IDOR/auth bypass","Non-production unauthorized read/update/RLS tests remain required before declaring security readiness"]},
+  "phase_8_3a_impact":{"DIRECT":["F-004","F-005","F-006","F-010","F-012"],"INDIRECT":["F-001","F-011"],"NO_IMPACT":["F-002","F-003","F-007","F-008","F-009","F-013","F-014"],"UNKNOWN":[]},
+  "required_order":["F-007","F-001","F-003","F-002","F-005","F-006","F-004","F-008","F-011","F-012","F-013","F-009","F-010","F-014"]
+}

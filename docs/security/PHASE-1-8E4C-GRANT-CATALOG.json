@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "capturedCount": 0,
+  "missing":["schema/table/sequence/function/view ACLs","owner","grantee","privilege","grant option"]
+}

@@ -1,0 +1,13 @@
+{
+  "phase": "8.8A.1B",
+  "status": "PASS",
+  "users": {
+    "admin_provinsi": {"email":"fixture-admin-provinsi@nonprod.invalid","user_id":"35999d8c-4ffb-4dae-854a-fede06b56afa","created":true},
+    "admin_kab_kota_a": {"email":"fixture-admin-kabkota-a@nonprod.invalid","user_id":"c5395935-4311-450d-8178-77f7ade21719","created":true},
+    "admin_kab_kota_b": {"email":"fixture-admin-kabkota-b@nonprod.invalid","user_id":"24598e43-a13f-42af-a7fa-e963e44680e6","created":true},
+    "referee": {"email":"fixture-referee@nonprod.invalid","user_id":"5cd22a8c-c79d-40d1-b39e-70088dffae5d","created":true}
+  },
+  "official_auth_admin": "supabase.auth.admin.createUser",
+  "direct_auth_users_insert": false,
+  "fake_jwt": false
+}

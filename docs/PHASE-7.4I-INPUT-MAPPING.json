@@ -1,0 +1,12 @@
+{
+  "contract_hash":"7ccbcced5b3ebfd74b5eb4e60c6c89c8f878a4a1162f312c51121ad6a7ed4bc6",
+  "inputs":[
+    {"application_field":"p_name","typescript_type":"string","required":true,"meaning":"event name","repository_field":"name","sql_parameter_candidate":"TBD","validation":"non-empty after trim","null_behavior":"ValidationError"},
+    {"application_field":"p_date","typescript_type":"string","required":true,"meaning":"event date yyyy-MM-dd","repository_field":"date","sql_parameter_candidate":"TBD","validation":"non-empty and valid ISO calendar date","null_behavior":"ValidationError"},
+    {"application_field":"p_location","typescript_type":"string | null","required":false,"meaning":"optional location filter","repository_field":"location","sql_parameter_candidate":"TBD","validation":"optional string","null_behavior":"filter not applied"},
+    {"application_field":"p_kabupaten_kota_id","typescript_type":"string | null","required":false,"meaning":"optional region filter","repository_field":"kabupatenKotaId","sql_parameter_candidate":"TBD","validation":"optional identifier string","null_behavior":"filter not applied"},
+    {"application_field":"p_exclude_event_id","typescript_type":"string | null","required":false,"meaning":"event exclusion","repository_field":"excludeEventId","sql_parameter_candidate":"TBD","validation":"optional identifier string","null_behavior":"no exclusion filter"}
+  ],
+  "new_inputs":[],
+  "status":"PASS - DESIGN MAPPING"
+}

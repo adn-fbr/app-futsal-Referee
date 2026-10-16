@@ -1,0 +1,21 @@
+{
+  "phase": "8.1",
+  "auth": {
+    "supabase_auth_used": true,
+    "login": "IMPLEMENTED: src/repositories/auth/supabase-auth-repository.ts signInWithPassword; src/pages/Login.tsx",
+    "logout": "IMPLEMENTED: AuthContext signOut",
+    "session_persistence": "IMPLEMENTED: client.ts localStorage, persistSession, autoRefreshToken",
+    "auth_state_listener": "IMPLEMENTED: AuthContext onAuthStateChange",
+    "loading_state": "IMPLEMENTED: AuthContext isLoading and ProtectedRoute loader",
+    "unauthenticated_state": "IMPLEMENTED: ProtectedRoute redirects to /login",
+    "identity_source": "Supabase session.user.id",
+    "profile_mapping": "profiles.id = auth.users.id via user-profile-repository.ts",
+    "role_mapping": "user_roles.user_id = auth.users.id via user-role-repository.ts",
+    "session_expiry": "PARTIAL: Supabase auto refresh configured; explicit expiry UX not evidenced",
+    "identity_error": "IMPLEMENTED: auth/profile/role error states"
+  },
+  "identity_findings": [
+    {"id":"APP-ID-001","severity":"P2","category":"Identity","finding":"Profile and role resolution are centralized only for auth context; many feature hooks query profiles/user_roles directly.","evidence":"229 direct table/RPC references across 33 files","current_behavior":"Feature data access can independently interpret identity and RLS outcomes.","expected_behavior":"Authenticated identity should flow through a consistent application access layer.","canonical_reference":"profiles.id -> auth.users.id; user_roles.user_id -> auth.users.id","impact":"Inconsistent authorization/error behavior risk","status":"OPEN"}
+  ],
+  "hard_coded_identity": {"user_id":false,"profile_identity":false,"fake_auth":false,"static_avatar_or_name":true,"evidence":"src/pages/Organization.tsx:27 static organizationData; not a user identity"}
+}

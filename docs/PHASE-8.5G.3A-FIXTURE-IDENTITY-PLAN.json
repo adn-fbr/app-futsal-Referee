@@ -1,0 +1,13 @@
+{
+  "phase": "8.5G.3A",
+  "status": "READY AS PLAN; NOT PROVISIONED",
+  "synthetic_identities": [
+    {"label":"FIXTURE_ADMIN_PROVINSI","email":"fixture-admin-provinsi@nonproduction.invalid","role":"admin_provinsi"},
+    {"label":"FIXTURE_NON_ADMIN","email":"fixture-non-admin@nonproduction.invalid","role":"admin_kab_kota"},
+    {"label":"FIXTURE_REFEREE","email":"fixture-referee@nonproduction.invalid","role":"wasit"}
+  ],
+  "fixture_records": ["FIXTURE_EVENT", "FIXTURE_EVENT_ASSIGNMENT"],
+  "canonical_initial_assignment_status": "pending",
+  "created": false,
+  "credentials_included": false
+}

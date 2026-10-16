@@ -1,0 +1,26 @@
+{
+  "phase":"7.4J-D0.9C",
+  "algorithm":"SHA-256",
+  "scope":"13 D0.9C evidence artifacts, excluding both hash manifest artifacts",
+  "canonicalization":"UTF-8 records of workspace-relative path, tab, lowercase file SHA-256, newline; sorted by path; trailing newline included",
+  "files":[
+    {"path":"docs/PHASE-7.4J-D0.9C-AUTH-ENUMERATION.json","sha256":"9f63bcdd511fb046a1dc72af97fa5b2ae5ada48ec18eab543565c0f8f7491a2e"},
+    {"path":"docs/PHASE-7.4J-D0.9C-AUTH-ENUMERATION.md","sha256":"c374aff284d29d4b99d7880eed178067a8ca30f7b2fb2eda3b68a0a1e6ff5378"},
+    {"path":"docs/PHASE-7.4J-D0.9C-AUTH-PROVENANCE.md","sha256":"a8cfa66fe10e6d2b8efd5137a5c8a34e1976c19b379b1cdecc0a5ada081f2871"},
+    {"path":"docs/PHASE-7.4J-D0.9C-AUTH-RLS-IMPACT.md","sha256":"94d78c7e11ebb388564fc2ced20c3f1f66c91502bc432a3992ff86268fe4cbe1"},
+    {"path":"docs/PHASE-7.4J-D0.9C-CANONICAL-TABLE-INVENTORY.csv","sha256":"06fc132d5dd387037fdca1c3468e5b99ca0c00524e29bcf47009a511a27632d9"},
+    {"path":"docs/PHASE-7.4J-D0.9C-CANONICAL-TABLE-INVENTORY.json","sha256":"0122576c1a3ad480ecff6b11d8b5cebfcc9152d328b7c88a0cdedb83c0c43c1d"},
+    {"path":"docs/PHASE-7.4J-D0.9C-D1-READINESS-MATRIX.md","sha256":"577ef8135af53606bd9ee63888ad79c2c9b5633bb38770afb5f73cbdc6051ecb"},
+    {"path":"docs/PHASE-7.4J-D0.9C-FINAL-REPORT.md","sha256":"1ca3ecead905adfb3e617779df8609f0d31a2b9450dd98b00a557a1c9c3b9d5c"},
+    {"path":"docs/PHASE-7.4J-D0.9C-IDENTITY-RELATIONSHIPS.json","sha256":"dd3b9e189d1f807d89ffc50ad28208f1443ab10a00cc079a935b8ca242778225"},
+    {"path":"docs/PHASE-7.4J-D0.9C-IDENTITY-RELATIONSHIPS.md","sha256":"0e80a85a40b8c45ce994ef0b93f0a739c25845d20e8b8379d2664bdcff2a68e6"},
+    {"path":"docs/PHASE-7.4J-D0.9C-PRODUCTION-SAFETY.md","sha256":"0bc7221a2dc1d89bd2136d8c62adfe4b0747d7782c15c11ffc09c607b2553ce0"},
+    {"path":"docs/PHASE-7.4J-D0.9C-RECONSTRUCTION-DISPOSITION.md","sha256":"5bed0b39503899489e21cb4e63d7b4b4aae2d4847d28797becd3289a3687c9f6"}
+  ],
+  "manifest_sha256":"a1324fcdecc651c596f599dc2b9357e3a6e17ba3ac33b7ae8f3f5222d53d7613",
+  "run1_hash":"a1324fcdecc651c596f599dc2b9357e3a6e17ba3ac33b7ae8f3f5222d53d7613",
+  "run2_hash":"a1324fcdecc651c596f599dc2b9357e3a6e17ba3ac33b7ae8f3f5222d53d7613",
+  "match":true,
+  "determinism":"PASS",
+  "gate":"BLOCKED"
+}

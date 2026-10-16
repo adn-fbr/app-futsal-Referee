@@ -1,0 +1,6 @@
+{
+  "phase":"8.5G.2A",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "direct_uuid_cross_region_test":"BLOCKED_MIGRATION_NOT_APPLIED",
+  "pre_remediation_leakage":"CONFIRMED_IN_PHASE_8_5G_1"
+}

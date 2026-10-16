@@ -1,0 +1,10 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED",
+  "tables_changed":"NOT_VERIFIED_POST",
+  "columns_changed":"NOT_VERIFIED_POST",
+  "enums_changed":"NOT_VERIFIED_POST",
+  "foreign_keys_changed":"NOT_VERIFIED_POST",
+  "extensions_changed":"NOT_VERIFIED_POST",
+  "approved_sql_policy_only":true
+}

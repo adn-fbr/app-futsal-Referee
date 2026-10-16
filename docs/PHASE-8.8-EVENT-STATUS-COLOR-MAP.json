@@ -1,0 +1,8 @@
+{
+  "phase": "8.8",
+  "DIAJUKAN": {"label":"Menunggu","visual":"amber/warning badge"},
+  "DISETUJUI": {"label":"Disetujui","visual":"green/success badge"},
+  "DITOLAK": {"label":"Ditolak","visual":"red/danger badge"},
+  "SELESAI": {"label":"Selesai","visual":"blue/info badge"},
+  "database_values_changed": false
+}

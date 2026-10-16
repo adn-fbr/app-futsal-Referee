@@ -1,0 +1,16 @@
+schema,table,exists,columns,estimated_rows,data_state,rls,policy_count,notes
+public,event_assignments,true,7,0,EMPTY,true,2,observed in schema dump and aggregate count
+public,events,true,10,0,EMPTY,true,4,deleted_at and kabupaten_kota_id absent
+public,honors,true,10,0,EMPTY,true,6,observed in schema dump and aggregate count
+public,profiles,true,12,0,EMPTY,true,5,observed in schema dump and aggregate count
+public,referee_reviews,true,6,0,EMPTY,true,2,observed in schema dump and aggregate count
+public,user_roles,true,3,0,EMPTY,true,2,observed in schema dump and aggregate count
+public,pengurus,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,event_approvals,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,evaluations,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,evaluation_scores,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,referee_cards,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,notifications,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,learning_progress,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,discussion_topics,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404
+public,discussion_replies,false,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN,REST returned 404

@@ -1,0 +1,7 @@
+{
+  "phase":"8.5G.2B",
+  "status":"NOT_EXECUTED",
+  "migration_with_check_present":true,
+  "event_region_escape_denied":"NOT_TESTED",
+  "assignment_event_id_unchanged":"NOT_TESTED"
+}

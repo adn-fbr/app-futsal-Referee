@@ -1,0 +1,13 @@
+{
+  "phase":"8.5B",
+  "canonical":{"identity":"public.check_duplicate_event","parameters":["p_kota_id text","p_location text","p_name text"],"return":"boolean","definition_source":"production-schema.sql:151"},
+  "callers":[
+    {"file":"src/hooks/useEvents.ts:556","consumer":"useCheckDuplicateEvent","current":"five named args; array result","canonical":"three text args; boolean","status":"MISMATCH"},
+    {"file":"src/pages/EventEdit.tsx:83","consumer":"handleCheckDuplicate","current":"expects duplicates[0].name and date semantics","canonical":"boolean only; no date/record details","status":"DEPENDENT_MISMATCH"},
+    {"file":"src/integrations/supabase/types.ts:1430","consumer":"generated Functions type","current":"historical five args/array","canonical":"three args/boolean","status":"STALE_GENERATED_TYPE"},
+    {"scope":"Edge Functions/tests","current":"no additional caller found","canonical":"same","status":"NO_CALLER_FOUND"}
+  ],
+  "semantics":{"p_kota_id":"maps to canonical events.kota_id::text per function body; do not assume kabupaten_kota_id without schema mapping decision","p_location":"exact location comparison; nullable behavior must follow canonical function/database","p_name":"exact name comparison; normalization not performed by canonical function","date":"not part of canonical duplicate contract; historical date must not be added to RPC semantics"},
+  "reconciliation":{"type_source":"approved canonical generation source required","application":"adapt hook to boolean and revise UI duplicate message without fabricated record details","generated_types":"regenerate; never hand-edit","rich_rpc":"not allowed"},
+  "status":"DESIGN_READY_IMPLEMENTATION_BLOCKED"
+}

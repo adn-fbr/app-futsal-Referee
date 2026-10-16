@@ -1,0 +1,17 @@
+{
+  "contract_hash":"7ccbcced5b3ebfd74b5eb4e60c6c89c8f878a4a1162f312c51121ad6a7ed4bc6",
+  "contract_hash_verified":true,
+  "inputs":"NOT VERIFIED IN DEPLOYED IMPLEMENTATION",
+  "outputs":"NOT VERIFIED IN DEPLOYED IMPLEMENTATION",
+  "matching":"BLOCKED",
+  "similarity":"BLOCKED",
+  "ordering":"BLOCKED",
+  "limit":"BLOCKED",
+  "null_semantics":"BLOCKED",
+  "error_semantics":"BLOCKED",
+  "security":"BLOCKED",
+  "rls":"BLOCKED",
+  "visibility":"BLOCKED",
+  "canonical_function":"UNCHANGED",
+  "contract_conformance":"BLOCKED"
+}

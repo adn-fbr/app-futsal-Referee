@@ -1,0 +1,67 @@
+{
+  "phase": "7.4J-D1-D",
+  "status": "BLOCKED",
+  "authorization": {
+    "d01_d10": "APPROVED",
+    "execution_scope": "NON-PRODUCTION ONLY",
+    "non_production_project": "shorsqyycpptxcutrqrb",
+    "production_project": "xfscfjwapwnkiinkgbjg",
+    "production_access_allowed": false
+  },
+  "execution_channel": {
+    "verified": true,
+    "channel_type": "Supabase CLI read-only schema dump",
+    "target_identity": "postgres.shorsqyycpptxcutrqrb",
+    "result": "PASS — LIVE NON-PRODUCTION EXECUTION CHANNEL VERIFIED"
+  },
+  "authoritative_sources": [
+    "production-schema.sql",
+    "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+    "PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+    "PRODUCTION-CANONICAL-RUNTIME-BASELINE",
+    "Phase 7.4H approved contract freeze",
+    "D0.9A migration/data disposition",
+    "D0.9D Auth boundary",
+    "D1-A authorization",
+    "D1-C execution-channel report"
+  ],
+  "baseline_hash": {
+    "expected": "b77b6cf72482a3401a7abd0a097f24587b6b78e88bbf1c6a816f1f1c9ed98db1",
+    "observed_file_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "match": false,
+    "decision": "BLOCKED"
+  },
+  "target": {
+    "tables": 27,
+    "columns": 249,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "rls_policies": 86,
+    "indexes": 47,
+    "extensions": 7,
+    "enum_types": 2,
+    "pk": 27,
+    "unique": 7,
+    "check": 3,
+    "fk": 30
+  },
+  "current_non_production_state": {
+    "tables": 6,
+    "columns": 48,
+    "functions": 3,
+    "views": 1,
+    "triggers": 4,
+    "rls_policies": 23,
+    "indexes": 0,
+    "extensions": 0,
+    "enum_types": 0,
+    "storage_buckets": 0,
+    "identity_boundary": "managed_auth"
+  },
+  "data_disposition": "SYNTHETIC_ONLY",
+  "auth_disposition": "NON-PRODUCTION SYNTHETIC ONLY / MANAGED AUTH BOUNDARY",
+  "migration_policy": "OPTION_C_AFTER_VALIDATION",
+  "reconstruction_method": "CANONICAL_BASELINE_ONLY",
+  "preflight_blocker": "Baseline hash mismatch between the required canonical artifact and the actual observed production-schema.sql hash; no destructive mutation was performed."
+}

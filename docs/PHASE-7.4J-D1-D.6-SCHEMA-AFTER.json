@@ -1,0 +1,44 @@
+{
+  "phase": "PHASE 7.4J-D1-D.6",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "snapshot_scope": ["public", "storage"],
+  "snapshot_1": {
+    "path": "tmp/d1d6-schema-after-1.sql",
+    "bytes": 165218,
+    "sha256": "77d9d8e4fe1f439a1118edc5f0ac5454cf9a2a38cfc72f0253f9653c300c9260"
+  },
+  "snapshot_2": {
+    "path": "tmp/d1d6-schema-after-2.sql",
+    "bytes": 165218,
+    "sha256": "77d9d8e4fe1f439a1118edc5f0ac5454cf9a2a38cfc72f0253f9653c300c9260"
+  },
+  "public_application_counts": {
+    "tables": 27,
+    "columns": 249,
+    "constraints": 67,
+    "functions": 47,
+    "views": 3,
+    "triggers": 22,
+    "rls_policies": 86,
+    "indexes": 47,
+    "enum_types": 2
+  },
+  "managed_storage_objects": {
+    "tables": 8,
+    "functions": 17,
+    "policies": 8,
+    "indexes": 11,
+    "enum_types": 1
+  },
+  "events": { "deleted_at": true, "kabupaten_kota_id": true },
+  "duplicate_event_function": "public.check_duplicate_event(text,text,text) RETURNS boolean",
+  "rich_duplicate_function_present": false,
+  "auth_users_definition": false,
+  "data_statements": 0,
+  "migration_history": {
+    "path": "tmp/d1d6-migration-history-after.txt",
+    "sha256": "c91f04ad1cfd013a93d720108b7256f609d1b661b5d9a6908c46a88c5654c84b",
+    "applied_canonical_migration": "20260908085000",
+    "historical_replay": false
+  }
+}

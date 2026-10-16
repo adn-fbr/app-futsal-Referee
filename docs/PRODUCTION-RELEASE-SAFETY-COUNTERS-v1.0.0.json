@@ -1,0 +1,19 @@
+{
+  "release":"v1.0.0",
+  "production_queries":0,
+  "production_mutations":0,
+  "production_auth_mutations":0,
+  "production_storage_mutations":0,
+  "production_deployments":0,
+  "production_migrations":0,
+  "production_drop_schema":0,
+  "production_reset":0,
+  "production_truncate":0,
+  "production_data_delete":0,
+  "production_data_update":0,
+  "production_fake_insert":0,
+  "migration_repair":0,
+  "include_all":0,
+  "service_role_exposed":0,
+  "frontend_secret_exposure":0
+}

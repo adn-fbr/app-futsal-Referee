@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "object_classification",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "APPLICATION | SUPABASE_MANAGED | POSTGRES_SYSTEM | UNKNOWN classification for public objects",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No live object classification or schema inventory was generated from the production runtime catalog."
+}

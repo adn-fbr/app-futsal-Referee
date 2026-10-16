@@ -1,0 +1,16 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "read_only":true,
+  "tables":[
+    {"name":"events","count":0,"classification":"EMPTY","provenance":"UNKNOWN"},{"name":"profiles","count":0,"classification":"EMPTY","provenance":"UNKNOWN"},{"name":"user_roles","count":0,"classification":"EMPTY","provenance":"UNKNOWN"},{"name":"event_assignments","count":0,"classification":"EMPTY","provenance":"UNKNOWN"},{"name":"referee_reviews","count":0,"classification":"EMPTY","provenance":"UNKNOWN"},{"name":"honors","count":0,"classification":"EMPTY","provenance":"UNKNOWN"},
+    {"name":"pengurus","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"event_approvals","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"evaluations","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"evaluation_scores","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"referee_cards","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"notifications","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"learning_progress","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"discussion_topics","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"},{"name":"discussion_replies","count":"UNKNOWN","classification":"UNKNOWN","provenance":"UNKNOWN","reason":"REST 404"}
+  ],
+  "auth_users":"UNKNOWN_NOT_ENUMERATED",
+  "storage_buckets":0,
+  "storage_objects":"UNKNOWN_NOT_LISTED",
+  "whole_database_classification":"UNKNOWN",
+  "disposition":"GOVERNANCE_REQUIRED",
+  "future_requirement":"DATA_REBUILD_REQUIRED",
+  "production_data_accessed":false,
+  "mutation":0
+}

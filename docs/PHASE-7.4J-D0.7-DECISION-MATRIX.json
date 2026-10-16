@@ -1,0 +1,46 @@
+{
+  "cli_target": "shorsqyycpptxcutrqrb",
+  "production_project": "xfscfjwapwnkiinkgbjg",
+  "d06_hash_verified": true,
+  "application_target": "REMOTE_NON_PRODUCTION",
+  "migration_target": "REMOTE_NON_PRODUCTION",
+  "authoritative_topology": "REMOTE_NON_PRODUCTION",
+  "local": {
+    "runtime_exists": false,
+    "database_exists": false,
+    "migration_target_known": false,
+    "auth_boundary_known": false,
+    "storage_boundary_known": false,
+    "rls_target_known": false,
+    "events_schema_target_known": false,
+    "data_disposition_known": false,
+    "safe_reconstruction_path": false
+  },
+  "remote_non_production": {
+    "project_metadata_exists": true,
+    "project_metadata_status": "ACTIVE_HEALTHY per existing evidence",
+    "database_schema_exists": "UNKNOWN",
+    "runtime_state": "UNKNOWN",
+    "migration_target_known": true,
+    "auth_boundary_known": true,
+    "storage_boundary_known": true,
+    "rls_target_known": true,
+    "events_schema_target_known": false,
+    "data_disposition_known": false,
+    "safe_reconstruction_path": false
+  },
+  "both": false,
+  "migration_conflicts": {
+    "count": 3,
+    "classification": "COMBINATION: local-history conflicts, canonical reconstruction conflicts, and unresolved topology/target-state conflicts"
+  },
+  "production": {
+    "access": false,
+    "mutation": false,
+    "deployment": false
+  },
+  "decision": "REMOTE_NON_PRODUCTION_TOPOLOGY_WITH_EXECUTION_BLOCKED",
+  "d1_readiness": "BLOCKED",
+  "gate": "BLOCKED",
+  "next_gate": "targeted remote non-production schema/empty-state evidence and migration-governance remediation"
+}

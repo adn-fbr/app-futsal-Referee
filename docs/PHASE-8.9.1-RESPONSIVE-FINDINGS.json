@@ -1,0 +1,19 @@
+{
+  "phase": "8.9.1",
+  "findings": [
+    {
+      "id": "RSP-001",
+      "severity": "P2",
+      "route": "/",
+      "viewport": "320x568",
+      "classification": "APPLICATION_OR_CONTENT_FLOW_DEFECT_UNCONFIRMED",
+      "description": "Four lower-page elements extend below the initial viewport in the DOM clipping check; page-level horizontal overflow was false.",
+      "evidence": "real browser DOM bounding-box measurement",
+      "follow_up": "Inspect mobile login vertical flow after authenticated validation channel is available"
+    }
+  ],
+  "p0": 0,
+  "p1": 0,
+  "p2": 1,
+  "p3": 0
+}

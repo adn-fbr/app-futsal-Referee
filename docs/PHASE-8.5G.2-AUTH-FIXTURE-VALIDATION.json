@@ -1,0 +1,12 @@
+{
+  "phase": "8.5G.2",
+  "target": "shorsqyycpptxcutrqrb",
+  "status": "BLOCKED",
+  "admin_auth_user": "NOT CREATED",
+  "non_admin_auth_user": "NOT CREATED",
+  "auth_creation_mechanism": "UNAVAILABLE",
+  "service_role_key_present": false,
+  "fixture_password_present": false,
+  "production_auth_operations": 0,
+  "reason": "Approved Non-Production Auth creation mechanism and credentials are unavailable."
+}

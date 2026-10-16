@@ -1,0 +1,8 @@
+{
+  "phase": "8.8A.1A",
+  "status": "PASS",
+  "cleanup_executed": false,
+  "cleanup_required_now": false,
+  "existing_scoped_cleanup_plan": true,
+  "unrelated_records_scope": "EXCLUDED"
+}

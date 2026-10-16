@@ -1,0 +1,8 @@
+{
+  "phase": "8.8A.1A",
+  "status": "NOT_EXECUTED",
+  "official_auth_admin_mechanism": "AVAILABLE_IN_PROJECT_DEPENDENCY_BUT_NOT_INITIALIZED",
+  "service_role_presence": "ABSENT",
+  "auth_admin_network_call": false,
+  "auth_users_created": 0
+}

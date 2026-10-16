@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2",
+  "status":"NOT_APPLIED",
+  "target":"shorsqyycpptxcutrqrb",
+  "migration":"20260908184851_phase_8_5g_2_regional_rls_authorization.sql",
+  "policies_after":"NOT_VERIFIED_LIVE",
+  "rls_enabled":"UNCHANGED",
+  "reason":"remote migration history drift blocked safe migration push"
+}

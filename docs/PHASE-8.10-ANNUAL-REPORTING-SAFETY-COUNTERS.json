@@ -1,0 +1,13 @@
+{
+  "phase":"8.10",
+  "production_queries":0,
+  "production_mutations":0,
+  "production_auth_mutations":0,
+  "production_storage_mutations":0,
+  "non_production_schema_mutations":0,
+  "non_production_data_mutations":0,
+  "non_production_auth_mutations":0,
+  "non_production_storage_mutations":0,
+  "secret_values_exposed":0,
+  "service_role_frontend_references":0
+}

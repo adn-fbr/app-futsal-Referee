@@ -1,0 +1,13 @@
+{
+  "status":"BLOCKED",
+  "projectRef":"xfscfjwapwnkiinkgbjg",
+  "projectName":"AFP SULSEL",
+  "access":"READ-ONLY",
+  "current_database":null,
+  "current_user":null,
+  "current_schema":null,
+  "server_version":null,
+  "version":null,
+  "sqlChannel":"NOT AVAILABLE",
+  "missing":"Authorized live production PostgreSQL SQL connection"
+}

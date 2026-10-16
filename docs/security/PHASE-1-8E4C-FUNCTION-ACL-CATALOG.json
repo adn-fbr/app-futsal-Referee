@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "capturedCount": 0,
+  "missing": ["raw proacl","expanded grantee/privilege/grantor/grant option","PUBLIC","anon","authenticated","service_role","postgres"]
+}

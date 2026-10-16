@@ -1,0 +1,11 @@
+{
+  "phase": "8.3A",
+  "rls_changed": false,
+  "service_role_frontend": false,
+  "mutation_client": "publishable Supabase client",
+  "canonical_row_identity": "event_assignments.id",
+  "rls_behavior": "RLS remains the database authorization boundary; UI and role checks do not bypass it.",
+  "safe_failure_on_rls_denial": true,
+  "policy_or_schema_artifacts_created": false,
+  "status": "PASS"
+}

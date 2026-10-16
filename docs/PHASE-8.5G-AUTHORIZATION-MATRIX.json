@@ -1,0 +1,8 @@
+{
+  "phase": "8.5G",
+  "authenticated_admin_provinsi": {"read": true, "status_mutation": true, "step_up_required": true},
+  "authenticated_non_admin": {"read": false, "status_mutation": false},
+  "anonymous": {"read": false, "status_mutation": false},
+  "role_source": "user_roles plus AuthContext role resolution",
+  "password_source_of_truth": false
+}

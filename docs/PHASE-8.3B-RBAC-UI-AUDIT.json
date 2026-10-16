@@ -1,0 +1,12 @@
+{
+  "phase":"8.3B","roles_found":["admin_provinsi","admin_kab_kota","evaluator","panitia","wasit"],
+  "guard":"src/components/auth/ProtectedRoute.tsx",
+  "positive_controls":["Protected routes check authenticated user","Role/profile loading and missing states exist","Admin assignment step-up rechecks current user and user_roles after password reauthentication","Password validity is not used as role proof"],
+  "findings":[
+    {"id":"R-001","severity":"P1","category":"MENU_VISIBLE_BUT_ACTION_FORBIDDEN","roles":["admin_kab_kota"],"location":"src/components/layout/MobileNav.tsx; src/App.tsx","evidence":"Event Approval menu is shown but /approvals requires admin_provinsi"},
+    {"id":"R-002","severity":"P1","category":"ACTION_VISIBLE_BUT_ROUTE_FORBIDDEN","roles":["panitia"],"location":"src/pages/EventDetail.tsx; src/App.tsx","evidence":"Tugaskan CTA is visible but assignment route requires admin role"},
+    {"id":"R-003","severity":"P2","category":"FRONTEND_ROLE_CHECK_DUPLICATION","roles":["admin_provinsi"],"location":"src/hooks/useAdminEventAssignments.ts","evidence":"Mutation checks AuthContext and direct user_roles before/after reauth; consistency is good but policy duplication needs contract tests"},
+    {"id":"R-004","severity":"P2","category":"CLIENT_ONLY_PAGE_GATING","roles":["all"],"location":"src/components/auth/ProtectedRoute.tsx","evidence":"UI route gating is client-side; docs correctly state RLS remains security boundary, but browser UAT must verify forbidden responses and no sensitive render"}
+  ],
+  "role_matrix":{"admin_provinsi":"broad admin and assignment management","admin_kab_kota":"admin routes except provinsi-only paths","evaluator":"evaluation paths","panitia":"event paths; assignment CTA mismatch","wasit":"referee paths","user":"no explicit AppRole found"}
+}

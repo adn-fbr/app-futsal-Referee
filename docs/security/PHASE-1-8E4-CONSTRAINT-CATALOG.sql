@@ -1,0 +1,6 @@
+-- PHASE 1.8E.4A CONSTRAINT CATALOG
+-- STATUS: PARTIAL / BLOCKED
+-- Verified relationship evidence is recorded in PHASE-1-8E4-TABLE-CATALOG.json.
+-- Complete PK/FK/UNIQUE/CHECK/EXCLUSION definitions and dependency ordering
+-- require a repository-local pg_constraint extraction.
+-- Do not use this file for deployment.

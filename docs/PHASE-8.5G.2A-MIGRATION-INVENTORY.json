@@ -1,0 +1,12 @@
+{
+  "phase":"8.5G.2A",
+  "target":"shorsqyycpptxcutrqrb",
+  "remote_only_versions":["20260908085000"],
+  "local_only_versions_count":50,
+  "approved_migration":"20260908184851",
+  "approved_migration_local":true,
+  "approved_migration_applied":false,
+  "include_all_used_for_apply":false,
+  "migration_repair_used":false,
+  "reset_used":false
+}

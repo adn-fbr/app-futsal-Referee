@@ -1,0 +1,7 @@
+{
+  "phase": "8.5G",
+  "existing_mechanism_preserved": true,
+  "new_notification_table": false,
+  "assignment_notification_path": "send-assignment-notification",
+  "status_change_live_validation": "NOT_EXECUTED"
+}

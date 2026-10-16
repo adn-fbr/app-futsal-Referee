@@ -1,0 +1,70 @@
+{
+    "canonicalization":  "UTF-8 records of workspace-relative path, tab, lowercase file SHA-256, newline; sorted by path; trailing newline included",
+    "gate":  "BLOCKED",
+    "run2_hash":  "72048d9d6a4483cada46fb48038caec1b0e35fe126714b4b72a129aa7aa21751",
+    "run1_hash":  "72048d9d6a4483cada46fb48038caec1b0e35fe126714b4b72a129aa7aa21751",
+    "algorithm":  "SHA-256",
+    "determinism":  "PASS",
+    "phase":  "7.4J-D1-A",
+    "scope":  "14 D1-A documentation artifacts, excluding both hash manifest artifacts",
+    "files":  [
+                  {
+                      "sha256":  "4b1b83217c484d6b74f454139e08b1f5af14b2c871b71db0540cd12a6cf87128",
+                      "path":  "docs/PHASE-7.4J-D1-A-AUTH-GOVERNANCE.md"
+                  },
+                  {
+                      "sha256":  "fa32ad51ab1797497a75e349f0a3e9cc3fd96960e27722f4a9067e3bebc8ebc9",
+                      "path":  "docs/PHASE-7.4J-D1-A-AUTHORIZATION-PACKAGE.md"
+                  },
+                  {
+                      "sha256":  "ef77ff8d3f8fcb8886f399212b2e6bc2508af7dbc4c91d406363f3b5cdb7a87e",
+                      "path":  "docs/PHASE-7.4J-D1-A-DATA-DISPOSITION.md"
+                  },
+                  {
+                      "sha256":  "0ffe54e6e6470e19078dfe1d25cc839e339ec35d75908f444556c81c73ffc6a4",
+                      "path":  "docs/PHASE-7.4J-D1-A-DECISION-MATRIX.json"
+                  },
+                  {
+                      "sha256":  "51deb5f9daa557b614f284c904ee52582cd1dde3716f9d172d3f2af02c447971",
+                      "path":  "docs/PHASE-7.4J-D1-A-DECISION-MATRIX.md"
+                  },
+                  {
+                      "sha256":  "df11ab3ef37867c51e5f16820941f46a0c9366cf3f083f4d2503d2d2dda6fff7",
+                      "path":  "docs/PHASE-7.4J-D1-A-DEPENDENCY-ORDER.md"
+                  },
+                  {
+                      "sha256":  "3c71ee85da8c341c92abff89ab86cf089123bbb75470dc84209fb8bd0757413c",
+                      "path":  "docs/PHASE-7.4J-D1-A-EXECUTION-SCOPE.md"
+                  },
+                  {
+                      "sha256":  "a6247d00b1df4246340085a7b018505411bbc71cdabc4970c35e973eab4b1ff9",
+                      "path":  "docs/PHASE-7.4J-D1-A-FINAL-REPORT.md"
+                  },
+                  {
+                      "sha256":  "99c3950c0c66d96e9f12d8d39dc48ea36ffb1b792676ec5e0661a39274863162",
+                      "path":  "docs/PHASE-7.4J-D1-A-MIGRATION-POLICY.md"
+                  },
+                  {
+                      "sha256":  "e92a3330f5d79f5bc4c8c06205f8a777e205d49cee176b0bdf7f6be7d1d3db51",
+                      "path":  "docs/PHASE-7.4J-D1-A-POST-VALIDATION-PLAN.md"
+                  },
+                  {
+                      "sha256":  "3594a8536c89cc38b006ad2a25ec1d9a5d4425c7f63cca68cb6c94b740f72f6d",
+                      "path":  "docs/PHASE-7.4J-D1-A-PRE-EXECUTION-CHECKLIST.md"
+                  },
+                  {
+                      "sha256":  "5633e7de6eda620d112c7b3d3c271b4424aee021e95eb0f4307d568fbe3acaf5",
+                      "path":  "docs/PHASE-7.4J-D1-A-PRODUCTION-SAFETY.md"
+                  },
+                  {
+                      "sha256":  "a0d08360ec147cab2b01f280d80442f5cebb42db40c04d414163b653c68a4ae5",
+                      "path":  "docs/PHASE-7.4J-D1-A-RECONSTRUCTION-TARGET.md"
+                  },
+                  {
+                      "sha256":  "a8faa342fbae4a82ad691ca0047115a2cfdd8883a43a5c4d8719a775b89f6483",
+                      "path":  "docs/PHASE-7.4J-D1-A-ROLLBACK-PREREQUISITES.md"
+                  }
+              ],
+    "manifest_sha256":  "72048d9d6a4483cada46fb48038caec1b0e35fe126714b4b72a129aa7aa21751",
+    "match":  true
+}

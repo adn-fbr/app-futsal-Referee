@@ -1,0 +1,64 @@
+{
+  "phase": "PHASE 7.4J-D1-D.3",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "snapshot_scope": ["public", "storage"],
+  "snapshot_path": "tmp/PHASE-7.4J-D1-D.3-NONPROD-SNAPSHOT.sql",
+  "captured_utc": "2026-09-08T08:29:10.0300767Z",
+  "bytes": 67413,
+  "sha256": "c214e785cff8f5323158d0dc5e9d9e51d88f21a56968a00c816c2640398210da",
+  "inventory": {
+    "schemas": 2,
+    "tables": 14,
+    "columns": 119,
+    "functions": 20,
+    "procedures": 0,
+    "views": 1,
+    "materialized_views": 0,
+    "triggers": 8,
+    "indexes": 11,
+    "primary_keys": 14,
+    "unique_constraints": 3,
+    "check_constraints": 13,
+    "foreign_keys": 14,
+    "rls_enabled_tables": 14,
+    "policies": 32,
+    "extensions": 0,
+    "enum_types": 2
+  },
+  "table_names": [
+    "public.event_assignments",
+    "public.events",
+    "public.honors",
+    "public.profiles",
+    "public.referee_reviews",
+    "public.user_roles",
+    "storage.buckets",
+    "storage.buckets_analytics",
+    "storage.buckets_vectors",
+    "storage.migrations",
+    "storage.objects",
+    "storage.s3_multipart_uploads",
+    "storage.s3_multipart_uploads_parts",
+    "storage.vector_indexes"
+  ],
+  "events": {
+    "columns": ["id", "name", "date", "location", "category", "status", "description", "created_by", "created_at", "updated_at"],
+    "has_deleted_at": false,
+    "has_kabupaten_kota_id": false
+  },
+  "duplicate_event_contract": {
+    "signature": "public.check_duplicate_event(text,text,text) RETURNS boolean",
+    "found": false
+  },
+  "auth_boundary": {
+    "auth_users_definition_dumped": false,
+    "auth_internals_enumerated": false,
+    "auth_references_present_in_dump": true
+  },
+  "data_markers": {
+    "insert_statements": 0,
+    "copy_data_statements": 0,
+    "real_data_extracted": false
+  },
+  "snapshot_mode": "read-only schema dump; no SQL execution against target beyond dump inspection"
+}

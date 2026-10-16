@@ -1,0 +1,16 @@
+{
+  "phase": "8.7",
+  "foundation": "PASS",
+  "module": "src/lib/annualReporting.ts",
+  "default_year": "current year",
+  "historical_years": "current year minus five through current year",
+  "event_analytics": "PASS - year selector and events.start_date half-open range",
+  "event_categories": "PARTIAL - existing event analytics only",
+  "referee_report": "PARTIAL - existing date-range report not yet converted to year selector",
+  "activity_report": "NOT IMPLEMENTED",
+  "honor_report": "NOT IMPLEMENTED as annual module",
+  "learning_report": "NOT IMPLEMENTED as annual module",
+  "csv_export": "PASS existing event analytics export includes selected year filename",
+  "pdf_export": "NOT AVAILABLE existing placeholder",
+  "authorization": "Existing RLS/RBAC preserved"
+}

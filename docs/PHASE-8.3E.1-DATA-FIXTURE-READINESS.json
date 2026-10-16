@@ -1,0 +1,22 @@
+{
+  "phase":"8.3E.1",
+  "status":"BLOCKED — FIXTURE AND REMOTE SCHEMA NOT VERIFIED",
+  "target":"shorsqyycpptxcutrqrb",
+  "required_fixture":[
+    {"object":"synthetic event","purpose":"parent for assignment","status":"NOT_READY"},
+    {"object":"synthetic referee profile","purpose":"event_assignments.referee_id","status":"NOT_READY"},
+    {"object":"synthetic Admin Provinsi profile/role","purpose":"authorized mutation","status":"NOT_READY"},
+    {"object":"one pending event_assignment","purpose":"pending -> confirmed test","status":"NOT_READY"}
+  ],
+  "schema_checks":[
+    {"check":"event_assignments table exists in current target","result":"NOT_VERIFIED"},
+    {"check":"primary key and foreign keys","result":"NOT_VERIFIED"},
+    {"check":"required NOT NULL columns","result":"NOT_VERIFIED"},
+    {"check":"status representation supports pending and confirmed","result":"OFFLINE_CODE_EXPECTS_VALUES; REMOTE_NOT_VERIFIED"},
+    {"check":"RLS and applicable policies","result":"OFFLINE_PRIOR_EVIDENCE_ONLY; CURRENT_TARGET_NOT_VERIFIED"}
+  ],
+  "records_created":0,
+  "records_mutated":0,
+  "schema_changed":0,
+  "reason":"Do not create fixtures until effective runtime target is proven non-production and approved credentials/fixture scope are available."
+}

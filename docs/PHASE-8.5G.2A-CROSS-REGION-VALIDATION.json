@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2A",
+  "status":"BLOCKED",
+  "admin_a_region_b_select":"PRE_REMEDIATION_LEAKAGE_CONFIRMED",
+  "admin_a_region_b_update":"PRE_REMEDIATION_LEAKAGE_CONFIRMED",
+  "admin_b_region_a_select":"NOT_EXECUTED",
+  "admin_b_region_a_update":"NOT_EXECUTED",
+  "post_remediation":"NOT_EXECUTED"
+}

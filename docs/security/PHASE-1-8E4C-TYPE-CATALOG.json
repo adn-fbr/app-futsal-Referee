@@ -1,0 +1,6 @@
+{
+  "status": "BLOCKED",
+  "complete": false,
+  "applicationEnums": [{"schema":"public","name":"app_role","labels":["admin_provinsi","admin_kab_kota","panitia","wasit","evaluator"],"complete":false},{"schema":"public","name":"pengurus_level","labels":["PROVINSI","KAB_KOTA"],"complete":false}],
+  "missing": ["owners","domains","composites","ranges","dependencies","complete pg_type classification"]
+}

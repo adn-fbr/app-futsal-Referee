@@ -1,0 +1,11 @@
+{
+  "phase":"8.5G.2E",
+  "target":"shorsqyycpptxcutrqrb",
+  "hash":"PASS",
+  "sql_scope":"PASS",
+  "execution_channel":"UNAVAILABLE",
+  "migration_applied":false,
+  "migration_repair":false,
+  "include_all":false,
+  "reset":false
+}

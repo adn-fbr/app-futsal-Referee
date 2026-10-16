@@ -1,0 +1,19 @@
+{
+  "phase": "8.6",
+  "table": "audit_logs",
+  "actions": [
+    "HISTORICAL_EVENT_EDIT_OPENED",
+    "HISTORICAL_EVENT_STEP_UP_REQUESTED",
+    "HISTORICAL_EVENT_STEP_UP_SUCCESS",
+    "HISTORICAL_EVENT_STEP_UP_FAILED",
+    "HISTORICAL_EVENT_EDIT_DENIED",
+    "HISTORICAL_EVENT_EDIT_FAILED",
+    "HISTORICAL_EVENT_UPDATED"
+  ],
+  "before_after": true,
+  "actor_id": true,
+  "event_id": true,
+  "password_fields": false,
+  "write_path": "existing Supabase client audit_logs mechanism",
+  "live_read_back": "NOT VERIFIED"
+}

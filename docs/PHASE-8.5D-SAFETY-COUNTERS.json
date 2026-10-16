@@ -1,0 +1,25 @@
+{
+  "phase": "8.5D",
+  "authorized_environment": "shorsqyycpptxcutrqrb",
+  "production_project": "xfscfjwapwnkiinkgbjg",
+  "production": {
+    "queries": 0,
+    "mutations": 0,
+    "schema_changes": 0,
+    "function_changes": 0,
+    "auth_changes": 0,
+    "deployments": 0
+  },
+  "non_production": {
+    "schema_changes": 0,
+    "function_changes": 0,
+    "rls_changes": 0,
+    "data_mutations": 0,
+    "auth_mutations": 0,
+    "storage_mutations": 0,
+    "read_only_type_generation": 1,
+    "controlled_rpc_invocations": 0
+  },
+  "final_gate": "BLOCKED",
+  "production_uat": "NOT READY"
+}

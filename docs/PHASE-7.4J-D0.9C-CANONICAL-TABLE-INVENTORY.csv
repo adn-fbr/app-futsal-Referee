@@ -1,0 +1,28 @@
+canonical_table,remote_exists,row_count,evidence,classification
+events,EXISTS,0,D0.8 remote catalog and aggregate count,REMOTE_CURRENT_EMPTY
+honors,EXISTS,0,D0.8 remote catalog and aggregate count,REMOTE_CURRENT_EMPTY
+activity_logs,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+audit_logs,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+auth_attempts,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+auth_event_logs,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+card_verification_logs,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+discussion_replies,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+discussion_topics,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+evaluation_criteria,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+evaluation_scores,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+evaluations,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+event_approvals,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+event_assignments,EXISTS,0,D0.8 remote catalog and aggregate count,REMOTE_CURRENT_EMPTY
+event_logs,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+kabupaten_kota,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+learning_materials,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+learning_progress,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+notification_preferences,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+notifications,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+pengurus,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+profiles,EXISTS,0,D0.8 remote catalog and aggregate count,REMOTE_CURRENT_EMPTY
+provinsi,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+referee_cards,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+referee_reviews,EXISTS,0,D0.8 remote catalog and aggregate count,REMOTE_CURRENT_EMPTY
+system_settings,ABSENT,N/A,D0.8 remote public catalog,EXPECTED_RECONSTRUCTION_GAP
+user_roles,EXISTS,0,D0.8 remote catalog and aggregate count,REMOTE_CURRENT_EMPTY

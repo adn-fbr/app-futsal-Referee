@@ -1,0 +1,22 @@
+{
+  "phase": "8.5F",
+  "target": "shorsqyycpptxcutrqrb",
+  "static_live_validation": {
+    "events_rls_enabled": true,
+    "events_force_rls": false,
+    "events_select_policy": "Everyone can view events (USING true)",
+    "function_security": "SECURITY INVOKER",
+    "anon_execute": true,
+    "authenticated_execute": true,
+    "security_definer_bypass_introduced": false
+  },
+  "tests": [
+    {"id": "SEC-001", "case": "Admin Provinsi", "status": "NOT_EXECUTED", "reason": "No synthetic identity/fixture channel"},
+    {"id": "SEC-002", "case": "non-admin", "status": "NOT_EXECUTED", "reason": "No synthetic identity/fixture channel"},
+    {"id": "SEC-003", "case": "restricted visibility", "status": "STATIC_PASS", "reason": "Invoker function follows existing public events SELECT policy"},
+    {"id": "SEC-004", "case": "anonymous", "status": "STATIC_PASS", "reason": "anon EXECUTE exists and events SELECT is public"},
+    {"id": "SEC-005", "case": "hidden event inference", "status": "NOT_EXECUTED", "reason": "No restricted fixture"},
+    {"id": "SEC-006", "case": "RLS bypass", "status": "STATIC_PASS", "reason": "Function is invoker; no RLS change"}
+  ],
+  "status": "PARTIAL"
+}

@@ -1,0 +1,8 @@
+{
+  "phase":"8.5G.2C",
+  "status":"NOT_EXECUTED",
+  "url_manipulation":"NOT_TESTED",
+  "uuid_manipulation":"NOT_TESTED",
+  "payload_event_id_escape":"NOT_TESTED",
+  "user_metadata_authorization":false
+}

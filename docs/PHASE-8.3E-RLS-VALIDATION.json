@@ -1,0 +1,18 @@
+{
+  "phase":"8.3E",
+  "target":"shorsqyycpptxcutrqrb",
+  "production_target":"xfscfjwapwnkiinkgbjg",
+  "status":"BLOCKED — TEST FIXTURE AND AUTHORIZED CLIENT UNAVAILABLE",
+  "production_queries":0,
+  "production_mutations":0,
+  "tests":[
+    {"test_id":"RLS-001","identity":"Admin Provinsi","operation":"read authorized event_assignment","expected":"contract-dependent","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"test_id":"RLS-002","identity":"Admin Provinsi","operation":"update authorized pending assignment","expected":"allowed for approved row","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"test_id":"RLS-003","identity":"Non-Admin role","operation":"update assignment","expected":"denied","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"test_id":"RLS-004","identity":"Anonymous","operation":"read/update assignment","expected":"denied unless contract says public","actual":"NOT_EXECUTED","status":"BLOCKED"},
+    {"test_id":"RLS-005","identity":"Admin Provinsi","operation":"verify event_id/referee_id unchanged after update","expected":"unchanged","actual":"NOT_EXECUTED","status":"BLOCKED"}
+  ],
+  "existing_offline_evidence":{"phase":"PHASE-7.4J-D1-D.6","project_ref":"shorsqyycpptxcutrqrb","policy_count":86,"policy_identity_missing":[],"policy_identity_unexpected":[],"normalized_policy_definition_mismatches":[],"rls_weakened":false,"status":"PASS","limitation":"Offline/previous evidence does not validate this Phase 8.3D application mutation or current fixture identities."},
+  "blockers":["Current browser client points to Production and cannot be used","No authorized non-production publishable credential is configured","Auth provenance is UNKNOWN","No approved synthetic assignment/user fixture is available","Running seed-security-fixtures would require a service-role key and would mutate data; it was not run"],
+  "schema_or_rls_changed":false
+}

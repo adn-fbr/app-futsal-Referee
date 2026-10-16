@@ -1,0 +1,55 @@
+{
+  "phase": "PHASE 7.4J-D1-D.3",
+  "purpose": "RECONSTRUCTION RE-AUTHORIZATION & FRESH PREFLIGHT",
+  "mode": "FRESH_PREFLIGHT_ONLY",
+  "authorized_target": "NON-PRODUCTION ONLY",
+  "project_ref": "shorsqyycpptxcutrqrb",
+  "production_project_ref": "xfscfjwapwnkiinkgbjg",
+  "baseline_authority": {
+    "source": "PHASE-7.4J-D1-D.2",
+    "decision": "PASS — CANONICAL BASELINE PROVENANCE VERIFIED",
+    "authoritative_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1"
+  },
+  "target_verification": {
+    "configured_project": "shorsqyycpptxcutrqrb",
+    "linked_project": "shorsqyycpptxcutrqrb",
+    "linked_project_healthy": true,
+    "production_linked": false,
+    "production_id_in_commands": false
+  },
+  "baseline_integrity": {
+    "sha256_match": true,
+    "bytes": 126597,
+    "git_worktree_diff": false,
+    "git_staged_diff": false,
+    "encoding_or_line_ending_conversion": false
+  },
+  "snapshot": {
+    "path": "tmp/PHASE-7.4J-D1-D.3-NONPROD-SNAPSHOT.sql",
+    "scope": ["public", "storage"],
+    "bytes": 67413,
+    "sha256": "c214e785cff8f5323158d0dc5e9d9e51d88f21a56968a00c816c2640398210da",
+    "captured_utc": "2026-09-08T08:29:10.0300767Z",
+    "contains_auth_users_definition": false,
+    "contains_data_inserts_or_copy": false
+  },
+  "recovery_preflight": {
+    "complete": true,
+    "mechanism": "Disposable non-production project with captured schema and migration history before execution",
+    "migration_history_path": "tmp/PHASE-7.4J-D1-D.3-MIGRATION-HISTORY.txt",
+    "migration_history_sha256": "8a3aafae7b8cc2b321a6b89ef6d00de62d2767c41bc71116857df49a88ebd64e",
+    "remote_applied_migrations": 4,
+    "local_migration_files": 55,
+    "reset_or_rebuild_executed": false
+  },
+  "canonical_target_consistent": false,
+  "blockers": [
+    "Non-production snapshot has 14 tables versus canonical 27",
+    "Non-production snapshot has 20 functions versus canonical 47",
+    "Non-production snapshot has 1 view versus canonical 3",
+    "Non-production events table lacks deleted_at",
+    "Non-production events table lacks kabupaten_kota_id",
+    "Non-production snapshot does not contain public.check_duplicate_event(text,text,text) RETURNS boolean"
+  ],
+  "decision": "BLOCKED — CANONICAL TARGET INCONSISTENT"
+}

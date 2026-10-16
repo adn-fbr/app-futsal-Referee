@@ -1,0 +1,11 @@
+{
+  "phase":"8.5C",
+  "status":"DESIGN_ONLY",
+  "existing_evidence":["event_approvals AFTER INSERT audit trigger in production-schema.sql","existing audit_logs infrastructure","existing assignment cancellation audit path"],
+  "tests":[
+    {"id":"HIST-L-001","event creation audit","status":"NOT_EXECUTED"},
+    {"id":"HIST-L-002","approval creation audit","status":"NOT_EXECUTED"}
+  ],
+  "design_rule":"approval trigger runs within DB transaction if transaction function is implemented; external notifications are not atomic DB state",
+  "audit_schema_changed":false
+}

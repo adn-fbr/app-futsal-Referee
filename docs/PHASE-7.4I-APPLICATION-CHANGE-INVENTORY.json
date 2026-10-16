@@ -1,0 +1,12 @@
+{
+  "status":"COMPLETE FOR DESIGN SCOPE",
+  "files":[
+    {"file":"src/hooks/useEvents.ts","current_responsibility":"Direct five-argument Supabase RPC and DuplicateEvent wrapper","required_change":"Move business call to repository/service; map typed errors; preserve wrapper","boundary":"Hook -> repository","risk":"High: current RPC targets conflicting canonical identity and fail-open consumers exist","tests":"Input/error/result mapping"},
+    {"file":"src/pages/EventEdit.tsx","current_responsibility":"Calls duplicate hook before confirmation; catches all errors and allows proceed","required_change":"Consume typed result/errors; do not convert database failure to no duplicate","boundary":"UI -> hook","risk":"High: current catch is fail-open","tests":"Database, authorization, timeout behavior"},
+    {"file":"src/components/events/DuplicateEventDialog.tsx","current_responsibility":"Renders DuplicateEvent fields and score labels","required_change":"Likely none beyond type import if repository DTO changes; no new fields","boundary":"UI presentation","risk":"Low","tests":"Candidate rendering and NULL score behavior"},
+    {"file":"src/integrations/supabase/types.ts","current_responsibility":"Generated conflicting check_duplicate_event Args/Returns","required_change":"Regenerate only after approved rich physical identity exists; do not hand-edit generated type","boundary":"Generated infrastructure type","risk":"High","tests":"Generated contract matches approved target"},
+    {"file":"supabase/migrations/20260121161308_170f4f14-a4bb-494b-ac16-77f99251a8c4.sql","current_responsibility":"Historical five-argument SECURITY DEFINER function evidence","required_change":"No change in design phase; must not be reused as authorization","boundary":"Historical database evidence","risk":"Critical identity/security conflict","tests":"Governance review before any future migration"}
+  ],
+  "repository_boundary":"UI -> Hook/Service -> Repository -> approved rich-search boundary",
+  "source_modification":"0"
+}

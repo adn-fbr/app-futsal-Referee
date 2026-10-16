@@ -1,0 +1,23 @@
+{
+  "phase": "8.5D",
+  "environment": "shorsqyycpptxcutrqrb",
+  "identity": "public.check_duplicate_event(text,text,text)",
+  "arguments": [
+    {"name": "p_kota_id", "type": "text"},
+    {"name": "p_location", "type": "text"},
+    {"name": "p_name", "type": "text"}
+  ],
+  "return_type": "boolean",
+  "volatility": "VOLATILE",
+  "security_mode": "SECURITY DEFINER",
+  "search_path": "not specified in canonical definition",
+  "owner": "postgres",
+  "body": "RETURN EXISTS (SELECT 1 FROM events WHERE kota_id::TEXT = p_kota_id AND location = p_location AND name = p_name)",
+  "referenced_relations": ["events"],
+  "referenced_columns": ["kota_id", "location", "name"],
+  "unresolved_references": ["events.kota_id"],
+  "comparison": "exact equality; no LOWER, TRIM, ILIKE, similarity, date, exclusion, or status predicate",
+  "null_behavior": "SQL equality with NULL yields UNKNOWN; no NULL-safe comparison is present",
+  "source": "production-schema.sql:151-167",
+  "status": "STATIC_DEFINITION_CONFLICTS_WITH_CANONICAL_TABLE"
+}

@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2",
+  "status":"CONFIRMED",
+  "user_scope_source":"profiles.kabupaten_kota_id",
+  "scope_helper":"public.get_user_kabupaten_kota(uuid)",
+  "row_scope_source":"events.kabupaten_kota_id via event_assignments.event_id",
+  "region_a":"be019cc8-1e5e-4ea6-a82f-d15b96e3aff0",
+  "region_b":"e2c10dfe-4744-46c0-b1ba-e2e0c197ef8f"
+}

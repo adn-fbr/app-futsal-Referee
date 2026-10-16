@@ -1,0 +1,17 @@
+{
+  "status":"DESIGN REQUIRED",
+  "physical_identity":"TBD",
+  "schema":"TBD",
+  "signature":"TBD",
+  "return_type":"TBD",
+  "security":"SECURITY INVOKER",
+  "target_table":"public.events (evidence only)",
+  "known_columns":["id","name","date","location","status","kabupaten_kota_id","deleted_at"],
+  "query_design":["name exact/contains","date proximity","optional location/region filters","exclude event","rank similarity","ORDER BY similarity_score DESC, date DESC","LIMIT 5"],
+  "null_design":"Frozen contract semantics; required NULL/blank validation error; optional filters disabled; database NULL does not match; NULL score is not evidence.",
+  "rls_design":{"mode":"caller context","bypass":false,"policy_change":false,"known_events_select_policy":"Everyone can view events (baseline evidence; implementation must revalidate in safe non-Production)","status":"EVIDENCE REQUIRED"},
+  "indexes":{"existing_candidates":["idx_events_date","idx_events_deleted_at","idx_events_kabupaten_kota_id","idx_events_status"],"new_index":"NONE AUTHORIZED","process":"MEASURE -> EXPLAIN -> VALIDATE -> INDEX"},
+  "errors":"DatabaseError, AuthorizationError, TimeoutError; never convert failure to no duplicate.",
+  "historical_migration":"Evidence only; conflicting five-argument SECURITY DEFINER check_duplicate_event must not be adopted.",
+  "execution":"NO SQL / NO MIGRATION"
+}

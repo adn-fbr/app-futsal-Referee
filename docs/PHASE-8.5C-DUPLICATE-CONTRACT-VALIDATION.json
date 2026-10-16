@@ -1,0 +1,13 @@
+{
+  "phase":"8.5C",
+  "canonical_signature_verified":true,
+  "callers":[
+    {"file":"src/hooks/useEvents.ts:556","current":"five historical args; array result","canonical":"three args; boolean","status":"NOT_CHANGED"},
+    {"file":"src/pages/EventEdit.tsx:83","current":"expects duplicate record details/date","canonical":"boolean only","status":"NOT_CHANGED"},
+    {"file":"src/integrations/supabase/types.ts:1430","current":"historical generated type","canonical":"regenerated temp output differs","status":"NOT_CHANGED"}
+  ],
+  "parameter_mapping":{"p_kota_id":{"candidate_source":"events.kabupaten_kota_id","status":"NOT_APPROVED","reason":"canonical function body references events.kota_id, absent from canonical events table"},"p_location":{"source":"events.location","status":"POSSIBLE"},"p_name":{"source":"events.name","status":"POSSIBLE"}},
+  "historical_date_semantics":"not part of canonical RPC; preserved as separate UI/business classification",
+  "rich_duplicate_rpc_created":false,
+  "status":"BLOCKED — semantic/schema contract inconsistency"
+}

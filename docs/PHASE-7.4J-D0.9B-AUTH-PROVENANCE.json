@@ -1,0 +1,17 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "boundary":"auth.users EXTERNAL_MANAGED",
+  "auth_current_state":"UNKNOWN_NOT_ENUMERATED",
+  "auth_user_count":"UNKNOWN",
+  "auth_provenance":"UNKNOWN",
+  "profiles_count":0,
+  "user_roles_count":0,
+  "pengurus_count":"UNKNOWN_ABSENT_TABLE",
+  "profile_references":"NO_ROWS_OBSERVED",
+  "role_references":"NO_ROWS_OBSERVED",
+  "pengurus_references":"UNKNOWN",
+  "broken_references":"UNKNOWN",
+  "rebuild_disposition":"GOVERNANCE_REQUIRED_BEFORE_DISCARD",
+  "future_strategy":"SYNTHETIC_AUTH_IDENTITIES_ONLY",
+  "mutation":0
+}

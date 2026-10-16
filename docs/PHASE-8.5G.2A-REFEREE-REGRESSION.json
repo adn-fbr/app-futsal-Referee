@@ -1,0 +1,6 @@
+{
+  "phase":"8.5G.2A",
+  "status":"NOT_EXECUTED_POST_REMEDIATION",
+  "referee_policies_preserved_in_migration":"YES",
+  "referee_insert_delete_admin_grant":"NO"
+}

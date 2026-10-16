@@ -1,0 +1,106 @@
+{
+  "phase": "7.4J-D1-A",
+  "status": "PENDING",
+  "decisions": [
+    {
+      "decision_id": "DECISION-01",
+      "decision": "Approve Non-Production as disposable reconstruction target",
+      "rationale": "Non-Production project is the only approved execution target.",
+      "risk": "Destructive rebuild may affect the approved target.",
+      "mitigation": "Require explicit disposable-target acknowledgement and recovery validation.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-02",
+      "decision": "Accept Auth non-enumerability as governance boundary",
+      "rationale": "Auth enumeration is unavailable in the current authorized channel.",
+      "risk": "Reconstruction could rely on unknown identity state.",
+      "mitigation": "Require synthetic Auth approval and documented governance boundary.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-03",
+      "decision": "Approve synthetic Auth identities",
+      "rationale": "Current Auth provenance is unknown; synthetic identities are the safe future model.",
+      "risk": "Synthetic identities may not match downstream assumptions.",
+      "mitigation": "Validate against canonical application contracts and RLS requirements.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-04",
+      "decision": "Approve synthetic application data",
+      "rationale": "Current application data provenance is incomplete or absent.",
+      "risk": "Synthetic fixtures may not reflect production semantics.",
+      "mitigation": "Use only canonical baseline and controlled fixtures; no production copy.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-05",
+      "decision": "Approve synthetic Storage fixtures",
+      "rationale": "Storage provenance cannot be confirmed.",
+      "risk": "Synthetic buckets/objects may diverge from business expectations.",
+      "mitigation": "Require explicit storage strategy approval and validation.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-06",
+      "decision": "Approve canonical baseline reconstruction",
+      "rationale": "Canonical Production baseline is the authoritative target.",
+      "risk": "Drift may occur if the baseline is wrong or incomplete.",
+      "mitigation": "Validate against the dependency graph and hash manifest.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-07",
+      "decision": "Approve exclusion of historical conflicting migrations",
+      "rationale": "Historical migrations conflict with the canonical target.",
+      "risk": "Blind replay could reintroduce wrong schema.",
+      "mitigation": "Exclude the historical chain and use the canonical baseline only.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-08",
+      "decision": "Approve RLS reconstruction from canonical baseline",
+      "rationale": "RLS is security-critical and depends on identity semantics.",
+      "risk": "Weak or inconsistent RLS could expose data.",
+      "mitigation": "Validate RLS policies against canonical definitions and application contracts.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-09",
+      "decision": "Approve rollback/recovery prerequisites",
+      "rationale": "Destructive rebuilds require controlled rollback.",
+      "risk": "Loss of state or inability to recover.",
+      "mitigation": "Require explicit recovery point and manifest validation.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    },
+    {
+      "decision_id": "DECISION-10",
+      "decision": "Approve future Option C validated migration model",
+      "rationale": "Only validated canonical reconstruction may proceed to migration strategy.",
+      "risk": "Premature migration may create drift.",
+      "mitigation": "Require canonical validation before migration execution.",
+      "authority": "operator",
+      "status": "PENDING",
+      "explicit_approval_required": true
+    }
+  ]
+}

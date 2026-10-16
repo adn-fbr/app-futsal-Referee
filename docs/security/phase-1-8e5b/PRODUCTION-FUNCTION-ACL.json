@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "function_acl",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "all function EXECUTE privileges for PUBLIC/anon/authenticated/service_role",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No `aclexplode(proacl)` extraction occurred."
+}

@@ -1,0 +1,11 @@
+{
+  "phase": "8.5G.3A",
+  "status": "READY AS PLAN; NOT EXECUTED",
+  "target_guard": "shorsqyycpptxcutrqrb only",
+  "identifier_scope": "deterministic fixture labels and IDs",
+  "dependency_order": ["event_assignments", "events", "profiles/user_roles", "Auth identities"],
+  "broad_delete": false,
+  "production_cleanup": false,
+  "verification_after_cleanup": "required",
+  "cleanup_tool": "NOT IMPLEMENTED"
+}

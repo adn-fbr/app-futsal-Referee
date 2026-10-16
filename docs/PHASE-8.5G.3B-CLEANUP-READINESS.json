@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G.3B",
+  "cleanup_tool": "NOT_READY",
+  "cleanup_plan_exists": true,
+  "fixture_identifiers_available": false,
+  "scoped_cleanup_executed": false,
+  "broad_cleanup_executed": false,
+  "status": "BLOCKED"
+}

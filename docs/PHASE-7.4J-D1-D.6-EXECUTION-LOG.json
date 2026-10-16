@@ -1,0 +1,25 @@
+{
+  "phase": "PHASE 7.4J-D1-D.6",
+  "target_project": "shorsqyycpptxcutrqrb",
+  "production_project": "xfscfjwapwnkiinkgbjg",
+  "operations": [
+    {
+      "timestamp": "2026-09-08T08:50:00Z",
+      "operation": "supabase db push --yes --linked --workdir tmp/d1d6-work",
+      "object": "canonical public schema baseline",
+      "result": "SUCCESS",
+      "migration": "20260908085000_canonical_baseline_reconstruction.sql",
+      "rollback_action": "none executed; D1-D.5 snapshot retained"
+    },
+    {
+      "timestamp": "2026-09-08T08:50:00Z",
+      "operation": "read-only schema dump",
+      "object": "public,storage",
+      "result": "SUCCESS",
+      "artifacts": ["tmp/d1d6-schema-after-1.sql", "tmp/d1d6-schema-after-2.sql"]
+    }
+  ],
+  "warnings": ["Platform-managed pg_trgm privilege warnings were emitted; no migration error occurred and no substitute extension was used."],
+  "secrets_logged": false,
+  "production_id_in_commands": false
+}

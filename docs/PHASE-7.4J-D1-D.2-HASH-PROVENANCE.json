@@ -1,0 +1,55 @@
+{
+  "phase": "PHASE 7.4J-D1-D.2",
+  "scope": "filesystem and Git provenance only",
+  "current_file": "production-schema.sql",
+  "expected_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88bbf1c6a816f1f1c9ed98db1",
+  "observed_sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+  "current_bytes": 126597,
+  "current_matches_observed": true,
+  "canonical_baseline_copy": {
+    "path": "CANONICAL-RUNTIME-BASELINE.sql",
+    "bytes": 126597,
+    "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "byte_identical_to_current": true
+  },
+  "expected_hash_provenance": {
+    "found_in_committed_git_tree": false,
+    "historical_file_recovered": false,
+    "status": "STALE_OR_INCORRECT_METADATA"
+  },
+  "observed_hash_provenance": {
+    "committed_generation_artifacts": [
+      "CANONICAL-RUNTIME-BASELINE-HASH.txt",
+      "CANONICAL-RUNTIME-BASELINE-MANIFEST.json",
+      "CANONICAL-RUNTIME-BASELINE-REPORT.md",
+      "PRODUCTION-FULL-DEPENDENCY-GRAPH.json",
+      "PRODUCTION-FULL-DEPENDENCY-MANIFEST.json",
+      "PRODUCTION-FULL-DEPENDENCY-REPORT.md"
+    ],
+    "generator": "scripts/validate-canonical-runtime-baseline.mjs --generate",
+    "source_fidelity": "byte_identical"
+  },
+  "historical_git_blob": {
+    "commit": "74dcc12efc1e46c38a5466bb0d2b04405009f535",
+    "date": "2026-09-07T21:26:19+08:00",
+    "ref": "main",
+    "bytes": 125722,
+    "sha256": "d4599d721b11ee2510bdcc16f3ad19916a8ce2e802a5f9ee05b12701b6a38995",
+    "normalized_sql_equal": true
+  },
+  "decision": "PASS — CANONICAL BASELINE PROVENANCE VERIFIED",
+  "reason": "Committed generated artifacts identify the current source and record the observed raw-byte hash; the expected hash has no authoritative committed artifact or recoverable file.",
+  "safety": {
+    "production_access": "NO",
+    "production_mutation": 0,
+    "database_mutation": 0,
+    "migration_execution": 0,
+    "reset": 0,
+    "rebuild": 0,
+    "seed": 0,
+    "auth_mutation": 0,
+    "storage_mutation": 0,
+    "rls_mutation": 0,
+    "application_implementation": 0
+  }
+}

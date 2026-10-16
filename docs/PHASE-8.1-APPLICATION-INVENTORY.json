@@ -1,0 +1,41 @@
+{
+  "phase": "8.1",
+  "audit_mode": "READ_ONLY",
+  "framework": "React 18.3.1 + TypeScript",
+  "build_system": "Vite 5.4.19",
+  "runtime": "Browser SPA; Vite entrypoint",
+  "entry_points": ["src/main.tsx", "src/App.tsx"],
+  "routing": "react-router-dom 6.30.1 BrowserRouter/Routes/Route",
+  "state_and_data": ["React Context", "TanStack React Query 5.83.0", "local component state"],
+  "supabase_client": "src/integrations/supabase/client.ts",
+  "environment_variables": ["VITE_SUPABASE_URL", "VITE_SUPABASE_PUBLISHABLE_KEY", "VITE_SUPABASE_PROJECT_ID"],
+  "source_inventory": {
+    "source_files": 202,
+    "source_lines": 37562,
+    "pages": 55,
+    "hooks": 33,
+    "repository_files": 9,
+    "components": 89,
+    "edge_function_files": 19,
+    "test_files": 4
+  },
+  "repository_structure": {
+    "pages": "src/pages",
+    "hooks": "src/hooks",
+    "contexts": "src/contexts",
+    "components": "src/components",
+    "repositories": "src/repositories/auth only",
+    "services": "MISSING",
+    "lib": "src/lib",
+    "supabase": "supabase/functions, supabase/migrations, src/integrations/supabase"
+  },
+  "canonical_reference": {
+    "baseline": "production-schema.sql",
+    "sha256": "b77b6cf72482a3401a7abd0a097f24587b6b78e88fbf1c6a816f1f1c9ed98db1",
+    "inventory": "docs/PHASE-7.4J-D1-D.4-CANONICAL-INVENTORY.json",
+    "dependency_graph": "PRODUCTION-FULL-DEPENDENCY-GRAPH.json"
+  },
+  "source_mutation": false,
+  "database_inspection": false,
+  "production_access": false
+}

@@ -1,0 +1,16 @@
+{
+  "phase": "8.5G.3B",
+  "repository_root": "D:/AFP SULSEL/app-futsal - Salin",
+  "files": {
+    ".env": {"status":"FILE_PRESENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED","role":"Vite/browser configuration"},
+    ".env.local": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED"},
+    ".env.development": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED"},
+    ".env.development.local": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED"},
+    ".env.test": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_NOT_IGNORED"},
+    ".env.test.local": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED"},
+    ".env.production": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED"},
+    ".env.production.local": {"status":"FILE_ABSENT","tracked":"FILE_UNTRACKED","ignored":"FILE_IGNORED"}
+  },
+  "selected_provisioning_file": "NONE",
+  "production_environment_file_auto_selection": false
+}

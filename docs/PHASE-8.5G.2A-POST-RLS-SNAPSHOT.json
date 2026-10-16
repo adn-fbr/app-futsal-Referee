@@ -1,0 +1,9 @@
+{
+  "phase":"8.5G.2A",
+  "status":"NOT_APPLIED",
+  "target":"shorsqyycpptxcutrqrb",
+  "live_post_snapshot":"NOT_AVAILABLE_CONNECTION_NOT_FOUND",
+  "approved_migration_state":"LOCAL_ONLY_NOT_APPLIED",
+  "rls_enabled":"UNCHANGED_FROM_CANONICAL_BASELINE",
+  "post_policy_validation":"NOT_EXECUTED"
+}

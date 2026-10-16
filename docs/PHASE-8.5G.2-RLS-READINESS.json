@@ -1,0 +1,9 @@
+{
+  "phase": "8.5G.2",
+  "status": "BLOCKED",
+  "rls_changed": 0,
+  "service_role_frontend": false,
+  "rls_readiness": "NOT VERIFIED REMOTELY",
+  "fixture_visibility": "NOT VERIFIED",
+  "reason": "No approved authenticated fixture identities are available for RLS read-back."
+}

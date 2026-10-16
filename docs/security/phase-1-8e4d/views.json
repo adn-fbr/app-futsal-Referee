@@ -1,0 +1,1 @@
+{"status":"BLOCKED","expected":3,"extracted":3,"complete":0,"missing":["pg_get_viewdef","owners","security_invoker/barrier","dependencies","privileges"]}

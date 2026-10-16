@@ -1,0 +1,12 @@
+{
+  "phase": "8.5E",
+  "events": [
+    {"time": "2026-09-06", "evidence": "git blame commit cb5098f", "event": "Historical five-argument duplicate function and application caller introduced", "status": "OBSERVED"},
+    {"time": "2026-09-07", "evidence": "git blame commit 74dcc12e", "event": "Frozen canonical three-argument boolean function definition recorded with events.kota_id body", "status": "OBSERVED"},
+    {"time": "canonical extraction", "evidence": "production-schema.sql and canonical inventory", "event": "events table exposes kabupaten_kota_id and no kota_id; canonical function identity remains three arguments", "status": "OBSERVED"},
+    {"time": "unknown", "evidence": "repository search", "event": "No explicit rename, semantic continuity statement, or migration proving kota_id == kabupaten_kota_id found", "status": "UNKNOWN_NOT_FABRICATED"}
+  ],
+  "unproven_events": ["events.kota_id introduced", "events.kota_id renamed", "function body updated after a rename"],
+  "historical_function": {"identity": "check_duplicate_event(p_name,p_date,p_location,p_kabupaten_kota_id,p_exclude_event_id)", "classification": "HISTORICAL / SUPERSEDED / CONFLICTING"},
+  "canonical_function": {"identity": "public.check_duplicate_event(p_kota_id text,p_location text,p_name text)", "classification": "AUTHORITATIVE_IDENTITY_WITH_INVALID_BODY_REFERENCE"}
+}

@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "catalog_status": "BLOCKED",
+    "blocker_classification": "AGENT EXECUTION CHANNEL LIMITATION",
+    "production_project": "xfscfjwapwnkiinkgbjg",
+    "database": "postgres",
+    "postgres_version_reported": "17.6",
+    "current_user_reported": "postgres",
+    "transaction_read_only_reported": true,
+    "extraction_timestamp": null,
+    "catalog_version": null,
+    "environment_identifier": "production project ref only",
+    "extraction_method": "not performed; no agent-accessible PostgreSQL SQL session",
+    "read_only_assertion": "externally reported, not independently captured by this agent",
+    "production_mutation": false,
+    "production_data_copied": false,
+    "excluded_schemas": [
+      "auth",
+      "storage",
+      "realtime",
+      "vault",
+      "graphql",
+      "graphql_public",
+      "pgbouncer",
+      "other managed/internal schemas"
+    ],
+    "exclusion_rationale": "Supabase-managed and internal schemas are outside application baseline scope.",
+    "object_counts": {},
+    "completeness_status": "incomplete",
+    "warnings": [
+      "External production channel verification was reported but no live SQL result was supplied to this workspace.",
+      "Counts and partial inventories are not definition evidence.",
+      "No catalog query was executed by this agent."
+    ],
+    "errors": [
+      "No psql executable or PostgreSQL connection variables are available in the agent environment.",
+      "The installed Supabase CLI does not expose a SQL query command."
+    ]
+  },
+  "schemas": {"status": "missing_exact_evidence", "objects": []},
+  "tables": {"status": "missing_exact_evidence", "objects": []},
+  "columns": {"status": "missing_exact_evidence", "objects": []},
+  "constraints": {"status": "missing_exact_evidence", "objects": []},
+  "indexes": {"status": "missing_exact_evidence", "objects": []},
+  "sequences": {"status": "missing_exact_evidence", "objects": []},
+  "types": {"status": "missing_exact_evidence", "objects": []},
+  "functions": {"status": "missing_exact_evidence", "objects": []},
+  "procedures": {"status": "missing_exact_evidence", "objects": []},
+  "views": {"status": "missing_exact_evidence", "objects": []},
+  "materialized_views": {"status": "missing_exact_evidence", "objects": []},
+  "triggers": {"status": "missing_exact_evidence", "objects": []},
+  "rls": {"status": "missing_exact_evidence", "objects": []},
+  "extensions": {"status": "missing_exact_evidence", "objects": []},
+  "privileges": {"status": "missing_exact_evidence", "objects": []},
+  "dependencies": {"status": "missing_exact_evidence", "objects": []},
+  "comments": {"status": "missing_exact_evidence", "objects": []}
+}

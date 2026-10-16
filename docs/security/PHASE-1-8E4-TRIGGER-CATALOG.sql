@@ -1,0 +1,6 @@
+-- PHASE 1.8E.4A TRIGGER CATALOG
+-- STATUS: BLOCKED
+-- No executable trigger definitions are reproduced here without complete
+-- runtime trigger metadata. Required fields: tgrelid, tgname, timing/events,
+-- enabled state, trigger function identity, definition, and dependencies.
+-- Do not use this file for deployment.

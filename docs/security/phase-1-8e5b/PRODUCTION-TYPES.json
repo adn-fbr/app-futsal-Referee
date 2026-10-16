@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "category": "types",
+  "reason": "No authorized production PostgreSQL SQL session is available; live catalog extraction is incomplete and cannot be claimed complete.",
+  "expected": "all public enums, domains, and composite types",
+  "actual": "NOT VERIFIED",
+  "delta": "NOT VERIFIED",
+  "explanation": "No live `pg_type` / `pg_enum` verification occurred."
+}

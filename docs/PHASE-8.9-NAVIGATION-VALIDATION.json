@@ -1,0 +1,12 @@
+{
+  "phase": "8.9",
+  "status": "PARTIAL",
+  "desktop_navigation": "STRUCTURALLY_PRESENT",
+  "tablet_navigation": "NOT_VALIDATED",
+  "mobile_navigation": "STRUCTURALLY_PRESENT",
+  "sidebar": "DESKTOP_PRESENT",
+  "header": "PRESENT",
+  "menu_toggle": "MOBILE_NAV_PRESENT",
+  "authorized_menu_visibility": "NOT_BROWSER_PROVEN",
+  "browser_validation": "NOT_AVAILABLE"
+}

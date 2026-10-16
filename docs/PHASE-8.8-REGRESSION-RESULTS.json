@@ -1,0 +1,9 @@
+{
+  "phase": "8.8",
+  "typecheck": "PASS",
+  "tests": {"status":"PASS", "test_files":14, "tests":44},
+  "build": "PASS",
+  "lint": {"status":"BASELINE FAIL", "errors":67, "warnings":12},
+  "bundle_scan": {"production_project_id":0,"service_role_value":0,"expected_auth_library_markers":true},
+  "build_warnings": ["large minified chunk", "stale Browserslist data"]
+}

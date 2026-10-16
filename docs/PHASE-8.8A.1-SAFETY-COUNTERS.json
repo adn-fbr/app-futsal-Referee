@@ -1,0 +1,15 @@
+{
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_auth_operations": 0,
+  "production_storage_operations": 0,
+  "production_deployments": 0,
+  "schema_mutations": 0,
+  "rls_mutations": 0,
+  "migration_executions": 0,
+  "frontend_service_role_references": 0,
+  "secret_values_exposed": 0,
+  "synthetic_auth_users_created": 0,
+  "synthetic_events_created": 0,
+  "synthetic_assignments_created": 0
+}

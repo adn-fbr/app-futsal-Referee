@@ -1,0 +1,15 @@
+{
+  "phase": "8.2",
+  "production_access": 0,
+  "production_queries": 0,
+  "production_mutations": 0,
+  "production_migrations": 0,
+  "production_resets": 0,
+  "production_deployments": 0,
+  "non_production_schema_mutations": 0,
+  "non_production_data_mutations": 0,
+  "auth_user_mutations": 0,
+  "storage_mutations": 0,
+  "rls_mutations": 0,
+  "status": "PASS"
+}

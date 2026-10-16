@@ -1,0 +1,17 @@
+{
+  "project":"shorsqyycpptxcutrqrb",
+  "production":"xfscfjwapwnkiinkgbjg",
+  "auth_access":false,
+  "blocker_type":"F",
+  "supporting_blocker_types":["C","D"],
+  "blocker_description":"managed auth.users is intentionally non-enumerable through the current publishable/PostgREST channel; CLI has no safe Auth-user enumeration command; no approved read-only database credential",
+  "auth_status":"GOVERNANCE_BOUNDARY",
+  "auth_current_state":"UNKNOWN",
+  "auth_user_count":"UNKNOWN",
+  "auth_provenance":"UNKNOWN",
+  "privileged_secret_name_references":"YES",
+  "privileged_secret_value_detected":"NO_VALUE_DETECTED",
+  "values_printed":false,
+  "production_targeted":false,
+  "mutation":0
+}

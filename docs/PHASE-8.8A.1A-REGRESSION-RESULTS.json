@@ -1,0 +1,9 @@
+{
+  "phase": "8.8A.1A",
+  "typecheck": "PASS",
+  "tests": {"test_files":16,"tests":54,"passed":54,"failed":0},
+  "build": "PASS",
+  "lint": {"status":"BASELINE_FAIL","errors":68,"warnings":12},
+  "focused_guard_tests": {"passed":9,"failed":0},
+  "dry_run_with_non_secret_placeholders": "PASS"
+}

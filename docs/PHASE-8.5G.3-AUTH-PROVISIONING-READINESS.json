@@ -1,0 +1,12 @@
+{
+  "phase": "8.5G.3",
+  "official_auth_admin_mechanism": "NOT AVAILABLE",
+  "fixture_script_auth_admin_api": "NOT AVAILABLE",
+  "service_role_required_by_existing_fixture_path": true,
+  "service_role_present": false,
+  "dry_run": "NOT AVAILABLE",
+  "direct_auth_users_insert": false,
+  "fabricated_jwt": false,
+  "frontend_service_role": false,
+  "status": "BLOCKED"
+}

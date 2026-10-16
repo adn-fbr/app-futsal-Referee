@@ -1,0 +1,15 @@
+{
+  "phase": "PHASE 7.4J-D1-D.3",
+  "authorized_project": "shorsqyycpptxcutrqrb",
+  "production_project": "xfscfjwapwnkiinkgbjg",
+  "config_project_id": "shorsqyycpptxcutrqrb",
+  "cli_linked_project": "shorsqyycpptxcutrqrb",
+  "cli_linked_project_name": "test APP",
+  "cli_linked_project_status": "ACTIVE_HEALTHY",
+  "cli_linked_project_database": "Postgres 17.6.1.166",
+  "cli_linked_project_region": "ap-south-1",
+  "production_listed_but_linked": false,
+  "production_access": "NO",
+  "production_id_in_executed_commands": false,
+  "verification": "PASS"
+}
