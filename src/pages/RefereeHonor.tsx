@@ -89,6 +89,7 @@ const getStatusConfig = (status: Honor["status"]) => {
 export default function RefereeHonor() {
   const [showInputForm, setShowInputForm] = useState(false);
   const [showSubmitDrawer, setShowSubmitDrawer] = useState(false);
+  const [editingHonor, setEditingHonor] = useState<Honor | null>(null);
   
   // Form state
   const [selectedEvent, setSelectedEvent] = useState("");
@@ -112,7 +113,7 @@ export default function RefereeHonor() {
     }
 
     // Check for duplicate honor
-    if (honorExists) {
+    if (!editingHonor && honorExists) {
       setFormError("Honor untuk event ini sudah pernah diajukan");
       return false;
     }
@@ -135,12 +136,17 @@ export default function RefereeHonor() {
   const handleSaveDraft = async () => {
     if (!validateForm()) return;
 
-    await createHonor.mutateAsync({
-      event_id: selectedEvent,
-      amount: parseInt(honorAmount.replace(/\D/g, "")),
-      notes: notes.trim() || undefined,
-      status: "draft",
-    });
+    const amount = parseInt(honorAmount.replace(/\D/g, ""));
+    const draftNotes = notes.trim() || undefined;
+    if (editingHonor) {
+      await updateHonor.mutateAsync({ id: editingHonor.id, amount, notes: draftNotes });
+    } else {
+      await createHonor.mutateAsync({
+        event_id: selectedEvent,
+        amount,
+        notes: draftNotes,
+      });
+    }
 
     resetForm();
   };
@@ -155,7 +161,6 @@ export default function RefereeHonor() {
       event_id: selectedEvent,
       amount: parseInt(honorAmount.replace(/\D/g, "")),
       notes: notes.trim() || undefined,
-      status: "submitted",
     });
 
     resetForm();
@@ -163,6 +168,7 @@ export default function RefereeHonor() {
   };
 
   const resetForm = () => {
+    setEditingHonor(null);
     setSelectedEvent("");
     setHonorAmount("");
     setNotes("");
@@ -184,6 +190,15 @@ export default function RefereeHonor() {
     await submitHonor.mutateAsync({
       id: entry.id,
     });
+  };
+
+  const editDraft = (entry: Honor) => {
+    setEditingHonor(entry);
+    setSelectedEvent(entry.event_id ?? "");
+    setHonorAmount(new Intl.NumberFormat("id-ID").format(entry.amount));
+    setNotes(entry.notes ?? "");
+    setFormError(null);
+    setShowInputForm(true);
   };
 
   if (honorsLoading) {
@@ -248,7 +263,7 @@ export default function RefereeHonor() {
           <Card className="border-primary/20 shadow-sm">
             <CardHeader className="border-b border-border/70 pb-4">
               <div className="flex items-center justify-between gap-4">
-                <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Pengajuan baru</p><CardTitle className="mt-1 text-lg">Input honor</CardTitle></div>
+                <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{editingHonor ? "Perubahan draft" : "Pengajuan baru"}</p><CardTitle className="mt-1 text-lg">{editingHonor ? "Edit draft honor" : "Input honor"}</CardTitle></div>
                 <Button variant="ghost" size="icon" className="h-10 w-10" onClick={resetForm} aria-label="Tutup form input honor"><X className="h-4 w-4" /></Button>
               </div>
             </CardHeader>
@@ -257,7 +272,11 @@ export default function RefereeHonor() {
               <div className="grid gap-5 lg:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="event">Event <span className="text-destructive">*</span></Label>
-                  {eventsLoading ? <div className="h-12 animate-pulse rounded-md bg-muted" /> : eligibleEvents && eligibleEvents.length > 0 ? (
+                  {editingHonor ? (
+                    <div className="flex h-12 items-center rounded-md border border-input bg-muted/40 px-3 text-sm" aria-label="Event draft">
+                      {editingHonor.events?.name || "Event draft"}
+                    </div>
+                  ) : eventsLoading ? <div className="h-12 animate-pulse rounded-md bg-muted" /> : eligibleEvents && eligibleEvents.length > 0 ? (
                     <Select value={selectedEvent} onValueChange={setSelectedEvent}>
                       <SelectTrigger className="h-12"><SelectValue placeholder="Pilih event yang sudah selesai..." /></SelectTrigger>
                       <SelectContent>{eligibleEvents.map((event) => <SelectItem key={event.id} value={event.id}><div className="flex flex-col"><span>{event.name}</span><span className="text-xs text-muted-foreground">{format(new Date(event.start_date), "dd MMM yyyy", { locale: id })} · {event.location || "Lokasi belum ditentukan"}</span></div></SelectItem>)}</SelectContent>
@@ -269,7 +288,7 @@ export default function RefereeHonor() {
               {selectedEvent && eligibleEvents && <div className="rounded-lg border border-border/70 bg-muted/30 p-4">{(() => { const event = eligibleEvents.find((item) => item.id === selectedEvent); return event ? <div className="space-y-2"><p className="font-semibold">{event.name}</p><div className="flex flex-wrap gap-3 text-xs text-muted-foreground"><span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{format(new Date(event.start_date), "dd MMM yyyy", { locale: id })}</span><span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5" />{event.location || "Lokasi belum ditentukan"}</span></div><StatusBadge status="success">{event.role}</StatusBadge></div> : null; })()}</div>}
               <div className="space-y-2"><Label htmlFor="notes">Catatan</Label><Textarea id="notes" placeholder="Contoh: 3 pertandingan sebagai wasit utama..." value={notes} onChange={(event) => setNotes(event.target.value)} maxLength={200} className="min-h-[96px]" /><p className="text-right text-xs text-muted-foreground">{notes.length}/200</p></div>
               {formError && <Alert variant="destructive" role="alert"><AlertCircle className="h-4 w-4" /><AlertDescription>{formError}</AlertDescription></Alert>}
-              <div className="flex flex-col-reverse gap-3 border-t border-border/70 pt-5 sm:flex-row sm:justify-end"><Button variant="outline" className="h-11 sm:min-w-36" onClick={handleSaveDraft} disabled={createHonor.isPending || updateHonor.isPending}>{createHonor.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Simpan draft"}</Button><Button className="h-11 sm:min-w-36" onClick={handleSubmit} disabled={createHonor.isPending || submitHonor.isPending}><Send className="mr-2 h-4 w-4" /> Ajukan</Button></div>
+              <div className="flex flex-col-reverse gap-3 border-t border-border/70 pt-5 sm:flex-row sm:justify-end"><Button variant="outline" className="h-11 sm:min-w-36" onClick={handleSaveDraft} disabled={createHonor.isPending || updateHonor.isPending}>{createHonor.isPending || updateHonor.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : editingHonor ? "Perbarui draft" : "Simpan draft"}</Button>{!editingHonor && <Button className="h-11 sm:min-w-36" onClick={handleSubmit} disabled={createHonor.isPending || submitHonor.isPending}><Send className="mr-2 h-4 w-4" /> Ajukan</Button>}</div>
             </CardContent>
           </Card>
         ) : (
@@ -280,7 +299,7 @@ export default function RefereeHonor() {
 
         <section aria-labelledby="honor-history-heading">
           <div className="mb-3 flex items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Aktivitas</p><h2 id="honor-history-heading" className="mt-1 text-lg font-bold">Riwayat honor</h2></div><span className="text-xs text-muted-foreground">{honors?.length || 0} pengajuan</span></div>
-          {!honors || honors.length === 0 ? <Card className="border-dashed"><CardContent className="p-10 text-center"><Wallet className="mx-auto mb-3 h-9 w-9 text-muted-foreground/40" /><p className="font-semibold">Belum ada data honor</p><p className="mt-1 text-sm text-muted-foreground">Informasi honorarium akan muncul setelah event dan proses terkait tersedia.</p></CardContent></Card> : <Card className="overflow-hidden"><CardContent className="p-0"><div className="divide-y divide-border">{honors.map((entry) => { const statusConfig = getStatusConfig(entry.status); const StatusIcon = statusConfig.icon; return <div key={entry.id} className="p-4 transition-colors hover:bg-muted/20 sm:p-5"><div className="flex flex-col gap-4 sm:flex-row sm:items-center"><div className="flex min-w-0 flex-1 items-start gap-3"><div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted ${statusConfig.color}`}><StatusIcon className="h-4 w-4" /></div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h3 className="truncate font-semibold">{entry.events?.name || "Event tidak ditemukan"}</h3><StatusBadge status={entry.status === "verified" ? "success" : entry.status === "submitted" ? "warning" : entry.status === "rejected" ? "error" : "neutral"}>{statusConfig.label}</StatusBadge></div><div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground"><span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{entry.events?.start_date ? format(new Date(entry.events.start_date), "dd MMM yyyy", { locale: id }) : "Tanggal belum tersedia"}</span>{entry.notes && <span className="max-w-full truncate">{entry.notes}</span>}</div></div></div><div className="flex items-center justify-between gap-4 border-t border-border/70 pt-3 sm:min-w-44 sm:flex-col sm:items-end sm:border-t-0 sm:pt-0"><p className={`text-lg font-bold ${statusConfig.color}`}>{formatCurrency(entry.amount)}</p>{entry.status === "draft" && <Button size="sm" onClick={() => submitDraft(entry)} disabled={updateHonor.isPending} className="min-h-[36px]"><Send className="mr-1 h-3 w-3" /> Ajukan</Button>}</div></div></div>; })}</div></CardContent></Card>}
+          {!honors || honors.length === 0 ? <Card className="border-dashed"><CardContent className="p-10 text-center"><Wallet className="mx-auto mb-3 h-9 w-9 text-muted-foreground/40" /><p className="font-semibold">Belum ada data honor</p><p className="mt-1 text-sm text-muted-foreground">Informasi honorarium akan muncul setelah event dan proses terkait tersedia.</p></CardContent></Card> : <Card className="overflow-hidden"><CardContent className="p-0"><div className="divide-y divide-border">{honors.map((entry) => { const statusConfig = getStatusConfig(entry.status); const StatusIcon = statusConfig.icon; return <div key={entry.id} className="p-4 transition-colors hover:bg-muted/20 sm:p-5"><div className="flex flex-col gap-4 sm:flex-row sm:items-center"><div className="flex min-w-0 flex-1 items-start gap-3"><div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted ${statusConfig.color}`}><StatusIcon className="h-4 w-4" /></div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><h3 className="truncate font-semibold">{entry.events?.name || "Event tidak ditemukan"}</h3><StatusBadge status={entry.status === "verified" ? "success" : entry.status === "submitted" ? "warning" : entry.status === "rejected" ? "error" : "neutral"}>{statusConfig.label}</StatusBadge></div><div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground"><span className="flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5" />{entry.events?.start_date ? format(new Date(entry.events.start_date), "dd MMM yyyy", { locale: id }) : "Tanggal belum tersedia"}</span>{entry.notes && <span className="max-w-full truncate">{entry.notes}</span>}</div></div></div><div className="flex items-center justify-between gap-4 border-t border-border/70 pt-3 sm:min-w-44 sm:flex-col sm:items-end sm:border-t-0 sm:pt-0"><p className={`text-lg font-bold ${statusConfig.color}`}>{formatCurrency(entry.amount)}</p>{entry.status === "draft" && <div className="flex gap-2"><Button size="sm" variant="outline" onClick={() => editDraft(entry)} className="min-h-[36px]">Edit</Button><Button size="sm" onClick={() => submitDraft(entry)} disabled={updateHonor.isPending || submitHonor.isPending} className="min-h-[36px]"><Send className="mr-1 h-3 w-3" /> Ajukan</Button></div>}</div></div></div>; })}</div></CardContent></Card>}
         </section>
       </main>
 

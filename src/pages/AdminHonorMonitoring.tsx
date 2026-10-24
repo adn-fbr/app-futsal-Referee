@@ -114,6 +114,7 @@ export default function AdminHonorMonitoring() {
   const [honorStatusFilter, setHonorStatusFilter] = useState<"all" | HonorStatus>("all");
   const [selectedHonor, setSelectedHonor] = useState<Honor | null>(null);
   const [showVerifyDialog, setShowVerifyDialog] = useState(false);
+  const [verificationAmount, setVerificationAmount] = useState("");
   const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
 
@@ -178,14 +179,18 @@ export default function AdminHonorMonitoring() {
   const handleVerify = async () => {
     if (!selectedHonor) return;
 
+    const amount = Number(verificationAmount);
+    if (!Number.isFinite(amount) || amount <= 0) return;
+
     await verifyHonor.mutateAsync({
       id: selectedHonor.id,
-      amount: selectedHonor.amount,
+      amount,
       notes: undefined,
     });
 
     setShowVerifyDialog(false);
     setSelectedHonor(null);
+    setVerificationAmount("");
   };
 
   // Handle reject
@@ -736,6 +741,7 @@ export default function AdminHonorMonitoring() {
                                     className="flex-1 text-success border-success/30 hover:bg-success/10"
                                     onClick={() => {
                                       setSelectedHonor(honor);
+                                      setVerificationAmount(String(honor.amount));
                                       setShowVerifyDialog(true);
                                     }}
                                   >
@@ -779,14 +785,24 @@ export default function AdminHonorMonitoring() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           {selectedHonor && (
-            <div className="py-4 space-y-2">
+            <div className="py-4 space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Event:</span>
                 <span className="font-medium">{selectedHonor.events?.name || "-"}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Jumlah:</span>
+                <span className="text-muted-foreground">Jumlah diajukan:</span>
                 <span className="font-medium text-success">{formatCurrency(selectedHonor.amount)}</span>
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="verification-amount" className="text-sm font-medium">Jumlah yang diverifikasi</label>
+                <Input
+                  id="verification-amount"
+                  type="number"
+                  min="1"
+                  value={verificationAmount}
+                  onChange={(event) => setVerificationAmount(event.target.value)}
+                />
               </div>
             </div>
           )}
@@ -794,7 +810,7 @@ export default function AdminHonorMonitoring() {
             <AlertDialogCancel disabled={verifyHonor.isPending}>Batal</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleVerify}
-              disabled={verifyHonor.isPending}
+              disabled={verifyHonor.isPending || !Number.isFinite(Number(verificationAmount)) || Number(verificationAmount) <= 0}
               className="bg-success hover:bg-success/90"
             >
               {verifyHonor.isPending ? (
